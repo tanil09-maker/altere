@@ -199,6 +199,17 @@
             transform: translateY(-2px);
         }
 
+        .btn-danger {
+            background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+            color: var(--white);
+            box-shadow: 0 4px 16px rgba(244, 67, 54, 0.2);
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(244, 67, 54, 0.3);
+        }
+
         .results-section {
             background: var(--white);
             border-radius: var(--border-radius);
@@ -435,6 +446,15 @@
         const loadingState = document.getElementById('loadingState');
         const resultsContent = document.getElementById('resultsContent');
 
+        // Start/Stop camera toggle
+        async function toggleCamera() {
+            if (!stream) {
+                await startCamera();
+            } else {
+                stopCamera();
+            }
+        }
+
         // Start camera
         async function startCamera() {
             try {
@@ -450,11 +470,38 @@
                 camera.srcObject = stream;
                 camera.style.display = 'block';
                 placeholder.style.display = 'none';
-                startCameraBtn.textContent = 'Camera Active';
-                startCameraBtn.style.background = 'linear-gradient(135deg, #4CAF50 0%, #45a049 100%)';
+                startCameraBtn.innerHTML = `
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"/>
+                    </svg>
+                    Stop Camera
+                `;
+                startCameraBtn.style.background = 'linear-gradient(135deg, #f44336 0%, #d32f2f 100%)';
+                startCameraBtn.classList.remove('btn-primary');
+                startCameraBtn.classList.add('btn-danger');
             } catch (error) {
                 console.error('Camera access denied:', error);
                 alert('Camera access is required to scan items. Please enable camera permissions and try again.');
+            }
+        }
+
+        // Stop camera
+        function stopCamera() {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                stream = null;
+                camera.style.display = 'none';
+                placeholder.style.display = 'flex';
+                startCameraBtn.innerHTML = `
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 15.2c1.65 0 3-1.35 3-3s-1.35-3-3-3-3 1.35-3 3 1.35 3 3 3zm0-4.2c.66 0 1.2.54 1.2 1.2s-.54 1.2-1.2 1.2-1.2-.54-1.2-1.2.54-1.2 1.2-1.2z"/>
+                        <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm11 15H4V6h16v11z"/>
+                    </svg>
+                    Start Camera
+                `;
+                startCameraBtn.style.background = 'linear-gradient(135deg, var(--primary-color) 0%, #333 100%)';
+                startCameraBtn.classList.remove('btn-danger');
+                startCameraBtn.classList.add('btn-primary');
             }
         }
 
@@ -542,20 +589,12 @@
         }
 
         // Event listeners
-        startCameraBtn.addEventListener('click', startCamera);
+        startCameraBtn.addEventListener('click', toggleCamera);
         captureBtn.addEventListener('click', capturePhoto);
         uploadBtn.addEventListener('click', () => fileInput.click());
         fileInput.addEventListener('change', handleFileUpload);
 
-        // Auto-start camera on mobile devices
-        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-            // Auto-prompt for camera on mobile
-            setTimeout(() => {
-                if (window.location.protocol === 'https:' || window.location.hostname === 'localhost') {
-                    startCamera();
-                }
-            }, 1000);
-        }
+        // Remove auto-start for better UX
 
         // Cleanup on page unload
         window.addEventListener('beforeunload', () => {
