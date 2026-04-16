@@ -1,0 +1,2089 @@
+/* ============================================================
+   ALTERE — Main Script
+   ============================================================ */
+
+document.addEventListener('DOMContentLoaded', () => {
+
+  /* ============================================================
+     Constants & State
+     ============================================================ */
+
+  const API_URL      = 'https://api.anthropic.com/v1/messages';
+  const MODEL        = 'claude-sonnet-4-20250514';
+  const LS_KEY       = 'altere_api_key';
+  const UNSPLASH_KEY = 'altere_unsplash_key';
+  const UNSPLASH_API = 'https://api.unsplash.com/search/photos';
+  const SAVED_KEY    = 'altere_saved_items';
+
+  let currentFile = null;
+  let isSearching = false;
+
+  // Muted fashion palette for colour placeholders (fallback when no Unsplash key)
+  const CARD_COLORS = [
+    '#D5C6B0', '#B8A99A', '#C4B7A6', '#A89F91', '#CABFB1', '#BDB1A0'
+  ];
+
+  /* ============================================================
+     DOM refs
+     ============================================================ */
+
+  const nav             = document.getElementById('nav');
+  const hamburger       = document.getElementById('hamburger');
+  const navLinks        = document.getElementById('navLinks');
+  const settingsBtn     = document.getElementById('settingsBtn');
+  const settingsModal   = document.getElementById('settingsModal');
+  const modalClose      = document.getElementById('modalClose');
+  const apiKeyInput     = document.getElementById('apiKeyInput');
+  const unsplashInput   = document.getElementById('unsplashKeyInput');
+  const apiStatus       = document.getElementById('apiStatus');
+  const saveApiKeyBtn   = document.getElementById('saveApiKey');
+  const uploadArea      = document.getElementById('uploadArea');
+  const fileInput       = document.getElementById('fileInput');
+  const uploadSearchBtn = document.getElementById('uploadSearchBtn');
+  const uploadDefault   = document.getElementById('uploadDefault');
+  const uploadPreview   = document.getElementById('uploadPreview');
+  const uploadThumb     = document.getElementById('uploadThumb');
+  const uploadFilename  = document.getElementById('uploadFilename');
+  const uploadFilesize  = document.getElementById('uploadFilesize');
+  const uploadRemove    = document.getElementById('uploadRemove');
+  const resultsGrid     = document.querySelector('.results__grid');
+  const resultsHeader   = document.querySelector('.results__header');
+  const categoryFilters = document.getElementById('categoryFilters');
+  const priceFilters    = document.getElementById('priceFilters');
+  const storeFilters    = document.getElementById('storeFilters');
+  const toast           = document.getElementById('toast');
+  const savedLink       = document.getElementById('savedLink');
+  const savedBadge      = document.getElementById('savedBadge');
+  const savedPage       = document.getElementById('savedPage');
+  const savedBack       = document.getElementById('savedBack');
+  const savedGrid       = document.getElementById('savedGrid');
+  const savedEmpty      = document.getElementById('savedEmpty');
+  const savedClearAll   = document.getElementById('savedClearAll');
+
+  let activeMinPrice  = 0;
+  let activeMaxPrice  = 0;
+  let activeCategory  = 'all';
+  let activeStores    = new Set(); // empty = show all
+
+  /* ============================================================
+     Dark mode toggle
+     ============================================================ */
+
+  const THEME_KEY    = 'altere_theme';
+  const themeToggle  = document.getElementById('themeToggle');
+
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem(THEME_KEY, theme);
+  }
+
+  // Restore saved preference on load
+  const savedTheme = localStorage.getItem(THEME_KEY) || 'light';
+  if (savedTheme === 'dark') applyTheme('dark');
+
+  themeToggle.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme');
+    applyTheme(current === 'dark' ? 'light' : 'dark');
+    if (typeof updateCalc === 'function') updateCalc();
+  });
+
+  /* ============================================================
+     Language switcher
+     ============================================================ */
+
+  const LANG_KEY      = 'altere_lang';
+  const langSwitcher  = document.getElementById('langSwitcher');
+  const langBtn       = document.getElementById('langBtn');
+  const langCurrent   = document.getElementById('langCurrent');
+  const langMenu      = document.getElementById('langMenu');
+
+  const TRANSLATIONS = {
+    en: {
+      'nav.discover': 'Discover', 'nav.brands': 'Brands', 'nav.saved': 'Saved', 'nav.signin': 'Sign in',
+      'hero.eyebrow': 'AI-Powered Fashion Discovery',
+      'hero.headline': 'Find the look.<br>Not the price tag.',
+      'hero.sub': 'Upload any luxury piece and we\u2019ll find stunning alternatives from your favourite high-street brands \u2014 instantly.',
+      'search.tab.link': 'Paste link', 'search.tab.upload': 'Upload photo', 'search.tab.text': 'Search text',
+      'search.placeholder.link': 'Paste a product URL from any fashion site...',
+      'search.placeholder.text': 'Describe the item, e.g. "cream satin midi skirt"...',
+      'search.btn': 'Find dupes',
+      'search.upload.hint': 'Drag & drop or <strong>browse</strong>',
+      'search.upload.formats': 'JPG, PNG or WEBP up to 10 MB',
+      'search.upload.ready': 'Ready to search',
+      'search.status': 'AI is finding your dupes',
+      'recent.label': 'Recent', 'recent.clear': 'Clear',
+      'trending.label': 'Trending now',
+      'hero.searching': 'Searching across', 'hero.scroll': 'Scroll to explore',
+      'dotd.eyebrow': 'Dupe of the Day', 'dotd.original': 'Original', 'dotd.dupe': 'Dupe', 'dotd.vs': 'VS', 'dotd.btn': 'View dupe',
+      'calc.eyebrow': 'Savings Calculator', 'calc.title': 'How much could you save?', 'calc.sub': 'See what happens when you swap luxury for smart dupes.', 'calc.budget': 'Monthly fashion budget', 'calc.perMonth': 'Per month', 'calc.perYear': 'Per year', 'calc.fiveYears': 'In 5 years', 'calc.note': 'Based on an average 68% saving when buying dupes over luxury originals.',
+      'proof.dupes': 'dupes found today', 'proof.shoppers': 'happy shoppers', 'proof.saved': 'saved this week', 'press.label': 'As seen in',
+      'celeb.eyebrow': 'Style Inspiration', 'celeb.title': 'Get the celebrity look', 'celeb.sub': 'Tap into the most searched aesthetics and find dupes instantly.', 'celeb.btn': 'Find dupes',
+      'celeb.c1.name': 'The Quiet Luxury', 'celeb.c1.desc': 'Understated elegance. Neutral tones, cashmere knits and clean silhouettes inspired by old-money minimalism.',
+      'celeb.c2.name': 'Street Chic', 'celeb.c2.desc': 'Bold, confident and effortless. Oversized blazers, leather trousers and statement sneakers straight from fashion week.',
+      'celeb.c3.name': 'Old Money', 'celeb.c3.desc': 'Prep meets polish. Tailored wool coats, pearl accents, loafers and structured bags that whisper wealth.',
+      'celeb.c4.name': 'French Girl', 'celeb.c4.desc': 'Effortlessly chic. Breton stripes, midi skirts, ballet flats and that perfectly undone Parisian je ne sais quoi.',
+      'cookie.text': 'We use cookies to enhance your experience.', 'cookie.accept': 'Accept all', 'cookie.manage': 'Manage preferences',
+      'about.mission': 'Luxury aesthetics, accessible prices.', 'about.storyEyebrow': 'Our Story', 'about.storyTitle': 'Fashion should be for everyone',
+      'about.storyP1': 'ALTERE was born from a simple frustration: falling in love with a runway piece, then seeing the price tag. We believe great style shouldn\u2019t require a trust fund.',
+      'about.storyP2': 'So we built an AI that sees fashion the way a stylist does \u2014 analysing fabric, cut, colour and silhouette \u2014 then scours thousands of high-street products to find the closest match at a fraction of the cost.',
+      'about.howEyebrow': 'The Technology', 'about.howTitle': 'How our AI works',
+      'about.step1Title': 'Visual deconstruction', 'about.step1Desc': 'Our vision model breaks down any fashion item into its core attributes: material, texture, shape, proportions, colour palette and construction details.',
+      'about.step2Title': 'Cross-store matching', 'about.step2Desc': 'We scan inventories from Zara, H&M, Mango, ASOS, COS and & Other Stories in real time, scoring each product against the original on over 40 style dimensions.',
+      'about.step3Title': 'Smart ranking', 'about.step3Desc': 'Results are ranked by match accuracy, price savings and availability \u2014 so the best dupe always rises to the top.',
+      'about.teamEyebrow': 'Who We Are', 'about.teamTitle': 'Founded by fashion lovers,<br>powered by AI',
+      'about.teamDesc': 'We\u2019re a small team of designers, engineers and fashion obsessives on a mission to democratise style. Every feature we build starts with the same question: does this help someone look incredible without overspending?',
+      'about.cta': 'Start discovering dupes',
+      'faq.eyebrow': 'Support', 'faq.title': 'Frequently asked questions',
+      'faq.q1': 'How does the AI find dupes?', 'faq.a1': 'Our AI vision model analyses any fashion item \u2014 from a photo, link or text description \u2014 breaking it down into core attributes like fabric, cut, colour, silhouette and construction. It then scores thousands of products from Zara, H&M, Mango, ASOS, COS and & Other Stories against those attributes in real time, surfacing the closest matches ranked by accuracy.',
+      'faq.q2': 'Are the links affiliate links?', 'faq.a2': 'Some links may be affiliate links, which means we earn a small commission when you make a purchase \u2014 at no extra cost to you. This helps us keep ALTERE free and continue improving the AI. We never let commissions influence which dupes are shown; results are always ranked purely by match quality.',
+      'faq.q3': 'Is ALTERE free to use?', 'faq.a3': 'Yes, ALTERE is completely free to use. You can search for unlimited dupes, save your favourites and share them \u2014 all without creating an account or paying anything. We plan to keep the core experience free forever.',
+      'faq.q4': 'How accurate are the match percentages?', 'faq.a4': 'Match percentages reflect how closely a dupe resembles the original across over 40 style dimensions including material, shape, colour and proportions. A score above 90% means the dupe is visually very close; 80\u201390% indicates a strong resemblance with minor differences. We continuously refine our model to improve accuracy.',
+      'faq.q5': 'Can I suggest a store to add?', 'faq.a5': 'Absolutely! We\u2019re always looking to expand our store network. Drop us a message with the store name and we\u2019ll evaluate adding it. Popular requests include Uniqlo, Arket and Massimo Dutti \u2014 all on our roadmap.',
+      'reviews.eyebrow': 'Reviews', 'reviews.title': 'Loved by fashion lovers',
+      'reviews.r1.quote': '\u201cFound a perfect Bottega dupe for my birthday \u2014 no one could tell the difference. Saved over \u20ac2,000!\u201d', 'reviews.r1.name': 'Sophie M.', 'reviews.r1.location': 'Amsterdam, NL',
+      'reviews.r2.quote': '\u201cI use ALTERE every time I spot something on Instagram. The AI match is honestly scary good.\u201d', 'reviews.r2.name': 'James T.', 'reviews.r2.location': 'London, UK',
+      'reviews.r3.quote': '\u201cAs a stylist, this is my secret weapon. My clients get the look they want without the luxury markup.\u201d', 'reviews.r3.name': 'Amara K.', 'reviews.r3.location': 'Paris, FR',
+      'reviews.r4.quote': '\u201cUploaded a photo of a \u20ac900 Max Mara coat and found a near-identical one at H&M for \u20ac89. Unreal.\u201d', 'reviews.r4.name': 'Luca R.', 'reviews.r4.location': 'Milan, IT',
+      'reviews.r5.quote': '\u201cFinally a dupe finder that actually works. The photo upload feature is a game changer for browsing Pinterest inspo.\u201d', 'reviews.r5.name': 'Elena V.', 'reviews.r5.location': 'Barcelona, ES',
+      'reviews.r6.quote': '\u201cShowed my friends and now our whole group chat is obsessed. We share dupes every single day.\u201d', 'reviews.r6.name': 'Noah B.', 'reviews.r6.location': 'Berlin, DE',
+      'results.eyebrow': 'Trending Dupes',
+      'results.title': 'Luxury looks, high\u2011street prices',
+      'results.subtitle': 'Our AI scans thousands of products daily to surface the best alternatives.',
+      'filter.category': 'Category', 'filter.bags': 'Bags', 'filter.shoes': 'Shoes', 'filter.clothing': 'Clothing', 'filter.jewellery': 'Jewellery', 'filter.accessories': 'Accessories',
+      'filter.price': 'Price', 'filter.all': 'All', 'filter.store': 'Store', 'filter.allStores': 'All Stores', 'filter.sortBy': 'Sort by',
+      'sort.match': 'Best match', 'sort.priceAsc': 'Price: Low to High', 'sort.priceDesc': 'Price: High to Low', 'sort.saving': 'Biggest saving',
+      'how.eyebrow': 'How it works', 'how.title': 'Three steps to your perfect dupe',
+      'how.step1.title': 'Upload or paste', 'how.step1.desc': 'Share a photo, product link or description of the luxury piece you love.',
+      'how.step2.title': 'AI analysis', 'how.step2.desc': 'Our vision model deconstructs fabric, cut, colour and silhouette in seconds.',
+      'how.step3.title': 'Shop the dupes', 'how.step3.desc': 'Browse ranked alternatives with match scores, prices and direct store links.',
+      'waitlist.eyebrow': 'Early Access', 'waitlist.title': 'Be the first to know<br>when we launch',
+      'waitlist.sub': 'Join thousands of fashion lovers already on the list.',
+      'waitlist.placeholder': 'Enter your email address', 'waitlist.btn': 'Join the waitlist',
+      'waitlist.hint': 'No spam, ever. Unsubscribe anytime.',
+      'waitlist.success.title': 'You\u2019re on the list', 'waitlist.success.desc': 'We\u2019ll let you know as soon as ALTERE is live.',
+      'saved.back': 'Back', 'saved.eyebrow': 'Your Collection', 'saved.title': 'Saved Items', 'saved.clearAll': 'Clear all',
+      'saved.empty': 'No saved items yet', 'saved.emptyHint': 'Tap the heart on any dupe to save it here',
+      'footer.tagline': 'AI-powered fashion dupe finder. Luxury aesthetics, accessible prices.',
+      'footer.explore': 'Explore', 'footer.trending': 'Trending', 'footer.newArrivals': 'New arrivals', 'footer.collections': 'Collections',
+      'footer.company': 'Company', 'footer.about': 'About', 'footer.careers': 'Careers', 'footer.privacy': 'Privacy', 'footer.terms': 'Terms',
+      'toast.saved': 'Saved to your collection', 'toast.removed': 'Removed from saved', 'toast.cleared': 'All saved items cleared',
+      'search.searching': 'Searching...', 'search.joining': 'Joining...',
+      'results.ai.eyebrow': 'AI Results', 'results.ai.title': 'Your dupes are ready',
+      'results.loading.title': 'Our AI is analysing your item\u2026', 'results.loading.sub': 'Finding the best alternatives across 6 stores',
+      'share.whatsapp': 'WhatsApp', 'share.copy': 'Copy link', 'share.copied': 'Copied!',
+      'share.text': 'Check out this dupe: {name} from {store} for just {price} \u2014 found on ALTERE'
+    },
+    nl: {
+      'nav.discover': 'Ontdek', 'nav.brands': 'Merken', 'nav.saved': 'Opgeslagen', 'nav.signin': 'Inloggen',
+      'hero.eyebrow': 'AI-Gestuurde Mode Ontdekking',
+      'hero.headline': 'Vind de look.<br>Niet het prijskaartje.',
+      'hero.sub': 'Upload een luxe stuk en wij vinden prachtige alternatieven van je favoriete winkelstraat-merken \u2014 direct.',
+      'search.tab.link': 'Link plakken', 'search.tab.upload': 'Foto uploaden', 'search.tab.text': 'Zoek op tekst',
+      'search.placeholder.link': 'Plak een product-URL van een modesite...',
+      'search.placeholder.text': 'Beschrijf het item, bijv. "cr\u00e8me satijnen midi rok"...',
+      'search.btn': 'Vind dupes',
+      'search.upload.hint': 'Sleep of <strong>blader</strong>',
+      'search.upload.formats': 'JPG, PNG of WEBP tot 10 MB',
+      'search.upload.ready': 'Klaar om te zoeken',
+      'search.status': 'AI zoekt je dupes',
+      'recent.label': 'Recent', 'recent.clear': 'Wissen',
+      'trending.label': 'Trending nu',
+      'hero.searching': 'Zoeken bij', 'hero.scroll': 'Scroll om te ontdekken',
+      'dotd.eyebrow': 'Dupe van de Dag', 'dotd.original': 'Origineel', 'dotd.dupe': 'Dupe', 'dotd.vs': 'VS', 'dotd.btn': 'Bekijk dupe',
+      'calc.eyebrow': 'Besparingscalculator', 'calc.title': 'Hoeveel kun je besparen?', 'calc.sub': 'Ontdek wat er gebeurt als je luxe inruilt voor slimme dupes.', 'calc.budget': 'Maandelijks modebudget', 'calc.perMonth': 'Per maand', 'calc.perYear': 'Per jaar', 'calc.fiveYears': 'In 5 jaar', 'calc.note': 'Gebaseerd op een gemiddelde besparing van 68% bij het kopen van dupes in plaats van luxe.',
+      'proof.dupes': 'dupes gevonden vandaag', 'proof.shoppers': 'blije shoppers', 'proof.saved': 'bespaard deze week', 'press.label': 'Bekend van',
+      'celeb.eyebrow': 'Stijlinspiratie', 'celeb.title': 'Krijg de celebrity look', 'celeb.sub': 'Ontdek de meest gezochte esthetieken en vind direct dupes.', 'celeb.btn': 'Vind dupes',
+      'celeb.c1.name': 'The Quiet Luxury', 'celeb.c1.desc': 'Ingetogen elegantie. Neutrale tinten, kasjmier en strakke silhouetten ge\u00efnspireerd door old-money minimalisme.',
+      'celeb.c2.name': 'Street Chic', 'celeb.c2.desc': 'Gedurfd, zelfverzekerd en moeiteloos. Oversized blazers, leren broeken en opvallende sneakers recht van fashion week.',
+      'celeb.c3.name': 'Old Money', 'celeb.c3.desc': 'Preppy meets gepolijst. Maatwerkjassen, parelaccenten, loafers en gestructureerde tassen die rijkdom fluisteren.',
+      'celeb.c4.name': 'French Girl', 'celeb.c4.desc': 'Moeiteloos chic. Bretonse strepen, midirokken, ballerina\u2019s en dat perfect nonchalante Parijse je ne sais quoi.',
+      'cookie.text': 'We gebruiken cookies om je ervaring te verbeteren.', 'cookie.accept': 'Alles accepteren', 'cookie.manage': 'Voorkeuren beheren',
+      'about.mission': 'Luxe esthetiek, betaalbare prijzen.', 'about.storyEyebrow': 'Ons Verhaal', 'about.storyTitle': 'Mode moet er voor iedereen zijn',
+      'about.storyP1': 'ALTERE is ontstaan uit een simpele frustratie: verliefd worden op een catwalk-stuk en dan het prijskaartje zien. Wij geloven dat geweldige stijl geen vermogen zou moeten kosten.',
+      'about.storyP2': 'Dus bouwden we een AI die mode ziet zoals een stylist dat doet \u2014 stof, snit, kleur en silhouet analyseert \u2014 en vervolgens duizenden producten doorzoekt om de beste match te vinden voor een fractie van de prijs.',
+      'about.howEyebrow': 'De Technologie', 'about.howTitle': 'Hoe onze AI werkt',
+      'about.step1Title': 'Visuele deconstructie', 'about.step1Desc': 'Ons model ontleedt elk mode-item in kernattributen: materiaal, textuur, vorm, verhoudingen, kleurenpalet en constructiedetails.',
+      'about.step2Title': 'Cross-store matching', 'about.step2Desc': 'We scannen voorraden van Zara, H&M, Mango, ASOS, COS en & Other Stories in realtime, en scoren elk product op meer dan 40 stijldimensies.',
+      'about.step3Title': 'Slimme rangschikking', 'about.step3Desc': 'Resultaten worden gerangschikt op match-nauwkeurigheid, prijsbesparing en beschikbaarheid \u2014 zodat de beste dupe altijd bovenaan staat.',
+      'about.teamEyebrow': 'Wie Wij Zijn', 'about.teamTitle': 'Opgericht door modeliefhebbers,<br>aangedreven door AI',
+      'about.teamDesc': 'We zijn een klein team van ontwerpers, engineers en mode-obsessieven met \u00e9\u00e9n missie: stijl democratiseren. Elke functie begint met dezelfde vraag: helpt dit iemand er fantastisch uit te zien zonder te veel uit te geven?',
+      'about.cta': 'Begin met dupes ontdekken',
+      'faq.eyebrow': 'Ondersteuning', 'faq.title': 'Veelgestelde vragen',
+      'faq.q1': 'Hoe vindt de AI dupes?', 'faq.a1': 'Ons AI-model analyseert elk mode-item \u2014 via foto, link of tekstbeschrijving \u2014 en ontleedt het in kernattributen zoals stof, snit, kleur, silhouet en constructie. Vervolgens scoort het duizenden producten van Zara, H&M, Mango, ASOS, COS en & Other Stories op die attributen in realtime.',
+      'faq.q2': 'Zijn de links affiliate links?', 'faq.a2': 'Sommige links kunnen affiliate links zijn, wat betekent dat we een kleine commissie verdienen bij een aankoop \u2014 zonder extra kosten voor jou. Dit helpt ons ALTERE gratis te houden. Commissies be\u00efnvloeden nooit welke dupes worden getoond.',
+      'faq.q3': 'Is ALTERE gratis?', 'faq.a3': 'Ja, ALTERE is volledig gratis. Je kunt onbeperkt dupes zoeken, favorieten opslaan en delen \u2014 zonder account of betaling. We zijn van plan de kernervaring altijd gratis te houden.',
+      'faq.q4': 'Hoe nauwkeurig zijn de matchpercentages?', 'faq.a4': 'Matchpercentages geven aan hoe nauw een dupe het origineel benadert op meer dan 40 stijldimensies. Een score boven 90% betekent visueel zeer dichtbij; 80\u201390% duidt op sterke gelijkenis met kleine verschillen.',
+      'faq.q5': 'Kan ik een winkel voorstellen?', 'faq.a5': 'Absoluut! We zijn altijd op zoek naar uitbreiding. Stuur ons de winkelnaam en we evalueren het. Populaire verzoeken zijn Uniqlo, Arket en Massimo Dutti \u2014 allemaal op onze roadmap.',
+      'reviews.eyebrow': 'Beoordelingen', 'reviews.title': 'Geliefd bij modeliefhebbers',
+      'reviews.r1.quote': '\u201cEen perfecte Bottega-dupe gevonden voor mijn verjaardag \u2014 niemand zag het verschil. Meer dan \u20ac2.000 bespaard!\u201d', 'reviews.r1.name': 'Sophie M.', 'reviews.r1.location': 'Amsterdam, NL',
+      'reviews.r2.quote': '\u201cIk gebruik ALTERE elke keer als ik iets op Instagram spot. De AI-match is echt eng goed.\u201d', 'reviews.r2.name': 'James T.', 'reviews.r2.location': 'Londen, UK',
+      'reviews.r3.quote': '\u201cAls styliste is dit mijn geheime wapen. Mijn klanten krijgen de look die ze willen zonder de luxe toeslag.\u201d', 'reviews.r3.name': 'Amara K.', 'reviews.r3.location': 'Parijs, FR',
+      'reviews.r4.quote': '\u201cEen foto ge\u00fcpload van een Max Mara jas van \u20ac900 en een bijna identieke gevonden bij H&M voor \u20ac89. Onwerkelijk.\u201d', 'reviews.r4.name': 'Luca R.', 'reviews.r4.location': 'Milaan, IT',
+      'reviews.r5.quote': '\u201cEindelijk een dupe-finder die echt werkt. De foto-upload is een gamechanger voor Pinterest-inspiratie.\u201d', 'reviews.r5.name': 'Elena V.', 'reviews.r5.location': 'Barcelona, ES',
+      'reviews.r6.quote': '\u201cAan vrienden laten zien en nu is onze hele groepschat geobsedeerd. We delen elke dag dupes.\u201d', 'reviews.r6.name': 'Noah B.', 'reviews.r6.location': 'Berlijn, DE',
+      'results.eyebrow': 'Trending Dupes',
+      'results.title': 'Luxe looks, betaalbare prijzen',
+      'results.subtitle': 'Onze AI scant dagelijks duizenden producten voor de beste alternatieven.',
+      'filter.category': 'Categorie', 'filter.bags': 'Tassen', 'filter.shoes': 'Schoenen', 'filter.clothing': 'Kleding', 'filter.jewellery': 'Sieraden', 'filter.accessories': 'Accessoires',
+      'filter.price': 'Prijs', 'filter.all': 'Alles', 'filter.store': 'Winkel', 'filter.allStores': 'Alle Winkels', 'filter.sortBy': 'Sorteer op',
+      'sort.match': 'Beste match', 'sort.priceAsc': 'Prijs: Laag naar Hoog', 'sort.priceDesc': 'Prijs: Hoog naar Laag', 'sort.saving': 'Grootste besparing',
+      'how.eyebrow': 'Hoe het werkt', 'how.title': 'Drie stappen naar je perfecte dupe',
+      'how.step1.title': 'Upload of plak', 'how.step1.desc': 'Deel een foto, productlink of beschrijving van het luxe stuk dat je mooi vindt.',
+      'how.step2.title': 'AI-analyse', 'how.step2.desc': 'Ons model ontleedt stof, snit, kleur en silhouet in seconden.',
+      'how.step3.title': 'Shop de dupes', 'how.step3.desc': 'Bekijk gerangschikte alternatieven met matchscores, prijzen en directe winkellinks.',
+      'waitlist.eyebrow': 'Vroege Toegang', 'waitlist.title': 'Wees de eerste<br>die het weet bij lancering',
+      'waitlist.sub': 'Sluit je aan bij duizenden modeliefhebbers op de lijst.',
+      'waitlist.placeholder': 'Vul je e-mailadres in', 'waitlist.btn': 'Schrijf je in',
+      'waitlist.hint': 'Geen spam, ooit. Schrijf je op elk moment uit.',
+      'waitlist.success.title': 'Je staat op de lijst', 'waitlist.success.desc': 'We laten je weten zodra ALTERE live is.',
+      'saved.back': 'Terug', 'saved.eyebrow': 'Jouw Collectie', 'saved.title': 'Opgeslagen Items', 'saved.clearAll': 'Alles wissen',
+      'saved.empty': 'Nog geen opgeslagen items', 'saved.emptyHint': 'Tik op het hartje om een dupe hier op te slaan',
+      'footer.tagline': 'AI-gestuurde mode dupe finder. Luxe esthetiek, betaalbare prijzen.',
+      'footer.explore': 'Ontdek', 'footer.trending': 'Trending', 'footer.newArrivals': 'Nieuw binnen', 'footer.collections': 'Collecties',
+      'footer.company': 'Bedrijf', 'footer.about': 'Over ons', 'footer.careers': 'Vacatures', 'footer.privacy': 'Privacy', 'footer.terms': 'Voorwaarden',
+      'toast.saved': 'Opgeslagen in je collectie', 'toast.removed': 'Verwijderd uit opgeslagen', 'toast.cleared': 'Alle opgeslagen items gewist',
+      'search.searching': 'Zoeken...', 'search.joining': 'Aanmelden...',
+      'results.ai.eyebrow': 'AI Resultaten', 'results.ai.title': 'Je dupes zijn klaar',
+      'results.loading.title': 'Onze AI analyseert je item\u2026', 'results.loading.sub': 'De beste alternatieven zoeken bij 6 winkels',
+      'share.whatsapp': 'WhatsApp', 'share.copy': 'Link kopi\u00ebren', 'share.copied': 'Gekopieerd!',
+      'share.text': 'Bekijk deze dupe: {name} van {store} voor slechts {price} \u2014 gevonden op ALTERE'
+    },
+    fr: {
+      'nav.discover': 'D\u00e9couvrir', 'nav.brands': 'Marques', 'nav.saved': 'Sauv\u00e9s', 'nav.signin': 'Connexion',
+      'hero.eyebrow': 'D\u00e9couverte Mode par IA',
+      'hero.headline': 'Trouvez le look.<br>Pas le prix.',
+      'hero.sub': 'Uploadez une pi\u00e8ce de luxe et nous trouverons des alternatives superbes chez vos marques pr\u00e9f\u00e9r\u00e9es \u2014 instantan\u00e9ment.',
+      'search.tab.link': 'Coller un lien', 'search.tab.upload': 'Uploader une photo', 'search.tab.text': 'Rechercher',
+      'search.placeholder.link': 'Collez l\u2019URL d\u2019un produit de mode...',
+      'search.placeholder.text': 'D\u00e9crivez l\u2019article, ex. "jupe midi en satin cr\u00e8me"...',
+      'search.btn': 'Trouver des dupes',
+      'search.upload.hint': 'Glisser-d\u00e9poser ou <strong>parcourir</strong>',
+      'search.upload.formats': 'JPG, PNG ou WEBP jusqu\u2019\u00e0 10 Mo',
+      'search.upload.ready': 'Pr\u00eat \u00e0 rechercher',
+      'search.status': 'L\u2019IA recherche vos dupes',
+      'recent.label': 'R\u00e9cents', 'recent.clear': 'Effacer',
+      'trending.label': 'Tendances',
+      'hero.searching': 'Recherche sur', 'hero.scroll': 'D\u00e9filez pour explorer',
+      'dotd.eyebrow': 'Dupe du Jour', 'dotd.original': 'Original', 'dotd.dupe': 'Dupe', 'dotd.vs': 'VS', 'dotd.btn': 'Voir le dupe',
+      'calc.eyebrow': 'Calculateur d\u2019\u00e9conomies', 'calc.title': 'Combien pourriez-vous \u00e9conomiser ?', 'calc.sub': 'D\u00e9couvrez ce qui se passe quand vous troquz le luxe pour des dupes malins.', 'calc.budget': 'Budget mode mensuel', 'calc.perMonth': 'Par mois', 'calc.perYear': 'Par an', 'calc.fiveYears': 'En 5 ans', 'calc.note': 'Bas\u00e9 sur une \u00e9conomie moyenne de 68% en achetant des dupes plut\u00f4t que du luxe.',
+      'proof.dupes': 'dupes trouv\u00e9s aujourd\u2019hui', 'proof.shoppers': 'acheteurs satisfaits', 'proof.saved': '\u00e9conomis\u00e9s cette semaine', 'press.label': 'Vu dans',
+      'celeb.eyebrow': 'Inspiration Style', 'celeb.title': 'Adoptez le look c\u00e9l\u00e9brit\u00e9', 'celeb.sub': 'Explorez les esth\u00e9tiques les plus recherch\u00e9es et trouvez des dupes instantan\u00e9ment.', 'celeb.btn': 'Trouver des dupes',
+      'celeb.c1.name': 'The Quiet Luxury', 'celeb.c1.desc': '\u00c9l\u00e9gance discr\u00e8te. Tons neutres, cachemire et silhouettes \u00e9pur\u00e9es inspir\u00e9es du minimalisme old-money.',
+      'celeb.c2.name': 'Street Chic', 'celeb.c2.desc': 'Audacieux, confiant et sans effort. Blazers oversize, pantalons en cuir et baskets statement tout droit de la fashion week.',
+      'celeb.c3.name': 'Old Money', 'celeb.c3.desc': 'Preppy rencontre le raffin\u00e9. Manteaux taill\u00e9s, accents perl\u00e9s, mocassins et sacs structur\u00e9s qui murmurent la richesse.',
+      'celeb.c4.name': 'French Girl', 'celeb.c4.desc': 'Chic sans effort. Rayures bretonnes, jupes midi, ballerines et ce je ne sais quoi parfaitement d\u00e9contract\u00e9.',
+      'cookie.text': 'Nous utilisons des cookies pour am\u00e9liorer votre exp\u00e9rience.', 'cookie.accept': 'Tout accepter', 'cookie.manage': 'G\u00e9rer les pr\u00e9f\u00e9rences',
+      'about.mission': 'Esth\u00e9tique luxe, prix accessibles.', 'about.storyEyebrow': 'Notre Histoire', 'about.storyTitle': 'La mode devrait \u00eatre pour tous',
+      'about.storyP1': 'ALTERE est n\u00e9 d\u2019une frustration simple : tomber amoureux d\u2019une pi\u00e8ce de d\u00e9fil\u00e9, puis voir le prix. Nous croyons que le grand style ne devrait pas n\u00e9cessiter une fortune.',
+      'about.storyP2': 'Alors nous avons cr\u00e9\u00e9 une IA qui voit la mode comme un styliste \u2014 analysant tissu, coupe, couleur et silhouette \u2014 puis parcourt des milliers de produits pour trouver le meilleur match \u00e0 une fraction du co\u00fbt.',
+      'about.howEyebrow': 'La Technologie', 'about.howTitle': 'Comment fonctionne notre IA',
+      'about.step1Title': 'D\u00e9construction visuelle', 'about.step1Desc': 'Notre mod\u00e8le d\u00e9compose chaque article en attributs cl\u00e9s : mati\u00e8re, texture, forme, proportions, palette de couleurs et d\u00e9tails de construction.',
+      'about.step2Title': 'Matching multi-enseignes', 'about.step2Desc': 'Nous analysons les inventaires de Zara, H&M, Mango, ASOS, COS et & Other Stories en temps r\u00e9el, \u00e9valuant chaque produit sur plus de 40 dimensions de style.',
+      'about.step3Title': 'Classement intelligent', 'about.step3Desc': 'Les r\u00e9sultats sont class\u00e9s par pr\u00e9cision, \u00e9conomies et disponibilit\u00e9 \u2014 le meilleur dupe est toujours en t\u00eate.',
+      'about.teamEyebrow': 'Qui Nous Sommes', 'about.teamTitle': 'Fond\u00e9 par des passionn\u00e9s de mode,<br>propuls\u00e9 par l\u2019IA',
+      'about.teamDesc': 'Nous sommes une petite \u00e9quipe de designers, ing\u00e9nieurs et obsess\u00e9s de la mode avec une mission : d\u00e9mocratiser le style. Chaque fonctionnalit\u00e9 commence par la m\u00eame question : cela aide-t-il quelqu\u2019un \u00e0 \u00eatre \u00e9l\u00e9gant sans trop d\u00e9penser ?',
+      'about.cta': 'Commencer \u00e0 d\u00e9couvrir des dupes',
+      'faq.eyebrow': 'Aide', 'faq.title': 'Questions fr\u00e9quentes',
+      'faq.q1': 'Comment l\u2019IA trouve-t-elle des dupes ?', 'faq.a1': 'Notre mod\u00e8le IA analyse tout article de mode \u2014 photo, lien ou description \u2014 en le d\u00e9composant en attributs cl\u00e9s comme le tissu, la coupe, la couleur et la silhouette. Il \u00e9value ensuite des milliers de produits de Zara, H&M, Mango, ASOS, COS et & Other Stories en temps r\u00e9el.',
+      'faq.q2': 'Les liens sont-ils des liens d\u2019affiliation ?', 'faq.a2': 'Certains liens peuvent \u00eatre des liens d\u2019affiliation, ce qui signifie que nous touchons une petite commission lors d\u2019un achat \u2014 sans co\u00fbt suppl\u00e9mentaire pour vous. Les commissions n\u2019influencent jamais les r\u00e9sultats.',
+      'faq.q3': 'ALTERE est-il gratuit ?', 'faq.a3': 'Oui, ALTERE est enti\u00e8rement gratuit. Vous pouvez rechercher des dupes de mani\u00e8re illimit\u00e9e, sauvegarder vos favoris et les partager \u2014 sans compte ni paiement.',
+      'faq.q4': 'Les pourcentages de correspondance sont-ils fiables ?', 'faq.a4': 'Les pourcentages refl\u00e8tent la ressemblance sur plus de 40 dimensions de style. Un score sup\u00e9rieur \u00e0 90% signifie une tr\u00e8s forte ressemblance ; 80\u201390% indique une bonne ressemblance avec des diff\u00e9rences mineures.',
+      'faq.q5': 'Puis-je sugg\u00e9rer un magasin \u00e0 ajouter ?', 'faq.a5': 'Bien s\u00fbr ! Nous cherchons toujours \u00e0 \u00e9tendre notre r\u00e9seau. Envoyez-nous le nom du magasin. Les demandes populaires incluent Uniqlo, Arket et Massimo Dutti.',
+      'reviews.eyebrow': 'Avis', 'reviews.title': 'Ador\u00e9 par les passionn\u00e9s de mode',
+      'reviews.r1.quote': '\u201cTrouv\u00e9 un dupe Bottega parfait pour mon anniversaire \u2014 personne n\u2019a vu la diff\u00e9rence. Plus de 2 000\u20ac \u00e9conomis\u00e9s !\u201d', 'reviews.r1.name': 'Sophie M.', 'reviews.r1.location': 'Amsterdam, NL',
+      'reviews.r2.quote': '\u201cJ\u2019utilise ALTERE chaque fois que je rep\u00e8re quelque chose sur Instagram. La correspondance IA est vraiment bluffante.\u201d', 'reviews.r2.name': 'James T.', 'reviews.r2.location': 'Londres, UK',
+      'reviews.r3.quote': '\u201cEn tant que styliste, c\u2019est mon arme secr\u00e8te. Mes clients obtiennent le look qu\u2019ils veulent sans la majoration luxe.\u201d', 'reviews.r3.name': 'Amara K.', 'reviews.r3.location': 'Paris, FR',
+      'reviews.r4.quote': '\u201cJ\u2019ai t\u00e9l\u00e9charg\u00e9 une photo d\u2019un manteau Max Mara \u00e0 900\u20ac et trouv\u00e9 un quasi-identique chez H&M \u00e0 89\u20ac. Incroyable.\u201d', 'reviews.r4.name': 'Luca R.', 'reviews.r4.location': 'Milan, IT',
+      'reviews.r5.quote': '\u201cEnfin un trouveur de dupes qui marche vraiment. L\u2019upload photo est r\u00e9volutionnaire pour l\u2019inspiration Pinterest.\u201d', 'reviews.r5.name': 'Elena V.', 'reviews.r5.location': 'Barcelone, ES',
+      'reviews.r6.quote': '\u201cMontr\u00e9 \u00e0 mes amis et maintenant tout le groupe est obsess\u00e9. On partage des dupes chaque jour.\u201d', 'reviews.r6.name': 'Noah B.', 'reviews.r6.location': 'Berlin, DE',
+      'results.eyebrow': 'Dupes Tendance',
+      'results.title': 'Looks luxe, prix abordables',
+      'results.subtitle': 'Notre IA scanne des milliers de produits chaque jour pour les meilleures alternatives.',
+      'filter.category': 'Cat\u00e9gorie', 'filter.bags': 'Sacs', 'filter.shoes': 'Chaussures', 'filter.clothing': 'V\u00eatements', 'filter.jewellery': 'Bijoux', 'filter.accessories': 'Accessoires',
+      'filter.price': 'Prix', 'filter.all': 'Tout', 'filter.store': 'Magasin', 'filter.allStores': 'Tous les Magasins', 'filter.sortBy': 'Trier par',
+      'sort.match': 'Meilleure correspondance', 'sort.priceAsc': 'Prix : Croissant', 'sort.priceDesc': 'Prix : D\u00e9croissant', 'sort.saving': 'Plus grande \u00e9conomie',
+      'how.eyebrow': 'Comment \u00e7a marche', 'how.title': 'Trois \u00e9tapes vers votre dupe parfait',
+      'how.step1.title': 'Uploadez ou collez', 'how.step1.desc': 'Partagez une photo, un lien ou une description de la pi\u00e8ce de luxe que vous aimez.',
+      'how.step2.title': 'Analyse IA', 'how.step2.desc': 'Notre mod\u00e8le de vision d\u00e9construit tissu, coupe, couleur et silhouette en secondes.',
+      'how.step3.title': 'Achetez les dupes', 'how.step3.desc': 'Parcourez des alternatives class\u00e9es avec scores, prix et liens directs.',
+      'waitlist.eyebrow': 'Acc\u00e8s Anticip\u00e9', 'waitlist.title': 'Soyez les premiers inform\u00e9s<br>du lancement',
+      'waitlist.sub': 'Rejoignez des milliers de passionn\u00e9s de mode d\u00e9j\u00e0 inscrits.',
+      'waitlist.placeholder': 'Entrez votre adresse e-mail', 'waitlist.btn': 'Rejoindre la liste',
+      'waitlist.hint': 'Pas de spam, jamais. D\u00e9sinscription \u00e0 tout moment.',
+      'waitlist.success.title': 'Vous \u00eates sur la liste', 'waitlist.success.desc': 'Nous vous pr\u00e9viendrons d\u00e8s qu\u2019ALTERE sera en ligne.',
+      'saved.back': 'Retour', 'saved.eyebrow': 'Votre Collection', 'saved.title': 'Articles Sauv\u00e9s', 'saved.clearAll': 'Tout effacer',
+      'saved.empty': 'Aucun article sauv\u00e9', 'saved.emptyHint': 'Appuyez sur le c\u0153ur pour sauvegarder un dupe ici',
+      'footer.tagline': 'Trouveur de dupes mode par IA. Esth\u00e9tique luxe, prix accessibles.',
+      'footer.explore': 'Explorer', 'footer.trending': 'Tendances', 'footer.newArrivals': 'Nouveaut\u00e9s', 'footer.collections': 'Collections',
+      'footer.company': 'Entreprise', 'footer.about': '\u00c0 propos', 'footer.careers': 'Carri\u00e8res', 'footer.privacy': 'Confidentialit\u00e9', 'footer.terms': 'Conditions',
+      'toast.saved': 'Sauv\u00e9 dans votre collection', 'toast.removed': 'Retir\u00e9 des sauvegardes', 'toast.cleared': 'Tous les articles sauv\u00e9s effac\u00e9s',
+      'search.searching': 'Recherche...', 'search.joining': 'Inscription...',
+      'results.ai.eyebrow': 'R\u00e9sultats IA', 'results.ai.title': 'Vos dupes sont pr\u00eats',
+      'results.loading.title': 'Notre IA analyse votre article\u2026', 'results.loading.sub': 'Recherche des meilleures alternatives dans 6 magasins',
+      'share.whatsapp': 'WhatsApp', 'share.copy': 'Copier le lien', 'share.copied': 'Copi\u00e9 !',
+      'share.text': 'D\u00e9couvrez ce dupe : {name} de {store} pour seulement {price} \u2014 trouv\u00e9 sur ALTERE'
+    },
+    de: {
+      'nav.discover': 'Entdecken', 'nav.brands': 'Marken', 'nav.saved': 'Gespeichert', 'nav.signin': 'Anmelden',
+      'hero.eyebrow': 'KI-gest\u00fctzte Mode-Entdeckung',
+      'hero.headline': 'Finde den Look.<br>Nicht den Preis.',
+      'hero.sub': 'Lade ein Luxusst\u00fcck hoch und wir finden atemberaubende Alternativen von deinen Lieblingsmarken \u2014 sofort.',
+      'search.tab.link': 'Link einf\u00fcgen', 'search.tab.upload': 'Foto hochladen', 'search.tab.text': 'Text suchen',
+      'search.placeholder.link': 'Produkt-URL von einer Modeseite einf\u00fcgen...',
+      'search.placeholder.text': 'Artikel beschreiben, z.B. "cremefarbener Satin-Midirock"...',
+      'search.btn': 'Dupes finden',
+      'search.upload.hint': 'Ziehen & ablegen oder <strong>durchsuchen</strong>',
+      'search.upload.formats': 'JPG, PNG oder WEBP bis 10 MB',
+      'search.upload.ready': 'Bereit zum Suchen',
+      'search.status': 'KI sucht deine Dupes',
+      'recent.label': 'K\u00fcrzlich', 'recent.clear': 'L\u00f6schen',
+      'trending.label': 'Jetzt im Trend',
+      'hero.searching': 'Suche bei', 'hero.scroll': 'Scrollen zum Entdecken',
+      'dotd.eyebrow': 'Dupe des Tages', 'dotd.original': 'Original', 'dotd.dupe': 'Dupe', 'dotd.vs': 'VS', 'dotd.btn': 'Dupe ansehen',
+      'calc.eyebrow': 'Sparrechner', 'calc.title': 'Wie viel k\u00f6nntest du sparen?', 'calc.sub': 'Entdecke, was passiert, wenn du Luxus gegen smarte Dupes tauschst.', 'calc.budget': 'Monatliches Modebudget', 'calc.perMonth': 'Pro Monat', 'calc.perYear': 'Pro Jahr', 'calc.fiveYears': 'In 5 Jahren', 'calc.note': 'Basierend auf einer durchschnittlichen Ersparnis von 68% beim Kauf von Dupes statt Luxus.',
+      'proof.dupes': 'Dupes heute gefunden', 'proof.shoppers': 'zufriedene K\u00e4ufer', 'proof.saved': 'diese Woche gespart', 'press.label': 'Bekannt aus',
+      'celeb.eyebrow': 'Stil-Inspiration', 'celeb.title': 'Hol dir den Promi-Look', 'celeb.sub': 'Entdecke die meistgesuchten \u00c4sthetiken und finde sofort Dupes.', 'celeb.btn': 'Dupes finden',
+      'celeb.c1.name': 'The Quiet Luxury', 'celeb.c1.desc': 'Zur\u00fcckhaltende Eleganz. Neutrale T\u00f6ne, Kaschmir und klare Silhouetten inspiriert von Old-Money-Minimalismus.',
+      'celeb.c2.name': 'Street Chic', 'celeb.c2.desc': 'Mutig, selbstbewusst und m\u00fchelos. Oversized Blazer, Lederhosen und Statement-Sneaker direkt von der Fashion Week.',
+      'celeb.c3.name': 'Old Money', 'celeb.c3.desc': 'Preppy trifft Eleganz. Ma\u00dfgeschneiderte M\u00e4ntel, Perlenakzente, Loafer und strukturierte Taschen, die Reichtum fl\u00fcstern.',
+      'celeb.c4.name': 'French Girl', 'celeb.c4.desc': 'M\u00fchelos schick. Breton-Streifen, Midir\u00f6cke, Ballerinas und das perfekt ungezwungene Pariser Je ne sais quoi.',
+      'cookie.text': 'Wir verwenden Cookies, um Ihre Erfahrung zu verbessern.', 'cookie.accept': 'Alle akzeptieren', 'cookie.manage': 'Einstellungen verwalten',
+      'about.mission': 'Luxus-\u00c4sthetik, bezahlbare Preise.', 'about.storyEyebrow': 'Unsere Geschichte', 'about.storyTitle': 'Mode sollte f\u00fcr alle sein',
+      'about.storyP1': 'ALTERE entstand aus einer einfachen Frustration: sich in ein Laufsteg-Piece zu verlieben und dann das Preisschild zu sehen. Wir glauben, dass gro\u00dfartiger Stil kein Verm\u00f6gen kosten sollte.',
+      'about.storyP2': 'Also bauten wir eine KI, die Mode so sieht wie ein Stylist \u2014 Stoff, Schnitt, Farbe und Silhouette analysiert \u2014 und dann tausende Produkte durchsucht, um den besten Match zu einem Bruchteil des Preises zu finden.',
+      'about.howEyebrow': 'Die Technologie', 'about.howTitle': 'Wie unsere KI funktioniert',
+      'about.step1Title': 'Visuelle Dekonstruktion', 'about.step1Desc': 'Unser Modell zerlegt jedes Mode-Item in Kernattribute: Material, Textur, Form, Proportionen, Farbpalette und Konstruktionsdetails.',
+      'about.step2Title': 'Cross-Store-Matching', 'about.step2Desc': 'Wir scannen Best\u00e4nde von Zara, H&M, Mango, ASOS, COS und & Other Stories in Echtzeit und bewerten jedes Produkt auf \u00fcber 40 Stildimensionen.',
+      'about.step3Title': 'Intelligentes Ranking', 'about.step3Desc': 'Ergebnisse werden nach Match-Genauigkeit, Preisersparnis und Verf\u00fcgbarkeit sortiert \u2014 der beste Dupe steht immer oben.',
+      'about.teamEyebrow': 'Wer Wir Sind', 'about.teamTitle': 'Gegr\u00fcndet von Modeliebhabern,<br>angetrieben von KI',
+      'about.teamDesc': 'Wir sind ein kleines Team aus Designern, Ingenieuren und Mode-Besessenen mit einer Mission: Stil zu demokratisieren. Jede Funktion beginnt mit derselben Frage: Hilft das jemandem, unglaublich auszusehen, ohne zu viel auszugeben?',
+      'about.cta': 'Jetzt Dupes entdecken',
+      'faq.eyebrow': 'Hilfe', 'faq.title': 'H\u00e4ufig gestellte Fragen',
+      'faq.q1': 'Wie findet die KI Dupes?', 'faq.a1': 'Unser KI-Modell analysiert jedes Mode-Item \u2014 per Foto, Link oder Beschreibung \u2014 und zerlegt es in Kernattribute wie Stoff, Schnitt, Farbe und Silhouette. Anschlie\u00dfend bewertet es tausende Produkte von Zara, H&M, Mango, ASOS, COS und & Other Stories in Echtzeit.',
+      'faq.q2': 'Sind die Links Affiliate-Links?', 'faq.a2': 'Einige Links k\u00f6nnen Affiliate-Links sein, was bedeutet, dass wir eine kleine Provision bei einem Kauf erhalten \u2014 ohne Mehrkosten f\u00fcr Sie. Provisionen beeinflussen niemals die angezeigten Ergebnisse.',
+      'faq.q3': 'Ist ALTERE kostenlos?', 'faq.a3': 'Ja, ALTERE ist v\u00f6llig kostenlos. Sie k\u00f6nnen unbegrenzt Dupes suchen, Favoriten speichern und teilen \u2014 ohne Konto oder Zahlung.',
+      'faq.q4': 'Wie genau sind die Match-Prozents\u00e4tze?', 'faq.a4': 'Die Prozents\u00e4tze spiegeln die \u00c4hnlichkeit auf \u00fcber 40 Stildimensionen wider. \u00dcber 90% bedeutet sehr hohe \u00c4hnlichkeit; 80\u201390% zeigt starke \u00c4hnlichkeit mit kleinen Unterschieden.',
+      'faq.q5': 'Kann ich ein Gesch\u00e4ft vorschlagen?', 'faq.a5': 'Nat\u00fcrlich! Wir suchen immer nach Erweiterungen. Senden Sie uns den Gesch\u00e4ftsnamen. Beliebte Anfragen sind Uniqlo, Arket und Massimo Dutti.',
+      'reviews.eyebrow': 'Bewertungen', 'reviews.title': 'Geliebt von Modefans',
+      'reviews.r1.quote': '\u201cEinen perfekten Bottega-Dupe f\u00fcr meinen Geburtstag gefunden \u2014 niemand konnte den Unterschied erkennen. \u00dcber 2.000\u20ac gespart!\u201d', 'reviews.r1.name': 'Sophie M.', 'reviews.r1.location': 'Amsterdam, NL',
+      'reviews.r2.quote': '\u201cIch benutze ALTERE jedes Mal, wenn ich etwas auf Instagram entdecke. Die KI-\u00dcbereinstimmung ist ehrlich gesagt unheimlich gut.\u201d', 'reviews.r2.name': 'James T.', 'reviews.r2.location': 'London, UK',
+      'reviews.r3.quote': '\u201cAls Stylistin ist das meine Geheimwaffe. Meine Kunden bekommen den Look ohne den Luxus-Aufpreis.\u201d', 'reviews.r3.name': 'Amara K.', 'reviews.r3.location': 'Paris, FR',
+      'reviews.r4.quote': '\u201cEin Foto eines 900\u20ac Max Mara Mantels hochgeladen und einen fast identischen bei H&M f\u00fcr 89\u20ac gefunden. Unglaublich.\u201d', 'reviews.r4.name': 'Luca R.', 'reviews.r4.location': 'Mailand, IT',
+      'reviews.r5.quote': '\u201cEndlich ein Dupe-Finder, der wirklich funktioniert. Der Foto-Upload ist ein Gamechanger f\u00fcr Pinterest-Inspiration.\u201d', 'reviews.r5.name': 'Elena V.', 'reviews.r5.location': 'Barcelona, ES',
+      'reviews.r6.quote': '\u201cFreunden gezeigt und jetzt ist der ganze Gruppenchat besessen. Wir teilen jeden Tag Dupes.\u201d', 'reviews.r6.name': 'Noah B.', 'reviews.r6.location': 'Berlin, DE',
+      'results.eyebrow': 'Trend-Dupes',
+      'results.title': 'Luxus-Looks, erschwingliche Preise',
+      'results.subtitle': 'Unsere KI durchsucht t\u00e4glich tausende Produkte nach den besten Alternativen.',
+      'filter.category': 'Kategorie', 'filter.bags': 'Taschen', 'filter.shoes': 'Schuhe', 'filter.clothing': 'Kleidung', 'filter.jewellery': 'Schmuck', 'filter.accessories': 'Accessoires',
+      'filter.price': 'Preis', 'filter.all': 'Alle', 'filter.store': 'Gesch\u00e4ft', 'filter.allStores': 'Alle Gesch\u00e4fte', 'filter.sortBy': 'Sortieren nach',
+      'sort.match': 'Beste \u00dcbereinstimmung', 'sort.priceAsc': 'Preis: Aufsteigend', 'sort.priceDesc': 'Preis: Absteigend', 'sort.saving': 'Gr\u00f6\u00dfte Ersparnis',
+      'how.eyebrow': 'So funktioniert es', 'how.title': 'Drei Schritte zu deinem perfekten Dupe',
+      'how.step1.title': 'Hochladen oder einf\u00fcgen', 'how.step1.desc': 'Teile ein Foto, einen Produktlink oder eine Beschreibung des Luxusst\u00fccks.',
+      'how.step2.title': 'KI-Analyse', 'how.step2.desc': 'Unser Modell analysiert Stoff, Schnitt, Farbe und Silhouette in Sekunden.',
+      'how.step3.title': 'Dupes shoppen', 'how.step3.desc': 'Durchst\u00f6bere bewertete Alternativen mit Match-Scores, Preisen und direkten Shop-Links.',
+      'waitlist.eyebrow': 'Fr\u00fcher Zugang', 'waitlist.title': 'Erfahre als Erste/r<br>vom Launch',
+      'waitlist.sub': 'Schlie\u00dfe dich tausenden Modebegeisterten auf der Liste an.',
+      'waitlist.placeholder': 'E-Mail-Adresse eingeben', 'waitlist.btn': 'Auf die Warteliste',
+      'waitlist.hint': 'Kein Spam, niemals. Jederzeit abmeldbar.',
+      'waitlist.success.title': 'Du bist auf der Liste', 'waitlist.success.desc': 'Wir benachrichtigen dich, sobald ALTERE live ist.',
+      'saved.back': 'Zur\u00fcck', 'saved.eyebrow': 'Deine Kollektion', 'saved.title': 'Gespeicherte Artikel', 'saved.clearAll': 'Alle l\u00f6schen',
+      'saved.empty': 'Noch keine gespeicherten Artikel', 'saved.emptyHint': 'Tippe auf das Herz, um einen Dupe hier zu speichern',
+      'footer.tagline': 'KI-gest\u00fctzter Mode-Dupe-Finder. Luxus-\u00c4sthetik, bezahlbare Preise.',
+      'footer.explore': 'Entdecken', 'footer.trending': 'Trends', 'footer.newArrivals': 'Neuheiten', 'footer.collections': 'Kollektionen',
+      'footer.company': 'Unternehmen', 'footer.about': '\u00dcber uns', 'footer.careers': 'Karriere', 'footer.privacy': 'Datenschutz', 'footer.terms': 'AGB',
+      'toast.saved': 'In deiner Kollektion gespeichert', 'toast.removed': 'Aus Gespeicherten entfernt', 'toast.cleared': 'Alle gespeicherten Artikel gel\u00f6scht',
+      'search.searching': 'Suche...', 'search.joining': 'Anmelden...',
+      'results.ai.eyebrow': 'KI-Ergebnisse', 'results.ai.title': 'Deine Dupes sind bereit',
+      'results.loading.title': 'Unsere KI analysiert deinen Artikel\u2026', 'results.loading.sub': 'Suche nach den besten Alternativen in 6 Gesch\u00e4ften',
+      'share.whatsapp': 'WhatsApp', 'share.copy': 'Link kopieren', 'share.copied': 'Kopiert!',
+      'share.text': 'Schau dir diesen Dupe an: {name} von {store} f\u00fcr nur {price} \u2014 gefunden auf ALTERE'
+    },
+    es: {
+      'nav.discover': 'Descubrir', 'nav.brands': 'Marcas', 'nav.saved': 'Guardados', 'nav.signin': 'Iniciar sesi\u00f3n',
+      'hero.eyebrow': 'Descubrimiento de Moda con IA',
+      'hero.headline': 'Encuentra el look.<br>No la etiqueta de precio.',
+      'hero.sub': 'Sube una prenda de lujo y encontraremos alternativas impresionantes de tus marcas favoritas \u2014 al instante.',
+      'search.tab.link': 'Pegar enlace', 'search.tab.upload': 'Subir foto', 'search.tab.text': 'Buscar texto',
+      'search.placeholder.link': 'Pega la URL de un producto de cualquier tienda de moda...',
+      'search.placeholder.text': 'Describe el art\u00edculo, ej. "falda midi de sat\u00e9n crema"...',
+      'search.btn': 'Buscar dupes',
+      'search.upload.hint': 'Arrastra o <strong>explora</strong>',
+      'search.upload.formats': 'JPG, PNG o WEBP hasta 10 MB',
+      'search.upload.ready': 'Listo para buscar',
+      'search.status': 'La IA busca tus dupes',
+      'recent.label': 'Recientes', 'recent.clear': 'Borrar',
+      'trending.label': 'Tendencia ahora',
+      'hero.searching': 'Buscando en', 'hero.scroll': 'Despl\u00e1zate para explorar',
+      'dotd.eyebrow': 'Dupe del D\u00eda', 'dotd.original': 'Original', 'dotd.dupe': 'Dupe', 'dotd.vs': 'VS', 'dotd.btn': 'Ver dupe',
+      'calc.eyebrow': 'Calculadora de Ahorros', 'calc.title': '\u00bfCu\u00e1nto podr\u00edas ahorrar?', 'calc.sub': 'Mira qu\u00e9 pasa cuando cambias lujo por dupes inteligentes.', 'calc.budget': 'Presupuesto mensual de moda', 'calc.perMonth': 'Al mes', 'calc.perYear': 'Al a\u00f1o', 'calc.fiveYears': 'En 5 a\u00f1os', 'calc.note': 'Basado en un ahorro promedio del 68% al comprar dupes en lugar de lujo.',
+      'proof.dupes': 'dupes encontrados hoy', 'proof.shoppers': 'compradores felices', 'proof.saved': 'ahorrados esta semana', 'press.label': 'Visto en',
+      'celeb.eyebrow': 'Inspiraci\u00f3n de Estilo', 'celeb.title': 'Consigue el look de celebridad', 'celeb.sub': 'Explora las est\u00e9ticas m\u00e1s buscadas y encuentra dupes al instante.', 'celeb.btn': 'Buscar dupes',
+      'celeb.c1.name': 'The Quiet Luxury', 'celeb.c1.desc': 'Elegancia discreta. Tonos neutros, cachemira y siluetas limpias inspiradas en el minimalismo old-money.',
+      'celeb.c2.name': 'Street Chic', 'celeb.c2.desc': 'Audaz, seguro y sin esfuerzo. Blazers oversize, pantalones de cuero y zapatillas statement directos de la fashion week.',
+      'celeb.c3.name': 'Old Money', 'celeb.c3.desc': 'Preppy con clase. Abrigos a medida, acentos de perlas, mocasines y bolsos estructurados que susurran riqueza.',
+      'celeb.c4.name': 'French Girl', 'celeb.c4.desc': 'Chic sin esfuerzo. Rayas bretonas, faldas midi, bailarinas y ese je ne sais quoi parisino perfectamente desenfadado.',
+      'cookie.text': 'Usamos cookies para mejorar tu experiencia.', 'cookie.accept': 'Aceptar todo', 'cookie.manage': 'Gestionar preferencias',
+      'about.mission': 'Est\u00e9tica de lujo, precios accesibles.', 'about.storyEyebrow': 'Nuestra Historia', 'about.storyTitle': 'La moda deber\u00eda ser para todos',
+      'about.storyP1': 'ALTERE naci\u00f3 de una frustraci\u00f3n simple: enamorarse de una pieza de pasarela y luego ver la etiqueta de precio. Creemos que el gran estilo no deber\u00eda requerir una fortuna.',
+      'about.storyP2': 'As\u00ed que construimos una IA que ve la moda como un estilista \u2014 analizando tela, corte, color y silueta \u2014 y luego recorre miles de productos para encontrar la mejor coincidencia a una fracci\u00f3n del costo.',
+      'about.howEyebrow': 'La Tecnolog\u00eda', 'about.howTitle': 'C\u00f3mo funciona nuestra IA',
+      'about.step1Title': 'Deconstrucci\u00f3n visual', 'about.step1Desc': 'Nuestro modelo descompone cada art\u00edculo en atributos clave: material, textura, forma, proporciones, paleta de colores y detalles de construcci\u00f3n.',
+      'about.step2Title': 'B\u00fasqueda multi-tienda', 'about.step2Desc': 'Escaneamos inventarios de Zara, H&M, Mango, ASOS, COS y & Other Stories en tiempo real, evaluando cada producto en m\u00e1s de 40 dimensiones de estilo.',
+      'about.step3Title': 'Ranking inteligente', 'about.step3Desc': 'Los resultados se clasifican por precisi\u00f3n, ahorro y disponibilidad \u2014 el mejor dupe siempre sube al tope.',
+      'about.teamEyebrow': 'Qui\u00e9nes Somos', 'about.teamTitle': 'Fundado por amantes de la moda,<br>impulsado por IA',
+      'about.teamDesc': 'Somos un peque\u00f1o equipo de dise\u00f1adores, ingenieros y obsesivos de la moda con una misi\u00f3n: democratizar el estilo. Cada funci\u00f3n comienza con la misma pregunta: \u00bfesto ayuda a alguien a verse incre\u00edble sin gastar de m\u00e1s?',
+      'about.cta': 'Empieza a descubrir dupes',
+      'faq.eyebrow': 'Ayuda', 'faq.title': 'Preguntas frecuentes',
+      'faq.q1': '\u00bfC\u00f3mo encuentra la IA los dupes?', 'faq.a1': 'Nuestro modelo de IA analiza cualquier art\u00edculo de moda \u2014 foto, enlace o descripci\u00f3n \u2014 descomponi\u00e9ndolo en atributos clave como tela, corte, color y silueta. Luego eval\u00faa miles de productos de Zara, H&M, Mango, ASOS, COS y & Other Stories en tiempo real.',
+      'faq.q2': '\u00bfSon enlaces de afiliados?', 'faq.a2': 'Algunos enlaces pueden ser de afiliados, lo que significa que ganamos una peque\u00f1a comisi\u00f3n con tu compra \u2014 sin costo extra para ti. Las comisiones nunca influyen en los resultados.',
+      'faq.q3': '\u00bfEs ALTERE gratis?', 'faq.a3': 'S\u00ed, ALTERE es completamente gratis. Puedes buscar dupes sin l\u00edmite, guardar favoritos y compartirlos \u2014 sin cuenta ni pago.',
+      'faq.q4': '\u00bfQu\u00e9 tan precisos son los porcentajes?', 'faq.a4': 'Los porcentajes reflejan la similitud en m\u00e1s de 40 dimensiones de estilo. M\u00e1s del 90% significa muy alta similitud; 80\u201390% indica fuerte parecido con diferencias menores.',
+      'faq.q5': '\u00bfPuedo sugerir una tienda?', 'faq.a5': '\u00a1Por supuesto! Siempre buscamos expandirnos. Env\u00edanos el nombre de la tienda. Las solicitudes populares incluyen Uniqlo, Arket y Massimo Dutti.',
+      'reviews.eyebrow': 'Rese\u00f1as', 'reviews.title': 'Amado por los amantes de la moda',
+      'reviews.r1.quote': '\u201cEncontr\u00e9 un dupe perfecto de Bottega para mi cumplea\u00f1os \u2014 nadie not\u00f3 la diferencia. \u00a1Ahorr\u00e9 m\u00e1s de 2.000\u20ac!\u201d', 'reviews.r1.name': 'Sophie M.', 'reviews.r1.location': '\u00c1msterdam, NL',
+      'reviews.r2.quote': '\u201cUso ALTERE cada vez que veo algo en Instagram. La coincidencia de IA es incre\u00edblemente buena.\u201d', 'reviews.r2.name': 'James T.', 'reviews.r2.location': 'Londres, UK',
+      'reviews.r3.quote': '\u201cComo estilista, esta es mi arma secreta. Mis clientes consiguen el look que quieren sin el sobreprecio de lujo.\u201d', 'reviews.r3.name': 'Amara K.', 'reviews.r3.location': 'Par\u00eds, FR',
+      'reviews.r4.quote': '\u201cSub\u00ed una foto de un abrigo Max Mara de 900\u20ac y encontr\u00e9 uno casi id\u00e9ntico en H&M por 89\u20ac. Irreal.\u201d', 'reviews.r4.name': 'Luca R.', 'reviews.r4.location': 'Mil\u00e1n, IT',
+      'reviews.r5.quote': '\u201cPor fin un buscador de dupes que funciona de verdad. La subida de fotos cambia todo para la inspiraci\u00f3n de Pinterest.\u201d', 'reviews.r5.name': 'Elena V.', 'reviews.r5.location': 'Barcelona, ES',
+      'reviews.r6.quote': '\u201cSe lo ense\u00f1\u00e9 a mis amigos y ahora todo el grupo est\u00e1 obsesionado. Compartimos dupes cada d\u00eda.\u201d', 'reviews.r6.name': 'Noah B.', 'reviews.r6.location': 'Berl\u00edn, DE',
+      'results.eyebrow': 'Dupes en Tendencia',
+      'results.title': 'Looks de lujo, precios accesibles',
+      'results.subtitle': 'Nuestra IA escanea miles de productos diariamente para encontrar las mejores alternativas.',
+      'filter.category': 'Categor\u00eda', 'filter.bags': 'Bolsos', 'filter.shoes': 'Zapatos', 'filter.clothing': 'Ropa', 'filter.jewellery': 'Joyer\u00eda', 'filter.accessories': 'Accesorios',
+      'filter.price': 'Precio', 'filter.all': 'Todo', 'filter.store': 'Tienda', 'filter.allStores': 'Todas las Tiendas', 'filter.sortBy': 'Ordenar por',
+      'sort.match': 'Mejor coincidencia', 'sort.priceAsc': 'Precio: Menor a Mayor', 'sort.priceDesc': 'Precio: Mayor a Menor', 'sort.saving': 'Mayor ahorro',
+      'how.eyebrow': 'C\u00f3mo funciona', 'how.title': 'Tres pasos hacia tu dupe perfecto',
+      'how.step1.title': 'Sube o pega', 'how.step1.desc': 'Comparte una foto, enlace o descripci\u00f3n de la prenda de lujo que te encanta.',
+      'how.step2.title': 'An\u00e1lisis IA', 'how.step2.desc': 'Nuestro modelo analiza tela, corte, color y silueta en segundos.',
+      'how.step3.title': 'Compra los dupes', 'how.step3.desc': 'Explora alternativas clasificadas con puntuaciones, precios y enlaces directos.',
+      'waitlist.eyebrow': 'Acceso Anticipado', 'waitlist.title': 'S\u00e9 el primero en saber<br>cu\u00e1ndo lanzamos',
+      'waitlist.sub': '\u00danete a miles de amantes de la moda ya en la lista.',
+      'waitlist.placeholder': 'Introduce tu correo electr\u00f3nico', 'waitlist.btn': '\u00danete a la lista',
+      'waitlist.hint': 'Sin spam, nunca. Canc\u00e9late en cualquier momento.',
+      'waitlist.success.title': 'Est\u00e1s en la lista', 'waitlist.success.desc': 'Te avisaremos cuando ALTERE est\u00e9 en l\u00ednea.',
+      'saved.back': 'Volver', 'saved.eyebrow': 'Tu Colecci\u00f3n', 'saved.title': 'Art\u00edculos Guardados', 'saved.clearAll': 'Borrar todo',
+      'saved.empty': 'A\u00fan no hay art\u00edculos guardados', 'saved.emptyHint': 'Toca el coraz\u00f3n en cualquier dupe para guardarlo aqu\u00ed',
+      'footer.tagline': 'Buscador de dupes de moda con IA. Est\u00e9tica de lujo, precios accesibles.',
+      'footer.explore': 'Explorar', 'footer.trending': 'Tendencias', 'footer.newArrivals': 'Novedades', 'footer.collections': 'Colecciones',
+      'footer.company': 'Empresa', 'footer.about': 'Acerca de', 'footer.careers': 'Empleo', 'footer.privacy': 'Privacidad', 'footer.terms': 'T\u00e9rminos',
+      'toast.saved': 'Guardado en tu colecci\u00f3n', 'toast.removed': 'Eliminado de guardados', 'toast.cleared': 'Todos los art\u00edculos guardados eliminados',
+      'search.searching': 'Buscando...', 'search.joining': 'Uni\u00e9ndose...',
+      'results.ai.eyebrow': 'Resultados IA', 'results.ai.title': 'Tus dupes est\u00e1n listos',
+      'results.loading.title': 'Nuestra IA analiza tu art\u00edculo\u2026', 'results.loading.sub': 'Buscando las mejores alternativas en 6 tiendas',
+      'share.whatsapp': 'WhatsApp', 'share.copy': 'Copiar enlace', 'share.copied': '\u00a1Copiado!',
+      'share.text': 'Mira este dupe: {name} de {store} por solo {price} \u2014 encontrado en ALTERE'
+    },
+    it: {
+      'nav.discover': 'Scopri', 'nav.brands': 'Marchi', 'nav.saved': 'Salvati', 'nav.signin': 'Accedi',
+      'hero.eyebrow': 'Scoperta Moda con IA',
+      'hero.headline': 'Trova il look.<br>Non il cartellino.',
+      'hero.sub': 'Carica un capo di lusso e troveremo alternative straordinarie dai tuoi marchi preferiti \u2014 all\u2019istante.',
+      'search.tab.link': 'Incolla link', 'search.tab.upload': 'Carica foto', 'search.tab.text': 'Cerca testo',
+      'search.placeholder.link': 'Incolla l\u2019URL di un prodotto da un sito di moda...',
+      'search.placeholder.text': 'Descrivi l\u2019articolo, es. "gonna midi in raso panna"...',
+      'search.btn': 'Trova dupes',
+      'search.upload.hint': 'Trascina o <strong>sfoglia</strong>',
+      'search.upload.formats': 'JPG, PNG o WEBP fino a 10 MB',
+      'search.upload.ready': 'Pronto per cercare',
+      'search.status': 'L\u2019IA sta cercando i tuoi dupes',
+      'recent.label': 'Recenti', 'recent.clear': 'Cancella',
+      'trending.label': 'Di tendenza',
+      'hero.searching': 'Ricerca su', 'hero.scroll': 'Scorri per esplorare',
+      'dotd.eyebrow': 'Dupe del Giorno', 'dotd.original': 'Originale', 'dotd.dupe': 'Dupe', 'dotd.vs': 'VS', 'dotd.btn': 'Vedi dupe',
+      'calc.eyebrow': 'Calcolatore Risparmi', 'calc.title': 'Quanto potresti risparmiare?', 'calc.sub': 'Scopri cosa succede quando scambi il lusso con dupes intelligenti.', 'calc.budget': 'Budget moda mensile', 'calc.perMonth': 'Al mese', 'calc.perYear': 'All\u2019anno', 'calc.fiveYears': 'In 5 anni', 'calc.note': 'Basato su un risparmio medio del 68% acquistando dupes invece di lusso.',
+      'proof.dupes': 'dupes trovati oggi', 'proof.shoppers': 'acquirenti soddisfatti', 'proof.saved': 'risparmiati questa settimana', 'press.label': 'Visto su',
+      'celeb.eyebrow': 'Ispirazione Stile', 'celeb.title': 'Ottieni il look delle star', 'celeb.sub': 'Scopri le estetiche pi\u00f9 cercate e trova dupes all\u2019istante.', 'celeb.btn': 'Trova dupes',
+      'celeb.c1.name': 'The Quiet Luxury', 'celeb.c1.desc': 'Eleganza sobria. Toni neutri, cashmere e silhouette pulite ispirate al minimalismo old-money.',
+      'celeb.c2.name': 'Street Chic', 'celeb.c2.desc': 'Audace, sicuro e senza sforzo. Blazer oversize, pantaloni in pelle e sneaker statement direttamente dalla fashion week.',
+      'celeb.c3.name': 'Old Money', 'celeb.c3.desc': 'Preppy incontra il raffinato. Cappotti su misura, accenti di perle, mocassini e borse strutturate che sussurrano ricchezza.',
+      'celeb.c4.name': 'French Girl', 'celeb.c4.desc': 'Chic senza sforzo. Righe alla bretone, gonne midi, ballerine e quel je ne sais quoi parigino perfettamente disinvolto.',
+      'cookie.text': 'Utilizziamo i cookie per migliorare la tua esperienza.', 'cookie.accept': 'Accetta tutto', 'cookie.manage': 'Gestisci preferenze',
+      'about.mission': 'Estetica di lusso, prezzi accessibili.', 'about.storyEyebrow': 'La Nostra Storia', 'about.storyTitle': 'La moda dovrebbe essere per tutti',
+      'about.storyP1': 'ALTERE \u00e8 nato da una frustrazione semplice: innamorarsi di un capo da passerella e poi vedere il cartellino del prezzo. Crediamo che il grande stile non debba richiedere una fortuna.',
+      'about.storyP2': 'Cos\u00ec abbiamo costruito un\u2019IA che vede la moda come un\u2019esperta \u2014 analizzando tessuto, taglio, colore e silhouette \u2014 e poi setaccia migliaia di prodotti per trovare la migliore corrispondenza a una frazione del costo.',
+      'about.howEyebrow': 'La Tecnologia', 'about.howTitle': 'Come funziona la nostra IA',
+      'about.step1Title': 'Decostruzione visiva', 'about.step1Desc': 'Il nostro modello scompone ogni articolo nei suoi attributi chiave: materiale, texture, forma, proporzioni, palette colori e dettagli costruttivi.',
+      'about.step2Title': 'Matching multi-negozio', 'about.step2Desc': 'Analizziamo gli inventari di Zara, H&M, Mango, ASOS, COS e & Other Stories in tempo reale, valutando ogni prodotto su oltre 40 dimensioni di stile.',
+      'about.step3Title': 'Classificazione intelligente', 'about.step3Desc': 'I risultati sono classificati per accuratezza, risparmio e disponibilit\u00e0 \u2014 il miglior dupe \u00e8 sempre in cima.',
+      'about.teamEyebrow': 'Chi Siamo', 'about.teamTitle': 'Fondato da amanti della moda,<br>alimentato dall\u2019IA',
+      'about.teamDesc': 'Siamo un piccolo team di designer, ingegneri e appassionati di moda con una missione: democratizzare lo stile. Ogni funzione inizia con la stessa domanda: questo aiuta qualcuno ad apparire incredibile senza spendere troppo?',
+      'about.cta': 'Inizia a scoprire i dupes',
+      'faq.eyebrow': 'Supporto', 'faq.title': 'Domande frequenti',
+      'faq.q1': 'Come fa l\u2019IA a trovare i dupes?', 'faq.a1': 'Il nostro modello IA analizza qualsiasi articolo di moda \u2014 foto, link o descrizione \u2014 scomponendolo in attributi chiave come tessuto, taglio, colore e silhouette. Poi valuta migliaia di prodotti di Zara, H&M, Mango, ASOS, COS e & Other Stories in tempo reale.',
+      'faq.q2': 'I link sono link di affiliazione?', 'faq.a2': 'Alcuni link possono essere di affiliazione, il che significa che guadagniamo una piccola commissione con il tuo acquisto \u2014 senza costi aggiuntivi per te. Le commissioni non influenzano mai i risultati.',
+      'faq.q3': 'ALTERE \u00e8 gratuito?', 'faq.a3': 'S\u00ec, ALTERE \u00e8 completamente gratuito. Puoi cercare dupes senza limiti, salvare i preferiti e condividerli \u2014 senza account o pagamento.',
+      'faq.q4': 'Quanto sono precise le percentuali?', 'faq.a4': 'Le percentuali riflettono la somiglianza su oltre 40 dimensioni di stile. Sopra il 90% significa somiglianza molto alta; 80\u201390% indica forte somiglianza con differenze minori.',
+      'faq.q5': 'Posso suggerire un negozio?', 'faq.a5': 'Certamente! Cerchiamo sempre di espanderci. Inviaci il nome del negozio. Le richieste popolari includono Uniqlo, Arket e Massimo Dutti.',
+      'reviews.eyebrow': 'Recensioni', 'reviews.title': 'Amato dagli appassionati di moda',
+      'reviews.r1.quote': '\u201cTrovato un dupe Bottega perfetto per il mio compleanno \u2014 nessuno ha visto la differenza. Risparmiati oltre 2.000\u20ac!\u201d', 'reviews.r1.name': 'Sophie M.', 'reviews.r1.location': 'Amsterdam, NL',
+      'reviews.r2.quote': '\u201cUso ALTERE ogni volta che vedo qualcosa su Instagram. La corrispondenza IA \u00e8 incredibilmente precisa.\u201d', 'reviews.r2.name': 'James T.', 'reviews.r2.location': 'Londra, UK',
+      'reviews.r3.quote': '\u201cCome stilista, \u00e8 la mia arma segreta. I miei clienti ottengono il look che vogliono senza il sovrapprezzo del lusso.\u201d', 'reviews.r3.name': 'Amara K.', 'reviews.r3.location': 'Parigi, FR',
+      'reviews.r4.quote': '\u201cCaricata una foto di un cappotto Max Mara da 900\u20ac e trovato uno quasi identico da H&M a 89\u20ac. Assurdo.\u201d', 'reviews.r4.name': 'Luca R.', 'reviews.r4.location': 'Milano, IT',
+      'reviews.r5.quote': '\u201cFinalmente un trova-dupes che funziona davvero. L\u2019upload foto \u00e8 rivoluzionario per l\u2019ispirazione Pinterest.\u201d', 'reviews.r5.name': 'Elena V.', 'reviews.r5.location': 'Barcellona, ES',
+      'reviews.r6.quote': '\u201cMostrato agli amici e ora tutta la chat di gruppo \u00e8 ossessionata. Condividiamo dupes ogni giorno.\u201d', 'reviews.r6.name': 'Noah B.', 'reviews.r6.location': 'Berlino, DE',
+      'results.eyebrow': 'Dupes di Tendenza',
+      'results.title': 'Look di lusso, prezzi accessibili',
+      'results.subtitle': 'La nostra IA analizza migliaia di prodotti ogni giorno per le migliori alternative.',
+      'filter.category': 'Categoria', 'filter.bags': 'Borse', 'filter.shoes': 'Scarpe', 'filter.clothing': 'Abbigliamento', 'filter.jewellery': 'Gioielli', 'filter.accessories': 'Accessori',
+      'filter.price': 'Prezzo', 'filter.all': 'Tutti', 'filter.store': 'Negozio', 'filter.allStores': 'Tutti i Negozi', 'filter.sortBy': 'Ordina per',
+      'sort.match': 'Migliore corrispondenza', 'sort.priceAsc': 'Prezzo: Crescente', 'sort.priceDesc': 'Prezzo: Decrescente', 'sort.saving': 'Maggiore risparmio',
+      'how.eyebrow': 'Come funziona', 'how.title': 'Tre passi verso il tuo dupe perfetto',
+      'how.step1.title': 'Carica o incolla', 'how.step1.desc': 'Condividi una foto, un link o una descrizione del capo di lusso che ami.',
+      'how.step2.title': 'Analisi IA', 'how.step2.desc': 'Il nostro modello analizza tessuto, taglio, colore e silhouette in pochi secondi.',
+      'how.step3.title': 'Acquista i dupes', 'how.step3.desc': 'Sfoglia alternative classificate con punteggi, prezzi e link diretti ai negozi.',
+      'waitlist.eyebrow': 'Accesso Anticipato', 'waitlist.title': 'Sii il primo a sapere<br>del lancio',
+      'waitlist.sub': 'Unisciti a migliaia di appassionati di moda gi\u00e0 in lista.',
+      'waitlist.placeholder': 'Inserisci il tuo indirizzo email', 'waitlist.btn': 'Unisciti alla lista',
+      'waitlist.hint': 'Niente spam, mai. Cancellati in qualsiasi momento.',
+      'waitlist.success.title': 'Sei nella lista', 'waitlist.success.desc': 'Ti avviseremo appena ALTERE sar\u00e0 online.',
+      'saved.back': 'Indietro', 'saved.eyebrow': 'La Tua Collezione', 'saved.title': 'Articoli Salvati', 'saved.clearAll': 'Cancella tutto',
+      'saved.empty': 'Nessun articolo salvato', 'saved.emptyHint': 'Tocca il cuore su un dupe per salvarlo qui',
+      'footer.tagline': 'Trova dupes di moda con IA. Estetica di lusso, prezzi accessibili.',
+      'footer.explore': 'Esplora', 'footer.trending': 'Tendenze', 'footer.newArrivals': 'Novit\u00e0', 'footer.collections': 'Collezioni',
+      'footer.company': 'Azienda', 'footer.about': 'Chi siamo', 'footer.careers': 'Lavora con noi', 'footer.privacy': 'Privacy', 'footer.terms': 'Termini',
+      'toast.saved': 'Salvato nella tua collezione', 'toast.removed': 'Rimosso dai salvati', 'toast.cleared': 'Tutti gli articoli salvati cancellati',
+      'search.searching': 'Ricerca...', 'search.joining': 'Iscrizione...',
+      'results.ai.eyebrow': 'Risultati IA', 'results.ai.title': 'I tuoi dupes sono pronti',
+      'results.loading.title': 'La nostra IA analizza il tuo articolo\u2026', 'results.loading.sub': 'Ricerca delle migliori alternative in 6 negozi',
+      'share.whatsapp': 'WhatsApp', 'share.copy': 'Copia link', 'share.copied': 'Copiato!',
+      'share.text': 'Guarda questo dupe: {name} di {store} a solo {price} \u2014 trovato su ALTERE'
+    }
+  };
+
+  const LANG_LABELS = { en: 'EN', nl: 'NL', fr: 'FR', de: 'DE', es: 'ES', it: 'IT' };
+  let currentLang = localStorage.getItem(LANG_KEY) || 'en';
+
+  function t(key) {
+    return (TRANSLATIONS[currentLang] && TRANSLATIONS[currentLang][key]) || TRANSLATIONS.en[key] || key;
+  }
+
+  function applyLanguage(lang) {
+    currentLang = lang;
+    localStorage.setItem(LANG_KEY, lang);
+    document.documentElement.setAttribute('lang', lang);
+    langCurrent.textContent = LANG_LABELS[lang];
+
+    // Update active state
+    langMenu.querySelectorAll('.nav__lang-option').forEach(opt => {
+      opt.classList.toggle('active', opt.dataset.lang === lang);
+    });
+
+    // Translate all data-i18n elements
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      const val = t(key);
+      if (val) {
+        // Preserve child badge spans (like the saved badge)
+        const badge = el.querySelector('.nav__badge');
+        el.innerHTML = val;
+        if (badge) el.appendChild(badge);
+      }
+    });
+
+    // Translate placeholders
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+      const key = el.getAttribute('data-i18n-placeholder');
+      const val = t(key);
+      if (val) el.setAttribute('placeholder', val);
+    });
+
+    langSwitcher.classList.remove('open');
+  }
+
+  // Toggle dropdown
+  langBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    langSwitcher.classList.toggle('open');
+  });
+
+  // Option click
+  langMenu.addEventListener('click', e => {
+    const opt = e.target.closest('.nav__lang-option');
+    if (!opt) return;
+    e.stopPropagation();
+    applyLanguage(opt.dataset.lang);
+  });
+
+  // Close on outside click
+  document.addEventListener('click', () => langSwitcher.classList.remove('open'));
+
+  // Apply saved language on load
+  if (currentLang !== 'en') applyLanguage(currentLang);
+
+  /* ============================================================
+     Navigation scroll effect
+     ============================================================ */
+
+  const onScroll = () => {
+    nav.classList.toggle('nav--scrolled', window.scrollY > 40);
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  /* ============================================================
+     Mobile hamburger
+     ============================================================ */
+
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('active');
+    navLinks.classList.toggle('open');
+  });
+
+  navLinks.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      hamburger.classList.remove('active');
+      navLinks.classList.remove('open');
+    });
+  });
+
+  /* ============================================================
+     Search box tabs
+     ============================================================ */
+
+  const tabs   = document.querySelectorAll('.search-box__tab');
+  const panels = document.querySelectorAll('.search-box__panel');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const target = tab.dataset.tab;
+      tabs.forEach(t => t.classList.remove('active'));
+      panels.forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.querySelector(`.search-box__panel[data-panel="${target}"]`).classList.add('active');
+    });
+  });
+
+  /* ============================================================
+     File upload / drag-drop
+     ============================================================ */
+
+  if (uploadArea) {
+    ['dragenter', 'dragover'].forEach(evt => {
+      uploadArea.addEventListener(evt, e => {
+        e.preventDefault();
+        uploadArea.classList.add('dragover');
+      });
+    });
+
+    ['dragleave', 'drop'].forEach(evt => {
+      uploadArea.addEventListener(evt, e => {
+        e.preventDefault();
+        uploadArea.classList.remove('dragover');
+      });
+    });
+
+    uploadArea.addEventListener('drop', e => {
+      const files = e.dataTransfer.files;
+      if (files.length) handleFile(files[0]);
+    });
+
+    fileInput.addEventListener('change', () => {
+      if (fileInput.files.length) handleFile(fileInput.files[0]);
+    });
+  }
+
+  function handleFile(file) {
+    if (!file.type.startsWith('image/')) return;
+    currentFile = file;
+
+    // Show preview thumbnail
+    const url = URL.createObjectURL(file);
+    uploadThumb.src = url;
+    uploadThumb.onload = () => URL.revokeObjectURL(url);
+
+    // Populate meta
+    uploadFilename.textContent = file.name;
+    uploadFilesize.textContent = formatFileSize(file.size);
+
+    // Switch to preview state
+    uploadArea.classList.add('has-file');
+    uploadSearchBtn.disabled = false;
+  }
+
+  function clearFile() {
+    currentFile = null;
+    fileInput.value = '';
+    uploadThumb.src = '';
+    uploadFilename.textContent = '';
+    uploadFilesize.textContent = '';
+    uploadArea.classList.remove('has-file');
+    uploadSearchBtn.disabled = true;
+  }
+
+  function formatFileSize(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+  }
+
+  // Remove button — prevent label click from reopening file picker
+  if (uploadRemove) {
+    uploadRemove.addEventListener('click', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      clearFile();
+    });
+  }
+
+  /* ============================================================
+     Filters (price + store)
+     ============================================================ */
+
+  // --- Category filter (single-select) ---
+  categoryFilters.addEventListener('click', e => {
+    const btn = e.target.closest('.filter-btn--cat');
+    if (!btn) return;
+
+    categoryFilters.querySelectorAll('.filter-btn--cat').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeCategory = btn.dataset.category;
+    applyFilters();
+  });
+
+  // --- Price filter (single-select) ---
+  priceFilters.addEventListener('click', e => {
+    const btn = e.target.closest('.filter-btn');
+    if (!btn) return;
+
+    priceFilters.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    activeMinPrice = parseInt(btn.dataset.min, 10);
+    activeMaxPrice = parseInt(btn.dataset.max, 10);
+    applyFilters();
+  });
+
+  // --- Store filter (multi-select) ---
+  storeFilters.addEventListener('click', e => {
+    const btn = e.target.closest('.filter-btn--store');
+    if (!btn) return;
+
+    const store = btn.dataset.store;
+    const allBtn = storeFilters.querySelector('[data-store="all"]');
+
+    if (store === 'all') {
+      // "All Stores" clears individual selections
+      activeStores.clear();
+      storeFilters.querySelectorAll('.filter-btn--store').forEach(b => b.classList.remove('active'));
+      allBtn.classList.add('active');
+    } else {
+      // Toggle individual store
+      allBtn.classList.remove('active');
+
+      if (activeStores.has(store)) {
+        activeStores.delete(store);
+        btn.classList.remove('active');
+      } else {
+        activeStores.add(store);
+        btn.classList.add('active');
+      }
+
+      // If nothing selected, revert to "All"
+      if (activeStores.size === 0) {
+        allBtn.classList.add('active');
+      }
+    }
+
+    applyFilters();
+  });
+
+  // --- Shared apply logic ---
+  function applyFilters() {
+    const cards = resultsGrid.querySelectorAll('.dupe-card:not(.dupe-card--skeleton)');
+    let visibleCount = 0;
+
+    cards.forEach(card => {
+      const price    = parseFloat(card.dataset.price);
+      const store    = card.dataset.store;
+      const category = card.dataset.category || '';
+
+      // Category check
+      const catPass = activeCategory === 'all' || category === activeCategory;
+
+      // Price check
+      const priceAll  = activeMinPrice === 0 && activeMaxPrice === 0;
+      const aboveMin  = activeMinPrice === 0 || price >= activeMinPrice;
+      const belowMax  = activeMaxPrice === 0 || price < activeMaxPrice;
+      const pricePass = priceAll || (aboveMin && belowMax);
+
+      // Store check
+      const storePass = activeStores.size === 0 || activeStores.has(store);
+
+      const show = catPass && pricePass && storePass;
+      card.classList.toggle('filter-hidden', !show);
+      if (show) visibleCount++;
+    });
+
+    // Empty state
+    const existing = resultsGrid.querySelector('.results__empty');
+    if (visibleCount === 0 && cards.length > 0) {
+      if (!existing) {
+        const empty = document.createElement('div');
+        empty.className = 'results__empty';
+        empty.innerHTML = '<p>No dupes match those filters</p><small>Try adjusting your price or store selection</small>';
+        resultsGrid.appendChild(empty);
+      }
+    } else if (existing) {
+      existing.remove();
+    }
+  }
+
+  function resetFilters() {
+    activeMinPrice = 0;
+    activeMaxPrice = 0;
+    activeCategory = 'all';
+    activeStores.clear();
+    activeSort = 'match';
+    categoryFilters.querySelectorAll('.filter-btn--cat').forEach(b => {
+      b.classList.toggle('active', b.dataset.category === 'all');
+    });
+    priceFilters.querySelectorAll('.filter-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.min === '0' && b.dataset.max === '0');
+    });
+    storeFilters.querySelectorAll('.filter-btn--store').forEach(b => {
+      b.classList.toggle('active', b.dataset.store === 'all');
+    });
+    sortMenu.querySelectorAll('.sort-select__option').forEach(o => {
+      o.classList.toggle('active', o.dataset.sort === 'match');
+    });
+    sortLabel.textContent = 'Best match';
+    sortSelect.classList.remove('open');
+  }
+
+  /* ============================================================
+     Sort
+     ============================================================ */
+
+  const sortSelect  = document.getElementById('sortSelect');
+  const sortTrigger = document.getElementById('sortTrigger');
+  const sortLabel   = document.getElementById('sortLabel');
+  const sortMenu    = document.getElementById('sortMenu');
+  let activeSort    = 'match';
+
+  sortTrigger.addEventListener('click', e => {
+    e.stopPropagation();
+    sortSelect.classList.toggle('open');
+  });
+
+  sortMenu.addEventListener('click', e => {
+    const opt = e.target.closest('.sort-select__option');
+    if (!opt) return;
+    e.stopPropagation();
+
+    activeSort = opt.dataset.sort;
+    sortLabel.textContent = opt.textContent;
+    sortMenu.querySelectorAll('.sort-select__option').forEach(o => o.classList.remove('active'));
+    opt.classList.add('active');
+    sortSelect.classList.remove('open');
+
+    applySortAndFilter();
+  });
+
+  // Close sort dropdown on outside click
+  document.addEventListener('click', () => sortSelect.classList.remove('open'));
+
+  function applySortAndFilter() {
+    // Gather non-skeleton cards
+    const cards = Array.from(resultsGrid.querySelectorAll('.dupe-card:not(.dupe-card--skeleton)'));
+    if (cards.length === 0) return;
+
+    // Sort
+    cards.sort((a, b) => {
+      const priceA = parseFloat(a.dataset.price) || 0;
+      const priceB = parseFloat(b.dataset.price) || 0;
+      const matchA = parseInt(a.querySelector('.dupe-card__match span')?.textContent) || 0;
+      const matchB = parseInt(b.querySelector('.dupe-card__match span')?.textContent) || 0;
+      const origA  = parseFloat((a.querySelector('.dupe-card__original')?.textContent || '0').replace(/[^0-9.]/g, '')) || 0;
+      const origB  = parseFloat((b.querySelector('.dupe-card__original')?.textContent || '0').replace(/[^0-9.]/g, '')) || 0;
+      const savingA = origA > 0 ? origA - priceA : 0;
+      const savingB = origB > 0 ? origB - priceB : 0;
+
+      switch (activeSort) {
+        case 'price-asc':  return priceA - priceB;
+        case 'price-desc': return priceB - priceA;
+        case 'saving':     return savingB - savingA;
+        case 'match':
+        default:           return matchB - matchA;
+      }
+    });
+
+    // Re-append in sorted order (preserves elements + event listeners)
+    cards.forEach(card => resultsGrid.appendChild(card));
+
+    // Re-apply price + store filters on the new order
+    applyFilters();
+  }
+
+  /* ============================================================
+     Saved items system
+     ============================================================ */
+
+  function getSavedItems() {
+    try { return JSON.parse(localStorage.getItem(SAVED_KEY)) || []; }
+    catch { return []; }
+  }
+
+  function setSavedItems(items) {
+    localStorage.setItem(SAVED_KEY, JSON.stringify(items));
+    updateBadge();
+  }
+
+  function generateItemId(item) {
+    return `${item.store}::${item.product_name}`.toLowerCase();
+  }
+
+  function isItemSaved(item) {
+    const id = generateItemId(item);
+    return getSavedItems().some(s => generateItemId(s) === id);
+  }
+
+  function saveItem(item) {
+    const items = getSavedItems();
+    const id = generateItemId(item);
+    if (!items.some(s => generateItemId(s) === id)) {
+      items.push(item);
+      setSavedItems(items);
+    }
+  }
+
+  function unsaveItem(item) {
+    const id = generateItemId(item);
+    setSavedItems(getSavedItems().filter(s => generateItemId(s) !== id));
+  }
+
+  function updateBadge() {
+    const count = getSavedItems().length;
+    savedBadge.textContent = count;
+    savedBadge.classList.toggle('visible', count > 0);
+  }
+
+  // Extract item data from a card DOM element
+  function extractCardData(card) {
+    const img = card.querySelector('.dupe-card__image img');
+    return {
+      store: card.dataset.store || '',
+      product_name: card.querySelector('.dupe-card__name')?.textContent || '',
+      dupe_price: parseFloat(card.dataset.price) || 0,
+      original_price: parseFloat((card.querySelector('.dupe-card__original')?.textContent || '0').replace(/[^0-9.]/g, '')) || 0,
+      match_percentage: parseInt((card.querySelector('.dupe-card__match span')?.textContent || '0')) || 0,
+      image_url: (img && img.src && !img.classList.contains('loading')) ? img.src : ''
+    };
+  }
+
+  // Bind save handler to all heart buttons in a container
+  function bindSaveButtons(container) {
+    container.querySelectorAll('.dupe-card__save').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.preventDefault();
+        e.stopPropagation();
+        const card = btn.closest('.dupe-card');
+        if (!card) return;
+        const item = extractCardData(card);
+
+        if (btn.classList.contains('saved')) {
+          btn.classList.remove('saved');
+          unsaveItem(item);
+          showToast(t('toast.removed'));
+        } else {
+          btn.classList.add('saved', 'pop');
+          btn.addEventListener('animationend', () => btn.classList.remove('pop'), { once: true });
+          saveItem(item);
+          showToast(t('toast.saved'));
+        }
+      });
+    });
+  }
+
+  // Mark hearts on cards that are already saved
+  function syncSaveStates(container) {
+    container.querySelectorAll('.dupe-card').forEach(card => {
+      const item = extractCardData(card);
+      const btn = card.querySelector('.dupe-card__save');
+      if (btn && isItemSaved(item)) {
+        btn.classList.add('saved');
+      }
+    });
+  }
+
+  // --- Share buttons ---
+  function buildShareText(card) {
+    const name  = card.querySelector('.dupe-card__name')?.textContent || '';
+    const store = card.querySelector('.dupe-card__store')?.textContent || '';
+    const price = card.querySelector('.dupe-card__price')?.textContent || '';
+    return t('share.text').replace('{name}', name).replace('{store}', store).replace('{price}', price);
+  }
+
+  function bindShareButtons(container) {
+    container.querySelectorAll('.dupe-card__share').forEach(btn => {
+      // Toggle dropdown
+      btn.addEventListener('click', e => {
+        e.preventDefault();
+        e.stopPropagation();
+        const wasActive = btn.classList.contains('active');
+        closeAllShareDropdowns();
+        if (!wasActive) btn.classList.add('active');
+      });
+
+      // WhatsApp
+      btn.querySelector('.share-dropdown__whatsapp')?.addEventListener('click', e => {
+        e.stopPropagation();
+        const card = btn.closest('.dupe-card');
+        const text = encodeURIComponent(buildShareText(card));
+        window.open(`https://wa.me/?text=${text}`, '_blank');
+        closeAllShareDropdowns();
+      });
+
+      // Copy link
+      btn.querySelector('.share-dropdown__copy')?.addEventListener('click', e => {
+        e.stopPropagation();
+        const card = btn.closest('.dupe-card');
+        const text = buildShareText(card);
+        navigator.clipboard.writeText(text).then(() => {
+          const copyBtn = btn.querySelector('.share-dropdown__copy');
+          copyBtn.classList.add('copied');
+          copyBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>${t('share.copied')}`;
+          setTimeout(() => {
+            copyBtn.classList.remove('copied');
+            copyBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copy link`;
+            closeAllShareDropdowns();
+          }, 1200);
+        });
+      });
+    });
+  }
+
+  function closeAllShareDropdowns() {
+    document.querySelectorAll('.dupe-card__share.active').forEach(s => s.classList.remove('active'));
+  }
+
+  // Close dropdowns when clicking anywhere else
+  document.addEventListener('click', () => closeAllShareDropdowns());
+
+  // --- Saved page ---
+  savedLink.addEventListener('click', e => {
+    e.preventDefault();
+    hamburger.classList.remove('active');
+    navLinks.classList.remove('open');
+    openSavedPage();
+  });
+
+  savedBack.addEventListener('click', () => closeSavedPage());
+
+  savedClearAll.addEventListener('click', () => {
+    setSavedItems([]);
+    renderSavedPage();
+    // Unsave hearts on visible cards
+    document.querySelectorAll('.dupe-card__save.saved').forEach(b => b.classList.remove('saved'));
+    showToast(t('toast.cleared'));
+  });
+
+  function openSavedPage() {
+    renderSavedPage();
+    savedPage.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeSavedPage() {
+    savedPage.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function renderSavedPage() {
+    const items = getSavedItems();
+    savedGrid.innerHTML = '';
+    savedEmpty.classList.toggle('visible', items.length === 0);
+    savedClearAll.style.display = items.length === 0 ? 'none' : '';
+
+    items.forEach((item, i) => {
+      const savings = item.original_price > 0
+        ? Math.round(((item.original_price - item.dupe_price) / item.original_price) * 100)
+        : 0;
+
+      const card = document.createElement('article');
+      card.className = 'dupe-card reveal visible';
+      card.style.transitionDelay = `${i * 0.06}s`;
+
+      let imageContent;
+      if (item.image_url) {
+        imageContent = `<img src="${escapeAttr(item.image_url)}" alt="${escapeAttr(item.product_name)}" loading="lazy">`;
+      } else {
+        imageContent = `<div class="dupe-card__color-placeholder" style="background:${CARD_COLORS[i % CARD_COLORS.length]}">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        </div>`;
+      }
+
+      card.innerHTML = `
+        <div class="dupe-card__image">
+          ${imageContent}
+          <button class="saved-card__remove" aria-label="Remove" data-index="${i}">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+          ${savings > 0 ? `<span class="dupe-card__badge">&minus;${savings}%</span>` : ''}
+        </div>
+        <div class="dupe-card__info">
+          <span class="dupe-card__store">${escapeHtml(item.store)}</span>
+          <h3 class="dupe-card__name">${escapeHtml(item.product_name)}</h3>
+          <div class="dupe-card__price-row">
+            <span class="dupe-card__price">$${item.dupe_price.toFixed(2)}</span>
+            ${item.original_price > 0 ? `<span class="dupe-card__original">$${item.original_price.toFixed(2)}</span>` : ''}
+          </div>
+          ${item.match_percentage > 0 ? `
+          <div class="dupe-card__match">
+            <div class="dupe-card__match-bar"><div class="dupe-card__match-fill" style="width:${item.match_percentage}%"></div></div>
+            <span>${item.match_percentage}% match</span>
+          </div>` : ''}
+        </div>`;
+
+      savedGrid.appendChild(card);
+    });
+
+    // Bind remove buttons
+    savedGrid.querySelectorAll('.saved-card__remove').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = parseInt(btn.dataset.index, 10);
+        const items = getSavedItems();
+        const removed = items.splice(idx, 1)[0];
+        setSavedItems(items);
+        // Unsync heart on the main page
+        if (removed) {
+          document.querySelectorAll('.dupe-card').forEach(card => {
+            const data = extractCardData(card);
+            if (generateItemId(data) === generateItemId(removed)) {
+              card.querySelector('.dupe-card__save')?.classList.remove('saved');
+            }
+          });
+        }
+        renderSavedPage();
+        showToast(t('toast.removed'));
+      });
+    });
+  }
+
+  // Update image_url on a saved item when its Unsplash image finishes loading
+  function updateSavedItemImage(item) {
+    if (!item.image_url) return;
+    const items = getSavedItems();
+    const id = generateItemId(item);
+    const saved = items.find(s => generateItemId(s) === id);
+    if (saved && saved.image_url !== item.image_url) {
+      saved.image_url = item.image_url;
+      setSavedItems(items);
+    }
+  }
+
+  // Initialize badge on load
+  updateBadge();
+
+  /* ============================================================
+     API key management
+     ============================================================ */
+
+  function getApiKey()      { return localStorage.getItem(LS_KEY) || ''; }
+  function getUnsplashKey() { return localStorage.getItem(UNSPLASH_KEY) || ''; }
+
+  function setApiKey(key) {
+    key ? localStorage.setItem(LS_KEY, key) : localStorage.removeItem(LS_KEY);
+    updateSettingsIndicator();
+  }
+
+  function setUnsplashKey(key) {
+    key ? localStorage.setItem(UNSPLASH_KEY, key) : localStorage.removeItem(UNSPLASH_KEY);
+  }
+
+  function updateSettingsIndicator() {
+    settingsBtn.classList.toggle('has-key', !!getApiKey());
+  }
+
+  updateSettingsIndicator();
+
+  // Modal open/close
+  settingsBtn.addEventListener('click', () => {
+    apiKeyInput.value    = getApiKey();
+    unsplashInput.value  = getUnsplashKey();
+    apiStatus.textContent = '';
+    apiStatus.className   = 'modal__status';
+    settingsModal.classList.add('open');
+  });
+
+  function closeModal() { settingsModal.classList.remove('open'); }
+
+  modalClose.addEventListener('click', closeModal);
+  settingsModal.addEventListener('click', e => {
+    if (e.target === settingsModal) closeModal();
+  });
+
+  saveApiKeyBtn.addEventListener('click', () => {
+    const key = apiKeyInput.value.trim();
+    if (!key) {
+      apiStatus.textContent = 'Please enter an Anthropic API key.';
+      apiStatus.className = 'modal__status error';
+      return;
+    }
+    setApiKey(key);
+    setUnsplashKey(unsplashInput.value.trim());
+    apiStatus.textContent = 'Settings saved.';
+    apiStatus.className = 'modal__status success';
+    setTimeout(closeModal, 800);
+  });
+
+  /* ============================================================
+     Toast notifications
+     ============================================================ */
+
+  let toastTimer;
+  function showToast(message, isError = false) {
+    clearTimeout(toastTimer);
+    toast.textContent = message;
+    toast.className = isError ? 'toast toast--error visible' : 'toast visible';
+    toastTimer = setTimeout(() => { toast.className = 'toast'; }, 4000);
+  }
+
+  /* ============================================================
+     Loading skeleton cards
+     ============================================================ */
+
+  const searchStatus = document.getElementById('searchStatus');
+
+  function showSearchStatus() {
+    searchStatus.classList.add('visible');
+  }
+
+  function hideSearchStatus() {
+    searchStatus.classList.remove('visible');
+  }
+
+  function renderSkeletons() {
+    resultsGrid.innerHTML = '';
+    for (let i = 0; i < 6; i++) {
+      const card = document.createElement('article');
+      card.className = 'dupe-card dupe-card--skeleton reveal visible';
+      card.style.animationDelay = `${i * 0.07}s`;
+      card.innerHTML = `
+        <div class="dupe-card__image">
+          <div class="skeleton-block skeleton-block--image"></div>
+        </div>
+        <div class="dupe-card__info">
+          <div class="skeleton-block skeleton-block--accent"></div>
+          <div class="skeleton-block skeleton-block--store"></div>
+          <div class="skeleton-block skeleton-block--name"></div>
+          <div class="skeleton-block skeleton-block--name2"></div>
+          <div class="skeleton-block skeleton-block--price"></div>
+          <div class="skeleton-block skeleton-block--bar"></div>
+        </div>`;
+      resultsGrid.appendChild(card);
+    }
+  }
+
+  /* ============================================================
+     Unsplash image search
+     ============================================================ */
+
+  async function searchUnsplashImage(query) {
+    const key = getUnsplashKey();
+    if (!key) return null;
+
+    const params = new URLSearchParams({
+      query,
+      per_page: '1',
+      orientation: 'portrait',
+      content_filter: 'high'
+    });
+
+    const res = await fetch(`${UNSPLASH_API}?${params}`, {
+      headers: { Authorization: `Client-ID ${key}` }
+    });
+
+    if (!res.ok) return null;
+
+    const data = await res.json();
+    if (!data.results || data.results.length === 0) return null;
+
+    const photo = data.results[0];
+    return {
+      url: photo.urls.regular + '&w=600&h=800&fit=crop&crop=center',
+      alt: photo.alt_description || query,
+      credit: photo.user.name,
+      link: photo.user.links.html
+    };
+  }
+
+  function buildImageSearchQuery(dupe) {
+    // Build a focused search: garment type + key descriptors
+    const name = dupe.product_name;
+    // Strip very generic words, keep fashion-relevant terms
+    const stripped = name
+      .replace(/\b(the|a|an|with|and|in|for|of)\b/gi, '')
+      .trim();
+    return `${stripped} fashion clothing`;
+  }
+
+  /* ============================================================
+     Render real result cards
+     ============================================================ */
+
+  function renderResults(dupes, query) {
+    resultsGrid.innerHTML = '';
+    resetFilters();
+
+    // Update header
+    const eyebrow = resultsHeader.querySelector('.results__eyebrow');
+    const title   = resultsHeader.querySelector('.results__title');
+    const sub     = resultsHeader.querySelector('.results__subtitle');
+    eyebrow.textContent = t('results.ai.eyebrow');
+    title.textContent   = t('results.ai.title');
+    sub.textContent     = `Showing ${dupes.length} alternatives for \u201c${query}\u201d`;
+
+    const hasUnsplash = !!getUnsplashKey();
+
+    dupes.forEach((dupe, i) => {
+      const savings = Math.round(((dupe.original_price - dupe.dupe_price) / dupe.original_price) * 100);
+      const card = document.createElement('article');
+      card.className = 'dupe-card reveal';
+      card.dataset.price = dupe.dupe_price.toFixed(2);
+      card.dataset.store = dupe.store;
+      card.dataset.category = dupe.category || 'clothing';
+      card.style.transitionDelay = `${i * 0.08}s`;
+
+      // Image area: shimmer if Unsplash available, colour placeholder otherwise
+      let imageInner;
+      if (hasUnsplash) {
+        imageInner = `
+          <div class="dupe-card__img-shimmer"></div>
+          <img class="loading" src="" alt="${escapeAttr(dupe.product_name)}" loading="lazy">`;
+      } else {
+        imageInner = `
+          <div class="dupe-card__color-placeholder" style="background:${CARD_COLORS[i % CARD_COLORS.length]}">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </div>`;
+      }
+
+      card.innerHTML = `
+        <div class="dupe-card__image">
+          ${imageInner}
+          <span class="dupe-card__save" aria-label="Save">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </span>
+          <span class="dupe-card__share" aria-label="Share">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            <div class="share-dropdown">
+              <button class="share-dropdown__item share-dropdown__whatsapp" type="button"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>WhatsApp</button>
+              <button class="share-dropdown__item share-dropdown__copy" type="button"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copy link</button>
+            </div>
+          </span>
+          <span class="dupe-card__badge">&minus;${savings}%</span>
+        </div>
+        <div class="dupe-card__info">
+          <span class="dupe-card__store">${escapeHtml(dupe.store)}</span>
+          <h3 class="dupe-card__name">${escapeHtml(dupe.product_name)}</h3>
+          <div class="dupe-card__price-row">
+            <span class="dupe-card__price">$${dupe.dupe_price.toFixed(2)}</span>
+            <span class="dupe-card__original">$${dupe.original_price.toFixed(2)}</span>
+          </div>
+          <div class="dupe-card__match">
+            <div class="dupe-card__match-bar"><div class="dupe-card__match-fill" style="width:0%"></div></div>
+            <span>${dupe.match_percentage}% match</span>
+          </div>
+        </div>`;
+
+      resultsGrid.appendChild(card);
+
+      // Animate reveal
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          card.classList.add('visible');
+          const fill = card.querySelector('.dupe-card__match-fill');
+          if (fill) fill.style.width = `${dupe.match_percentage}%`;
+        });
+      });
+
+      // Fetch Unsplash image for this card (non-blocking)
+      if (hasUnsplash) {
+        loadCardImage(card, dupe, i);
+      }
+    });
+
+    // Bind save + share buttons and sync states
+    bindSaveButtons(resultsGrid);
+    bindShareButtons(resultsGrid);
+    syncSaveStates(resultsGrid);
+  }
+
+  async function loadCardImage(card, dupe, index) {
+    const imgEl  = card.querySelector('.dupe-card__image img');
+    const shimmer = card.querySelector('.dupe-card__img-shimmer');
+    if (!imgEl) return;
+
+    const searchQuery = buildImageSearchQuery(dupe);
+
+    try {
+      const result = await searchUnsplashImage(searchQuery);
+
+      if (result) {
+        // Preload image before showing
+        const preload = new Image();
+        preload.onload = () => {
+          imgEl.src = result.url;
+          imgEl.alt = result.alt;
+          imgEl.classList.remove('loading');
+          imgEl.classList.add('loaded');
+          // Update saved item image if already saved
+          updateSavedItemImage(extractCardData(card));
+          // Fade out shimmer
+          if (shimmer) {
+            shimmer.style.opacity = '0';
+            shimmer.style.transition = 'opacity 0.4s ease';
+            setTimeout(() => shimmer.remove(), 400);
+          }
+        };
+        preload.onerror = () => {
+          showColorFallback(card, index, shimmer);
+        };
+        preload.src = result.url;
+      } else {
+        // No results — show colour fallback
+        showColorFallback(card, index, shimmer);
+      }
+    } catch {
+      showColorFallback(card, index, shimmer);
+    }
+  }
+
+  function showColorFallback(card, index, shimmer) {
+    const imageDiv = card.querySelector('.dupe-card__image');
+    // Remove shimmer and img
+    if (shimmer) shimmer.remove();
+    const img = imageDiv.querySelector('img');
+    if (img) img.remove();
+    // Insert colour placeholder
+    const placeholder = document.createElement('div');
+    placeholder.className = 'dupe-card__color-placeholder';
+    placeholder.style.background = CARD_COLORS[index % CARD_COLORS.length];
+    placeholder.innerHTML = `<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>`;
+    imageDiv.insertBefore(placeholder, imageDiv.firstChild);
+  }
+
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  function escapeAttr(str) {
+    return str.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  /* ============================================================
+     Claude API call
+     ============================================================ */
+
+  const SYSTEM_PROMPT = `You are ALTERE, an AI fashion dupe finder. The user will describe a fashion item, paste a product URL, or provide an image. Your job is to suggest 6 realistic cheaper alternatives ("dupes") from high-street brands.
+
+For each dupe, respond with ONLY a JSON array of 6 objects. No markdown, no explanation, no code fences — just the raw JSON array.
+
+Each object must have these fields:
+- "store": one of "ZARA", "H&M", "MANGO", "ASOS", "COS", "& OTHER STORIES" (use each store exactly once)
+- "product_name": a realistic product name that this store would actually use (max 6 words)
+- "category": one of "bags", "shoes", "clothing", "jewellery", "accessories" (pick the single best fit for the item type)
+- "original_price": the estimated original luxury item price in USD (number)
+- "dupe_price": a realistic dupe price in USD for that store (number, must be lower than original_price)
+- "match_percentage": how closely it matches the original, 78-96 range (integer)
+
+Rules:
+- Make product names feel authentic to each brand's naming style
+- Prices should be realistic for each store's actual price range
+- The first result should have the highest match percentage, descending from there
+- original_price should be the same across all 6 (the price of the luxury item)
+- Vary the dupe_price realistically per store`;
+
+  async function callClaude(userContent) {
+    const apiKey = getApiKey();
+    if (!apiKey) {
+      settingsModal.classList.add('open');
+      apiKeyInput.value = '';
+      apiStatus.textContent = 'Enter your API key to use AI search.';
+      apiStatus.className = 'modal__status error';
+      return null;
+    }
+
+    const messages = [{ role: 'user', content: userContent }];
+
+    const body = {
+      model: MODEL,
+      max_tokens: 1024,
+      system: SYSTEM_PROMPT,
+      messages
+    };
+
+    const res = await fetch(API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify(body)
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      if (res.status === 401) {
+        throw new Error('Invalid API key. Check your key in settings.');
+      }
+      throw new Error(err.error?.message || `API error ${res.status}`);
+    }
+
+    const data = await res.json();
+    const text = data.content?.[0]?.text || '';
+
+    let cleaned = text.trim();
+    if (cleaned.startsWith('```')) {
+      cleaned = cleaned.replace(/^```(?:json)?\s*/, '').replace(/\s*```$/, '');
+    }
+
+    const dupes = JSON.parse(cleaned);
+    if (!Array.isArray(dupes) || dupes.length === 0) {
+      throw new Error('Unexpected AI response format.');
+    }
+
+    return dupes;
+  }
+
+  /* ============================================================
+     File → base64 helper
+     ============================================================ */
+
+  function fileToBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload  = () => resolve(reader.result.split(',')[1]);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function getMediaType(file) {
+    const map = {
+      'image/jpeg': 'image/jpeg',
+      'image/jpg': 'image/jpeg',
+      'image/png': 'image/png',
+      'image/webp': 'image/webp',
+      'image/gif': 'image/gif'
+    };
+    return map[file.type] || 'image/jpeg';
+  }
+
+  /* ============================================================
+     Recent searches
+     ============================================================ */
+
+  const RECENT_KEY    = 'altere_recent_searches';
+  const RECENT_MAX    = 5;
+  const recentWrapper = document.getElementById('recentSearches');
+  const recentChips   = document.getElementById('recentChips');
+  const recentClear   = document.getElementById('recentClear');
+
+  function getRecentSearches() {
+    try { return JSON.parse(localStorage.getItem(RECENT_KEY)) || []; }
+    catch { return []; }
+  }
+
+  function saveRecentSearch(query, type) {
+    if (!query || type === 'image') return; // don't save image uploads
+    let items = getRecentSearches();
+    // Remove duplicate (case-insensitive)
+    items = items.filter(s => s.query.toLowerCase() !== query.toLowerCase());
+    items.unshift({ query, type });
+    if (items.length > RECENT_MAX) items = items.slice(0, RECENT_MAX);
+    localStorage.setItem(RECENT_KEY, JSON.stringify(items));
+    renderRecentSearches();
+  }
+
+  function renderRecentSearches() {
+    const items = getRecentSearches();
+    recentChips.innerHTML = '';
+
+    if (items.length === 0) {
+      recentWrapper.classList.remove('visible');
+      return;
+    }
+
+    recentWrapper.classList.add('visible');
+
+    items.forEach(item => {
+      const chip = document.createElement('button');
+      chip.className = 'recent-chip';
+      chip.type = 'button';
+      // Truncate display text
+      const display = item.query.length > 32 ? item.query.slice(0, 30) + '\u2026' : item.query;
+      chip.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${escapeHtml(display)}`;
+      chip.title = item.query;
+      chip.addEventListener('click', () => {
+        performSearch(item.query, item.type, null);
+      });
+      recentChips.appendChild(chip);
+    });
+  }
+
+  recentClear.addEventListener('click', () => {
+    localStorage.removeItem(RECENT_KEY);
+    renderRecentSearches();
+  });
+
+  // Initial render
+  renderRecentSearches();
+
+  /* ============================================================
+     Trending chips
+     ============================================================ */
+
+  document.querySelectorAll('.trending__chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const query = chip.dataset.query;
+      if (query) performSearch(query, 'text', null);
+    });
+  });
+
+  /* ============================================================
+     Celebrity Looks buttons
+     ============================================================ */
+
+  document.querySelectorAll('.celeb__btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const query = btn.dataset.query;
+      if (query) performSearch(query, 'text', null);
+    });
+  });
+
+  /* ============================================================
+     Social Proof Counter Animation
+     ============================================================ */
+
+  function animateCounter(el, target, duration) {
+    const start = performance.now();
+    const format = (n) => Math.round(n).toLocaleString();
+
+    function tick(now) {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      // Ease-out cubic for a smooth deceleration
+      const eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = format(target * eased);
+      if (progress < 1) requestAnimationFrame(tick);
+    }
+
+    requestAnimationFrame(tick);
+  }
+
+  const proofBar = document.getElementById('proofBar');
+  let proofAnimated = false;
+
+  const proofObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !proofAnimated) {
+        proofAnimated = true;
+        document.querySelectorAll('.proof__num').forEach(el => {
+          const target = parseInt(el.dataset.target, 10);
+          animateCounter(el, target, 2000);
+        });
+        proofObserver.unobserve(proofBar);
+      }
+    });
+  }, { threshold: 0.3 });
+
+  proofObserver.observe(proofBar);
+
+  /* ============================================================
+     Dupe of the Day
+     ============================================================ */
+
+  const DOTD_ITEMS = [
+    {
+      origBrand: 'BOTTEGA VENETA', origName: 'Cassette Padded Leather Bag', origPrice: 3200,
+      origImg: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=500&h=625&fit=crop&crop=center&q=80',
+      dupeBrand: 'MANGO', dupeName: 'Quilted Chain Shoulder Bag', dupePrice: 59.99,
+      dupeImg: 'https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?w=500&h=625&fit=crop&crop=center&q=80',
+      query: 'Bottega Veneta Cassette bag'
+    },
+    {
+      origBrand: 'MAX MARA', origName: 'Madame Wool Double-Breasted Coat', origPrice: 2590,
+      origImg: 'https://images.unsplash.com/photo-1539533113208-f6df8cc8b543?w=500&h=625&fit=crop&crop=center&q=80',
+      dupeBrand: 'H&M', dupeName: 'Oversized Wool-Blend Coat', dupePrice: 89.99,
+      dupeImg: 'https://images.unsplash.com/photo-1653660666869-2345adc51155?w=500&h=625&fit=crop&crop=center&q=80',
+      query: 'Max Mara double breasted wool coat'
+    },
+    {
+      origBrand: 'THE ROW', origName: 'Margaux Leather Tote', origPrice: 5500,
+      origImg: 'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=500&h=625&fit=crop&crop=center&q=80',
+      dupeBrand: 'COS', dupeName: 'Structured Leather Tote', dupePrice: 120,
+      dupeImg: 'https://images.unsplash.com/photo-1594223274512-ad4803739b7c?w=500&h=625&fit=crop&crop=center&q=80',
+      query: 'The Row Margaux leather tote'
+    },
+    {
+      origBrand: 'TOTÊME', origName: 'Signature Wool Cashmere Scarf', origPrice: 420,
+      origImg: 'https://images.unsplash.com/photo-1601924921557-45e8e0e6588a?w=500&h=625&fit=crop&crop=center&q=80',
+      dupeBrand: 'ZARA', dupeName: 'Soft Wool Blend Scarf', dupePrice: 35.99,
+      dupeImg: 'https://images.unsplash.com/photo-1520903920243-00d872a2d1c9?w=500&h=625&fit=crop&crop=center&q=80',
+      query: 'Toteme signature wool scarf'
+    },
+    {
+      origBrand: 'ACNE STUDIOS', origName: 'Musubi Mini Leather Bag', origPrice: 1150,
+      origImg: 'https://images.unsplash.com/photo-1614179689702-355944cd0918?w=500&h=625&fit=crop&crop=center&q=80',
+      dupeBrand: 'ASOS', dupeName: 'Knotted Leather Crossbody', dupePrice: 48,
+      dupeImg: 'https://images.unsplash.com/photo-1598532163257-ae3c6b2524b6?w=500&h=625&fit=crop&crop=center&q=80',
+      query: 'Acne Studios Musubi mini bag'
+    },
+    {
+      origBrand: 'JACQUEMUS', origName: 'Le Chiquito Long Bag', origPrice: 680,
+      origImg: 'https://images.unsplash.com/photo-1606522754091-d86bbd9f4066?w=500&h=625&fit=crop&crop=center&q=80',
+      dupeBrand: '& OTHER STORIES', dupeName: 'Mini Structured Handbag', dupePrice: 69,
+      dupeImg: 'https://images.unsplash.com/photo-1564422167509-4f8763ff046e?w=500&h=625&fit=crop&crop=center&q=80',
+      query: 'Jacquemus Le Chiquito long bag'
+    },
+    {
+      origBrand: 'SAINT LAURENT', origName: 'Le 5 à 7 Leather Shoulder Bag', origPrice: 2150,
+      origImg: 'https://images.unsplash.com/photo-1575032617751-6ddec2089882?w=500&h=625&fit=crop&crop=center&q=80',
+      dupeBrand: 'MANGO', dupeName: 'Leather Effect Shoulder Bag', dupePrice: 55.99,
+      dupeImg: 'https://images.unsplash.com/photo-1591561954557-26941169b49e?w=500&h=625&fit=crop&crop=center&q=80',
+      query: 'Saint Laurent Le 5 a 7 bag'
+    }
+  ];
+
+  function renderDupeOfDay() {
+    // Pick item based on day of year so it changes daily
+    const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(),0,0)) / 86400000);
+    const item = DOTD_ITEMS[dayOfYear % DOTD_ITEMS.length];
+    const savings = Math.round(((item.origPrice - item.dupePrice) / item.origPrice) * 100);
+
+    document.getElementById('dotdOrigImg').style.backgroundImage = `url('${item.origImg}')`;
+    document.getElementById('dotdOrigBrand').textContent = item.origBrand;
+    document.getElementById('dotdOrigName').textContent = item.origName;
+    document.getElementById('dotdOrigPrice').textContent = `$${item.origPrice.toLocaleString()}`;
+
+    document.getElementById('dotdDupeImg').style.backgroundImage = `url('${item.dupeImg}')`;
+    document.getElementById('dotdDupeBrand').textContent = item.dupeBrand;
+    document.getElementById('dotdDupeName').textContent = item.dupeName;
+    document.getElementById('dotdDupePrice').textContent = `$${item.dupePrice.toFixed(2)}`;
+
+    document.getElementById('dotdSavings').textContent = `\u2212${savings}%`;
+
+    document.getElementById('dotdBtn').addEventListener('click', () => {
+      performSearch(item.query, 'text', null);
+    });
+  }
+
+  renderDupeOfDay();
+
+  /* ============================================================
+     Savings Calculator
+     ============================================================ */
+
+  const calcSlider  = document.getElementById('calcSlider');
+  const calcAmount  = document.getElementById('calcAmount');
+  const calcMonth   = document.getElementById('calcMonth');
+  const calcYear    = document.getElementById('calcYear');
+  const calcFive    = document.getElementById('calcFive');
+  const SAVINGS_RATE = 0.68; // average 68% saving
+
+  function formatEuro(n) {
+    return '\u20ac' + Math.round(n).toLocaleString();
+  }
+
+  function updateCalc() {
+    const budget   = parseInt(calcSlider.value, 10);
+    const monthly  = Math.round(budget * SAVINGS_RATE);
+    const yearly   = monthly * 12;
+    const fiveYear = yearly * 5;
+
+    calcAmount.textContent = formatEuro(budget);
+    calcMonth.textContent  = formatEuro(monthly);
+    calcYear.textContent   = formatEuro(yearly);
+    calcFive.textContent   = formatEuro(fiveYear);
+
+    // Update slider track fill via CSS gradient
+    const pct = ((budget - 50) / (2000 - 50)) * 100;
+    const trackColor = document.documentElement.getAttribute('data-theme') === 'dark' ? '#333' : '#F0EDE8';
+    calcSlider.style.background = `linear-gradient(to right, #C9A96E 0%, #C9A96E ${pct}%, ${trackColor} ${pct}%, ${trackColor} 100%)`;
+  }
+
+  calcSlider.addEventListener('input', updateCalc);
+  updateCalc();
+
+  /* ============================================================
+     Main search handler
+     ============================================================ */
+
+  async function performSearch(query, type, imageFile) {
+    if (isSearching) return;
+    isSearching = true;
+
+    showSearchStatus();
+    renderSkeletons();
+    const resultsSection = document.getElementById('results');
+    resultsSection.scrollIntoView({ behavior: 'smooth' });
+
+    const eyebrow = resultsHeader.querySelector('.results__eyebrow');
+    const title   = resultsHeader.querySelector('.results__title');
+    const sub     = resultsHeader.querySelector('.results__subtitle');
+    eyebrow.textContent = t('search.searching').replace('...', '');
+    title.textContent   = t('results.loading.title');
+    sub.textContent     = t('results.loading.sub');
+
+    try {
+      let userContent;
+      let displayQuery = query;
+
+      if (type === 'image' && imageFile) {
+        const base64 = await fileToBase64(imageFile);
+        displayQuery = imageFile.name;
+        userContent = [
+          {
+            type: 'image',
+            source: { type: 'base64', media_type: getMediaType(imageFile), data: base64 }
+          },
+          { type: 'text', text: 'Identify this fashion item and find 6 high-street dupes for it.' }
+        ];
+      } else if (type === 'link') {
+        userContent = `The user pasted this product link: ${query}\n\nIdentify what fashion item this is (infer from the URL structure, brand, and path) and find 6 high-street dupes for it.`;
+      } else {
+        userContent = `Find 6 high-street dupes for this fashion item: ${query}`;
+      }
+
+      const dupes = await callClaude(userContent);
+      if (dupes) {
+        renderResults(dupes, displayQuery);
+        saveRecentSearch(query, type);
+      }
+    } catch (err) {
+      showToast(err.message, true);
+      eyebrow.textContent = t('results.eyebrow');
+      title.textContent   = t('results.title');
+      sub.textContent     = t('results.subtitle');
+      restoreDefaultCards();
+    } finally {
+      isSearching = false;
+      hideSearchStatus();
+      document.querySelectorAll('.search-box__btn').forEach(b => {
+        b.textContent = t('search.btn');
+        b.style.background = '';
+        b.disabled = false;
+      });
+    }
+  }
+
+  /* ============================================================
+     Default cards (restore on error)
+     ============================================================ */
+
+  const defaultCardsHTML = resultsGrid.innerHTML;
+
+  function restoreDefaultCards() {
+    resultsGrid.innerHTML = defaultCardsHTML;
+    resetFilters();
+    bindSaveButtons(resultsGrid);
+    bindShareButtons(resultsGrid);
+    syncSaveStates(resultsGrid);
+    resultsGrid.querySelectorAll('.dupe-card').forEach((card, i) => {
+      card.classList.add('reveal', 'visible');
+      card.style.transitionDelay = `${i * 0.08}s`;
+    });
+  }
+
+  /* ============================================================
+     "Find dupes" button handlers (link + text panels)
+     ============================================================ */
+
+  document.querySelectorAll('.search-box__panel[data-panel="link"] .search-box__btn, .search-box__panel[data-panel="text"] .search-box__btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const panel = btn.closest('.search-box__panel');
+      const input = panel.querySelector('.search-box__input');
+      const value = input.value.trim();
+
+      if (!value) {
+        input.style.borderColor = '#C9A96E';
+        input.setAttribute('placeholder', 'Please enter something first...');
+        setTimeout(() => {
+          input.style.borderColor = '';
+          input.setAttribute('placeholder',
+            panel.dataset.panel === 'link'
+              ? 'Paste a product URL from any fashion site...'
+              : 'Describe the item, e.g. "cream satin midi skirt"...'
+          );
+        }, 2000);
+        return;
+      }
+
+      btn.textContent = t('search.searching');
+      btn.style.background = '#C9A96E';
+      btn.disabled = true;
+
+      const type = panel.dataset.panel === 'link' ? 'link' : 'text';
+      performSearch(value, type, null);
+    });
+  });
+
+  document.querySelectorAll('.search-box__input').forEach(input => {
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        const btn = input.closest('.search-box__panel').querySelector('.search-box__btn');
+        if (btn) btn.click();
+      }
+    });
+  });
+
+  /* ============================================================
+     Upload panel search button
+     ============================================================ */
+
+  uploadSearchBtn.addEventListener('click', () => {
+    if (!currentFile) return;
+    uploadSearchBtn.textContent = t('search.searching');
+    uploadSearchBtn.style.background = '#C9A96E';
+    uploadSearchBtn.disabled = true;
+    performSearch(currentFile.name, 'image', currentFile);
+  });
+
+  /* ============================================================
+     Save / heart toggle (initial cards)
+     ============================================================ */
+
+  bindSaveButtons(resultsGrid);
+  bindShareButtons(resultsGrid);
+  syncSaveStates(resultsGrid);
+
+  /* ============================================================
+     Waitlist form
+     ============================================================ */
+
+  const waitlistForm    = document.getElementById('waitlistForm');
+  const waitlistEmail   = document.getElementById('waitlistEmail');
+  const waitlistBtn     = document.getElementById('waitlistBtn');
+  const waitlistSuccess = document.getElementById('waitlistSuccess');
+
+  waitlistForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const email = waitlistEmail.value.trim();
+    if (!email) return;
+
+    waitlistBtn.disabled = true;
+    waitlistBtn.textContent = t('search.joining');
+
+    // Simulate a short network delay
+    setTimeout(() => {
+      waitlistForm.style.display = 'none';
+      waitlistSuccess.classList.add('visible');
+    }, 600);
+  });
+
+  /* ============================================================
+     FAQ Accordion
+     ============================================================ */
+
+  document.getElementById('faqList').addEventListener('click', e => {
+    const btn = e.target.closest('.faq__question');
+    if (!btn) return;
+    const item = btn.parentElement;
+    const wasOpen = item.classList.contains('open');
+    // Close all
+    document.querySelectorAll('.faq__item.open').forEach(i => i.classList.remove('open'));
+    // Toggle clicked
+    if (!wasOpen) item.classList.add('open');
+  });
+
+  /* ============================================================
+     About Page
+     ============================================================ */
+
+  const aboutPage  = document.getElementById('aboutPage');
+  const aboutLink  = document.getElementById('aboutLink');
+  const aboutClose = document.getElementById('aboutClose');
+  const aboutCta   = document.getElementById('aboutCta');
+
+  aboutLink.addEventListener('click', e => {
+    e.preventDefault();
+    aboutPage.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  });
+
+  aboutClose.addEventListener('click', () => {
+    aboutPage.classList.remove('open');
+    document.body.style.overflow = '';
+  });
+
+  aboutCta.addEventListener('click', () => {
+    aboutPage.classList.remove('open');
+    document.body.style.overflow = '';
+    document.getElementById('discover').scrollIntoView({ behavior: 'smooth' });
+  });
+
+  /* ============================================================
+     Cookie Consent
+     ============================================================ */
+
+  const COOKIE_KEY     = 'altere_cookies';
+  const cookieBanner   = document.getElementById('cookieBanner');
+  const cookieAccept   = document.getElementById('cookieAccept');
+  const cookieManage   = document.getElementById('cookieManage');
+
+  if (!localStorage.getItem(COOKIE_KEY)) {
+    setTimeout(() => cookieBanner.classList.add('visible'), 1200);
+  }
+
+  function dismissCookie(value) {
+    localStorage.setItem(COOKIE_KEY, value);
+    cookieBanner.classList.remove('visible');
+  }
+
+  cookieAccept.addEventListener('click', () => dismissCookie('accepted'));
+  cookieManage.addEventListener('click', () => dismissCookie('managed'));
+
+  /* ============================================================
+     Scroll-reveal animation
+     ============================================================ */
+
+  const revealEls = document.querySelectorAll(
+    '.dupe-card, .how__step, .results__header, .how__inner'
+  );
+
+  revealEls.forEach(el => el.classList.add('reveal'));
+
+  const observer = new IntersectionObserver(
+    entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.15, rootMargin: '0px 0px -40px 0px' }
+  );
+
+  revealEls.forEach(el => observer.observe(el));
+
+  /* ============================================================
+     Stagger initial card reveal + match bars
+     ============================================================ */
+
+  document.querySelectorAll('.dupe-card').forEach((card, i) => {
+    card.style.transitionDelay = `${i * 0.08}s`;
+  });
+
+  document.querySelectorAll('.dupe-card__match-fill').forEach(fill => {
+    const width = fill.style.width;
+    fill.style.width = '0%';
+    const barObserver = new IntersectionObserver(
+      entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            fill.style.width = width;
+            barObserver.unobserve(fill);
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
+    barObserver.observe(fill);
+  });
+
+});
