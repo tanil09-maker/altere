@@ -3355,6 +3355,211 @@ img, video {
 }
 
 /* ============================================================
+   Camera Panel
+   ============================================================ */
+
+.search-box__panel[data-panel="camera"].active {
+  display: block;
+}
+
+.camera {
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--black);
+  position: relative;
+}
+
+/* Start state */
+.camera__start {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 36px 20px;
+  cursor: pointer;
+  color: var(--grey-500);
+  background: var(--cream);
+  border: 2px dashed var(--cream-dark);
+  border-radius: 10px;
+  transition: all 0.3s;
+}
+
+.camera__start:hover {
+  border-color: var(--gold);
+  background: rgba(201, 169, 110, 0.04);
+}
+
+.camera__start svg {
+  color: var(--gold);
+}
+
+.camera__start span {
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.camera__start small {
+  font-size: 12px;
+  color: var(--grey-500);
+}
+
+/* Viewfinder */
+.camera__viewfinder {
+  display: none;
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background: #000;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.camera__viewfinder.active {
+  display: block;
+}
+
+.camera__video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.camera__frame {
+  position: absolute;
+  inset: 16%;
+  border: 1.5px solid rgba(255,255,255,0.25);
+  border-radius: 12px;
+  pointer-events: none;
+}
+
+.camera__frame::before,
+.camera__frame::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-color: var(--gold);
+  border-style: solid;
+}
+
+.camera__frame::before {
+  top: -1.5px;
+  left: -1.5px;
+  border-width: 2.5px 0 0 2.5px;
+  border-radius: 8px 0 0 0;
+}
+
+.camera__frame::after {
+  bottom: -1.5px;
+  right: -1.5px;
+  border-width: 0 2.5px 2.5px 0;
+  border-radius: 0 0 8px 0;
+}
+
+/* Shutter button */
+.camera__shutter {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 3px solid rgba(255,255,255,0.8);
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.15s;
+}
+
+.camera__shutter:hover {
+  transform: translateX(-50%) scale(1.06);
+}
+
+.camera__shutter:active {
+  transform: translateX(-50%) scale(0.94);
+}
+
+.camera__shutter-ring {
+  display: block;
+  width: 44px;
+  height: 44px;
+  margin: 3px auto;
+  border-radius: 50%;
+  background: var(--white);
+  transition: background 0.15s;
+}
+
+.camera__shutter:active .camera__shutter-ring {
+  background: var(--gold);
+}
+
+/* Captured preview */
+.camera__preview {
+  display: none;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.camera__preview.active {
+  display: block;
+}
+
+.camera__canvas {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  display: block;
+  border-radius: 10px 10px 0 0;
+}
+
+.camera__preview-actions {
+  display: flex;
+  gap: 10px;
+  padding: 12px 0 0;
+}
+
+.camera__retake {
+  flex: 1;
+  padding: 12px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--grey-700);
+  background: var(--cream);
+  border: 1px solid var(--cream-dark);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.camera__retake:hover {
+  border-color: var(--grey-300);
+}
+
+.camera__use {
+  flex: 1;
+  padding: 12px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--white);
+  background: var(--gold);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.camera__use:hover {
+  background: var(--gold-dark);
+}
+
+/* Dark mode */
+[data-theme="dark"] .camera__start { background: #1E1E1E; border-color: #333; }
+[data-theme="dark"] .camera__start:hover { border-color: var(--gold); background: rgba(201,169,110,0.06); }
+[data-theme="dark"] .camera__retake { background: #333; border-color: #444; color: #BBB; }
+
+/* ============================================================
    Results query echo
    ============================================================ */
 

@@ -76,6 +76,10 @@
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
             <span data-i18n="search.tab.upload">Upload photo</span>
           </button>
+          <button class="search-box__tab" data-tab="camera">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            <span data-i18n="search.tab.camera">Take photo</span>
+          </button>
           <button class="search-box__tab" data-tab="text">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
             <span data-i18n="search.tab.text">Search text</span>
@@ -117,6 +121,33 @@
               </div>
             </label>
             <button class="search-box__btn search-box__btn--upload" id="uploadSearchBtn" disabled data-i18n="search.btn">Find dupes</button>
+          </div>
+          <!-- Camera Panel -->
+          <div class="search-box__panel" data-panel="camera">
+            <div class="camera" id="cameraArea">
+              <!-- Initial state: start camera -->
+              <div class="camera__start" id="cameraStart">
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                <span data-i18n="camera.start">Tap to open camera</span>
+                <small data-i18n="camera.hint">Point at any fashion item to find dupes</small>
+              </div>
+              <!-- Live viewfinder -->
+              <div class="camera__viewfinder" id="cameraViewfinder">
+                <video class="camera__video" id="cameraVideo" autoplay playsinline></video>
+                <div class="camera__frame"></div>
+                <button class="camera__shutter" id="cameraShutter" type="button" aria-label="Capture">
+                  <span class="camera__shutter-ring"></span>
+                </button>
+              </div>
+              <!-- Captured preview -->
+              <div class="camera__preview" id="cameraPreview">
+                <canvas class="camera__canvas" id="cameraCanvas"></canvas>
+                <div class="camera__preview-actions">
+                  <button class="camera__retake" id="cameraRetake" type="button" data-i18n="camera.retake">Retake</button>
+                  <button class="camera__use" id="cameraUse" type="button" data-i18n="camera.use">Find dupes</button>
+                </div>
+              </div>
+            </div>
           </div>
           <!-- Search Text Panel -->
           <div class="search-box__panel" data-panel="text">

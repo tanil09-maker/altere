@@ -111,6 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'search.upload.formats': 'JPG, PNG or WEBP up to 10 MB',
       'search.upload.ready': 'Ready to search',
       'search.status': 'AI is finding your dupes',
+      'search.tab.camera': 'Take photo', 'camera.start': 'Tap to open camera', 'camera.hint': 'Point at any fashion item to find dupes', 'camera.retake': 'Retake', 'camera.use': 'Find dupes', 'camera.error': 'Could not access camera. Please check permissions.',
       'recent.label': 'Recent', 'recent.clear': 'Clear',
       'trending.label': 'Trending now',
       'hero.searching': 'Searching across', 'hero.scroll': 'Scroll to explore',
@@ -186,6 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'search.upload.formats': 'JPG, PNG of WEBP tot 10 MB',
       'search.upload.ready': 'Klaar om te zoeken',
       'search.status': 'AI zoekt je dupes',
+      'search.tab.camera': 'Maak foto', 'camera.start': 'Tik om camera te openen', 'camera.hint': 'Richt op een mode-item om dupes te vinden', 'camera.retake': 'Opnieuw', 'camera.use': 'Vind dupes', 'camera.error': 'Kan camera niet openen. Controleer de machtigingen.',
       'recent.label': 'Recent', 'recent.clear': 'Wissen',
       'trending.label': 'Trending nu',
       'hero.searching': 'Zoeken bij', 'hero.scroll': 'Scroll om te ontdekken',
@@ -261,6 +263,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'search.upload.formats': 'JPG, PNG ou WEBP jusqu\u2019\u00e0 10 Mo',
       'search.upload.ready': 'Pr\u00eat \u00e0 rechercher',
       'search.status': 'L\u2019IA recherche vos dupes',
+      'search.tab.camera': 'Prendre photo', 'camera.start': 'Appuyez pour ouvrir la cam\u00e9ra', 'camera.hint': 'Pointez vers un article de mode pour trouver des dupes', 'camera.retake': 'Reprendre', 'camera.use': 'Trouver des dupes', 'camera.error': 'Impossible d\u2019acc\u00e9der \u00e0 la cam\u00e9ra. V\u00e9rifiez les permissions.',
       'recent.label': 'R\u00e9cents', 'recent.clear': 'Effacer',
       'trending.label': 'Tendances',
       'hero.searching': 'Recherche sur', 'hero.scroll': 'D\u00e9filez pour explorer',
@@ -336,6 +339,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'search.upload.formats': 'JPG, PNG oder WEBP bis 10 MB',
       'search.upload.ready': 'Bereit zum Suchen',
       'search.status': 'KI sucht deine Dupes',
+      'search.tab.camera': 'Foto machen', 'camera.start': 'Tippen um Kamera zu \u00f6ffnen', 'camera.hint': 'Auf ein Mode-Item richten, um Dupes zu finden', 'camera.retake': 'Nochmal', 'camera.use': 'Dupes finden', 'camera.error': 'Kamera konnte nicht ge\u00f6ffnet werden. Bitte Berechtigungen pr\u00fcfen.',
       'recent.label': 'K\u00fcrzlich', 'recent.clear': 'L\u00f6schen',
       'trending.label': 'Jetzt im Trend',
       'hero.searching': 'Suche bei', 'hero.scroll': 'Scrollen zum Entdecken',
@@ -411,6 +415,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'search.upload.formats': 'JPG, PNG o WEBP hasta 10 MB',
       'search.upload.ready': 'Listo para buscar',
       'search.status': 'La IA busca tus dupes',
+      'search.tab.camera': 'Tomar foto', 'camera.start': 'Toca para abrir la c\u00e1mara', 'camera.hint': 'Apunta a cualquier art\u00edculo de moda para encontrar dupes', 'camera.retake': 'Repetir', 'camera.use': 'Buscar dupes', 'camera.error': 'No se pudo acceder a la c\u00e1mara. Verifica los permisos.',
       'recent.label': 'Recientes', 'recent.clear': 'Borrar',
       'trending.label': 'Tendencia ahora',
       'hero.searching': 'Buscando en', 'hero.scroll': 'Despl\u00e1zate para explorar',
@@ -486,6 +491,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'search.upload.formats': 'JPG, PNG o WEBP fino a 10 MB',
       'search.upload.ready': 'Pronto per cercare',
       'search.status': 'L\u2019IA sta cercando i tuoi dupes',
+      'search.tab.camera': 'Scatta foto', 'camera.start': 'Tocca per aprire la fotocamera', 'camera.hint': 'Inquadra un articolo di moda per trovare dupes', 'camera.retake': 'Riprova', 'camera.use': 'Trova dupes', 'camera.error': 'Impossibile accedere alla fotocamera. Controlla i permessi.',
       'recent.label': 'Recenti', 'recent.clear': 'Cancella',
       'trending.label': 'Di tendenza',
       'hero.searching': 'Ricerca su', 'hero.scroll': 'Scorri per esplorare',
@@ -724,6 +730,104 @@ document.addEventListener('DOMContentLoaded', () => {
       clearFile();
     });
   }
+
+  /* ============================================================
+     Camera capture
+     ============================================================ */
+
+  const cameraStart      = document.getElementById('cameraStart');
+  const cameraViewfinder = document.getElementById('cameraViewfinder');
+  const cameraVideo      = document.getElementById('cameraVideo');
+  const cameraShutter    = document.getElementById('cameraShutter');
+  const cameraPreview    = document.getElementById('cameraPreview');
+  const cameraCanvas     = document.getElementById('cameraCanvas');
+  const cameraRetake     = document.getElementById('cameraRetake');
+  const cameraUse        = document.getElementById('cameraUse');
+  let cameraStream       = null;
+  let capturedBlob       = null;
+
+  // Open camera
+  cameraStart.addEventListener('click', async () => {
+    try {
+      cameraStream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 960 } }
+      });
+      cameraVideo.srcObject = cameraStream;
+      cameraStart.style.display = 'none';
+      cameraViewfinder.classList.add('active');
+      cameraPreview.classList.remove('active');
+    } catch (err) {
+      showToast(t('camera.error') || 'Could not access camera. Please check permissions.', true);
+    }
+  });
+
+  // Capture photo
+  cameraShutter.addEventListener('click', () => {
+    if (!cameraStream) return;
+    const ctx = cameraCanvas.getContext('2d');
+    cameraCanvas.width  = cameraVideo.videoWidth;
+    cameraCanvas.height = cameraVideo.videoHeight;
+    ctx.drawImage(cameraVideo, 0, 0);
+
+    // Convert to blob
+    cameraCanvas.toBlob(blob => {
+      capturedBlob = blob;
+    }, 'image/jpeg', 0.9);
+
+    // Stop stream and show preview
+    stopCamera();
+    cameraViewfinder.classList.remove('active');
+    cameraPreview.classList.add('active');
+  });
+
+  // Retake
+  cameraRetake.addEventListener('click', async () => {
+    capturedBlob = null;
+    cameraPreview.classList.remove('active');
+    try {
+      cameraStream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 960 } }
+      });
+      cameraVideo.srcObject = cameraStream;
+      cameraViewfinder.classList.add('active');
+    } catch {
+      cameraStart.style.display = '';
+    }
+  });
+
+  // Use photo → search
+  cameraUse.addEventListener('click', () => {
+    if (!capturedBlob) return;
+    const file = new File([capturedBlob], 'camera-photo.jpg', { type: 'image/jpeg' });
+    cameraUse.textContent = t('search.searching');
+    cameraUse.style.background = '#B8954F';
+    performSearch('Camera photo', 'image', file);
+
+    // Reset after search starts
+    setTimeout(() => {
+      cameraUse.textContent = t('camera.use') || 'Find dupes';
+      cameraUse.style.background = '';
+    }, 2000);
+  });
+
+  function stopCamera() {
+    if (cameraStream) {
+      cameraStream.getTracks().forEach(track => track.stop());
+      cameraStream = null;
+    }
+  }
+
+  // Stop camera when switching away from the camera tab
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      if (tab.dataset.tab !== 'camera') {
+        stopCamera();
+        cameraViewfinder.classList.remove('active');
+        cameraPreview.classList.remove('active');
+        cameraStart.style.display = '';
+      }
+    });
+  });
 
   /* ============================================================
      Filters (price + store)
