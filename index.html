@@ -35,7 +35,8 @@
         }
 
         .hero-section {
-            background: linear-gradient(rgba(26, 26, 26, 0.3), rgba(26, 26, 26, 0.3)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><rect fill="%23d4a574" width="1200" height="800"/><circle fill="%23e6b4b0" cx="300" cy="200" r="120" opacity="0.6"/><circle fill="%23c9956f" cx="800" cy="400" r="80" opacity="0.4"/><rect fill="%23f5f5f0" x="600" y="300" width="200" height="150" rx="20" opacity="0.8"/></svg>');
+            background: linear-gradient(rgba(26, 26, 26, 0.3), rgba(26, 26, 26, 0.3)), 
+                        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><pattern id="quilted" patternUnits="userSpaceOnUse" width="60" height="60"><polygon fill="%23d4a574" points="30,0 60,30 30,60 0,30"/><circle cx="30" cy="30" r="3" fill="%23b8956a"/></pattern></defs><rect width="1200" height="800" fill="%23c9956f"/><rect width="1200" height="800" fill="url(%23quilted)" opacity="0.8"/><ellipse cx="300" cy="200" rx="150" ry="80" fill="%23d4a574" opacity="0.6"/><ellipse cx="800" cy="500" rx="120" ry="60" fill="%23e6b4b0" opacity="0.4"/></svg>');
             background-size: cover;
             background-position: center;
             padding: 80px 20px 100px;
@@ -107,6 +108,7 @@
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
             max-width: 500px;
             margin: 0 auto;
+            position: relative;
         }
 
         .tab-container {
@@ -146,10 +148,6 @@
 
         .tab-content.active {
             display: block;
-        }
-
-        .input-group {
-            margin-bottom: 20px;
         }
 
         .text-input {
@@ -197,93 +195,6 @@
             opacity: 0.6;
         }
 
-        .camera-section {
-            text-align: center;
-        }
-
-        .camera-container {
-            position: relative;
-            width: 100%;
-            max-width: 300px;
-            margin: 0 auto 20px;
-            border-radius: 12px;
-            overflow: hidden;
-            background: #000;
-            min-height: 200px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        #camera {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: none;
-        }
-
-        .camera-placeholder {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: var(--white);
-            text-align: center;
-            padding: 30px 15px;
-        }
-
-        .camera-icon {
-            width: 40px;
-            height: 40px;
-            margin-bottom: 10px;
-            opacity: 0.7;
-        }
-
-        .camera-controls {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .capture-btn {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-rose) 100%);
-            border: 2px solid var(--white);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(212, 165, 116, 0.3);
-        }
-
-        .capture-btn:hover {
-            transform: scale(1.1);
-        }
-
-        .btn-small {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary-small {
-            background: var(--text-primary);
-            color: white;
-        }
-
-        .btn-danger-small {
-            background: #f44336;
-            color: white;
-        }
-
         .find-button {
             width: 100%;
             padding: 16px;
@@ -295,11 +206,34 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+            margin-bottom: 15px;
         }
 
         .find-button:hover {
             background: #333;
             transform: translateY(-1px);
+        }
+
+        .camera-button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, var(--accent-gold), var(--accent-rose));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .camera-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(212, 165, 116, 0.3);
         }
 
         .recent-section {
@@ -377,6 +311,121 @@
 
         .brand-links span:hover {
             opacity: 0.7;
+        }
+
+        /* Camera Modal */
+        .camera-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .camera-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .camera-container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .camera-view {
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto 20px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #000;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        #camera {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+        .camera-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            padding: 30px 15px;
+        }
+
+        .camera-controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .capture-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-gold), var(--accent-rose));
+            border: 3px solid white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .capture-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary-small {
+            background: var(--text-primary);
+            color: white;
+        }
+
+        .btn-danger-small {
+            background: #f44336;
+            color: white;
+        }
+
+        .close-modal {
+            background: #f0f0f0;
+            color: var(--text-primary);
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
         }
 
         .results-section {
@@ -477,6 +526,14 @@
                 font-size: 11px;
                 padding: 10px 6px;
             }
+
+            .camera-modal {
+                padding: 10px;
+            }
+
+            .camera-container {
+                padding: 20px;
+            }
         }
     </style>
 </head>
@@ -487,7 +544,7 @@
             <div class="nav-links">
                 <a href="#">DISCOVER</a>
                 <a href="#">BRANDS</a>
-                <a href="#">SAVED</a>
+                <a href="#">SAVED <span style="background: #ff6b6b; color: white; border-radius: 50%; width: 18px; height: 18px; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; margin-left: 5px;">3</span></a>
                 <a href="#">SIGN IN</a>
             </div>
         </div>
@@ -503,9 +560,6 @@
                     </button>
                     <button class="tab" data-tab="upload">
                         <span>📁</span> Upload photo
-                    </button>
-                    <button class="tab" data-tab="camera">
-                        <span>📷</span> Live camera
                     </button>
                     <button class="tab" data-tab="search">
                         <span>🔍</span> Search text
@@ -529,30 +583,6 @@
                     <input type="file" id="fileInput" class="file-upload" accept="image/*">
                 </div>
 
-                <div class="tab-content" id="camera-content">
-                    <div class="camera-section">
-                        <div class="camera-container">
-                            <video id="camera" autoplay playsinline></video>
-                            <div class="camera-placeholder" id="cameraPlaceholder">
-                                <svg class="camera-icon" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M12 15.2c1.65 0 3-1.35 3-3s-1.35-3-3-3-3 1.35-3 3 1.35 3 3 3zm0-4.2c.66 0 1.2.54 1.2 1.2s-.54 1.2-1.2 1.2-1.2-.54-1.2-1.2.54-1.2 1.2-1.2z"/>
-                                    <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm11 15H4V6h16v11z"/>
-                                </svg>
-                                <p style="font-size: 13px; margin-bottom: 4px;">Ready to scan</p>
-                                <p style="font-size: 11px; opacity: 0.7;">Point camera at fashion items</p>
-                            </div>
-                        </div>
-                        <div class="camera-controls">
-                            <button class="btn-small btn-primary-small" id="toggleCamera">Start Camera</button>
-                            <div class="capture-btn" id="captureBtn">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
-                                    <circle cx="12" cy="12" r="6"/>
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="tab-content" id="search-content">
                     <div class="input-group">
                         <input type="text" class="text-input" id="searchInput" placeholder="Describe what you're looking for...">
@@ -560,6 +590,14 @@
                 </div>
 
                 <button class="find-button" onclick="findDupes()">Find dupes</button>
+                
+                <button class="camera-button" onclick="openCameraModal()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 15.2c1.65 0 3-1.35 3-3s-1.35-3-3-3-3 1.35-3 3 1.35 3 3 3zm0-4.2c.66 0 1.2.54 1.2 1.2s-.54 1.2-1.2 1.2-1.2-.54-1.2-1.2.54-1.2 1.2-1.2z"/>
+                        <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm11 15H4V6h16v11z"/>
+                    </svg>
+                    📷 Scan with Camera
+                </button>
             </div>
 
             <div class="recent-section">
@@ -592,6 +630,32 @@
                     <span>& OTHER STORIES</span>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Camera Modal -->
+    <div class="camera-modal" id="cameraModal">
+        <div class="camera-container">
+            <h3 style="margin-bottom: 20px; color: var(--text-primary);">Scan Fashion Item</h3>
+            <div class="camera-view">
+                <video id="camera" autoplay playsinline></video>
+                <div class="camera-placeholder" id="cameraPlaceholder">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 15.2c1.65 0 3-1.35 3-3s-1.35-3-3-3-3 1.35-3 3 1.35 3 3 3zm0-4.2c.66 0 1.2.54 1.2 1.2s-.54 1.2-1.2 1.2-1.2-.54-1.2-1.2.54-1.2 1.2-1.2z"/>
+                        <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm11 15H4V6h16v11z"/>
+                    </svg>
+                    <p style="font-size: 13px; margin-top: 10px;">Click Start Camera</p>
+                </div>
+            </div>
+            <div class="camera-controls">
+                <button class="btn-small btn-primary-small" id="toggleCamera">Start Camera</button>
+                <div class="capture-btn" id="captureBtn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                        <circle cx="12" cy="12" r="6"/>
+                    </svg>
+                </div>
+            </div>
+            <button class="close-modal" onclick="closeCameraModal()">Close</button>
         </div>
     </div>
 
@@ -630,9 +694,18 @@
             document.getElementById(`${tabName}-content`).classList.add('active');
 
             currentTab = tabName;
+        }
 
-            // Stop camera if switching away from camera tab
-            if (tabName !== 'camera' && stream) {
+        // Camera Modal
+        function openCameraModal() {
+            document.getElementById('cameraModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeCameraModal() {
+            document.getElementById('cameraModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+            if (stream) {
                 stopCamera();
             }
         }
@@ -703,6 +776,7 @@
             context.drawImage(camera, 0, 0, canvas.width, canvas.height);
             
             canvas.toBlob((blob) => {
+                closeCameraModal();
                 analyzeImage(blob);
             }, 'image/jpeg', 0.8);
         }
@@ -757,13 +831,6 @@
                         return;
                     }
                     analyzeImage(file);
-                    return;
-                case 'camera':
-                    if (!stream) {
-                        alert('Please start the camera and take a photo');
-                        return;
-                    }
-                    capturePhoto();
                     return;
                 case 'search':
                     const searchValue = document.getElementById('searchInput').value.trim();
@@ -835,6 +902,13 @@
         function openProduct(brand, name) {
             alert(`Opening ${brand} - ${name}\n\nThis would redirect to affiliate link in production.`);
         }
+
+        // Close modal with escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && document.getElementById('cameraModal').classList.contains('active')) {
+                closeCameraModal();
+            }
+        });
 
         // Cleanup
         window.addEventListener('beforeunload', () => {
