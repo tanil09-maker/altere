@@ -90,8 +90,25 @@
         <div class="search-box__body">
           <!-- Paste Link Panel -->
           <div class="search-box__panel active" data-panel="link">
-            <input type="url" class="search-box__input" data-i18n-placeholder="search.placeholder.link" placeholder="Paste a product URL from any fashion site...">
+            <input type="url" class="search-box__input" id="linkInput" data-i18n-placeholder="search.placeholder.link" placeholder="Paste a product URL from any fashion site...">
             <button class="search-box__btn" data-i18n="search.btn">Find dupes</button>
+            <div class="link-preview" id="linkPreview">
+              <div class="link-preview__loading" id="linkPreviewLoading">
+                <div class="link-preview__spinner"></div>
+                <span data-i18n="link.fetching">Fetching preview...</span>
+              </div>
+              <div class="link-preview__card" id="linkPreviewCard">
+                <img class="link-preview__img" id="linkPreviewImg" src="" alt="">
+                <div class="link-preview__info">
+                  <span class="link-preview__domain" id="linkPreviewDomain"></span>
+                  <span class="link-preview__title" id="linkPreviewTitle"></span>
+                  <span class="link-preview__desc" id="linkPreviewDesc"></span>
+                </div>
+                <button class="link-preview__clear" id="linkPreviewClear" type="button" aria-label="Clear">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+              </div>
+            </div>
           </div>
           <!-- Upload Photo Panel -->
           <div class="search-box__panel" data-panel="upload">
