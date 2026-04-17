@@ -1759,13 +1759,44 @@ Rules:
     if (/\b(shoe|shoes|boot|boots|heel|heels|sneaker|sneakers|loafer|loafers|sandal|sandals|flats|ballet|mule|mules|pump|pumps|trainer|trainers|espadrille)\b/.test(q)) return 'shoes';
     if (/\b(jewel|jewelry|jewellery|necklace|earring|earrings|ring|rings|bracelet|pendant|chain|pearl|pearls|brooch|cuff|bangle|choker)\b/.test(q)) return 'jewellery';
     if (/\b(scarf|scarves|belt|belts|hat|hats|cap|glove|gloves|sunglasses|watch|watches|wallet|headband|hairclip|tie|bow tie|beanie)\b/.test(q)) return 'accessories';
-    return 'clothing';
+    if (/\b(dress|skirt|coat|blazer|jacket|trouser|trousers|pants|top|blouse|shirt|sweater|knit|cardigan|hoodie|jeans|denim|jumpsuit|romper|kimono|cape|vest|corset)\b/.test(q)) return 'clothing';
+    return 'mixed';
   }
 
   function generateDemoResults(query) {
     const cat = detectCategory(query);
+
+    let items;
+    if (cat === 'mixed') {
+      // Pick one product from each category for variety
+      const cats = Object.keys(DEMO_PRODUCTS);
+      const pool = [];
+      cats.forEach(c => pool.push(...DEMO_PRODUCTS[c]));
+      // Shuffle and take 6
+      for (let i = pool.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [pool[i], pool[j]] = [pool[j], pool[i]];
+      }
+      items = pool.slice(0, 6);
+      // Ensure unique stores
+      const seen = new Set();
+      items = items.filter(item => {
+        if (seen.has(item.store)) return false;
+        seen.add(item.store);
+        return true;
+      });
+      // Fill if needed
+      while (items.length < 6) {
+        const fill = pool.find(p => !seen.has(p.store));
+        if (fill) { items.push(fill); seen.add(fill.store); }
+        else break;
+      }
+    } else {
+      items = DEMO_PRODUCTS[cat];
+    }
+
     // Deep clone and add slight randomness
-    return DEMO_PRODUCTS[cat].map(item => ({
+    return items.map(item => ({
       ...item,
       match_percentage: item.match_percentage + Math.floor(Math.random() * 3) - 1
     }));
