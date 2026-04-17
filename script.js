@@ -1552,9 +1552,12 @@ document.addEventListener('DOMContentLoaded', () => {
       card.dataset.category = dupe.category || 'clothing';
       card.style.transitionDelay = `${i * 0.08}s`;
 
-      // Image area: shimmer if Unsplash available, colour placeholder otherwise
+      // Image area: use embedded URL if available, else Unsplash API, else colour placeholder
       let imageInner;
-      if (hasUnsplash) {
+      const hasDirectImage = dupe.image_url;
+      if (hasDirectImage) {
+        imageInner = `<img src="${escapeAttr(dupe.image_url)}" alt="${escapeAttr(dupe.product_name)}" loading="lazy">`;
+      } else if (hasUnsplash) {
         imageInner = `
           <div class="dupe-card__img-shimmer"></div>
           <img class="loading" src="" alt="${escapeAttr(dupe.product_name)}" loading="lazy">`;
@@ -1604,8 +1607,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       });
 
-      // Fetch Unsplash image for this card (non-blocking)
-      if (hasUnsplash) {
+      // Fetch Unsplash image for this card (non-blocking) — skip if already has image
+      if (!hasDirectImage && hasUnsplash) {
         loadCardImage(card, dupe, i);
       }
     });
@@ -1705,46 +1708,48 @@ Rules:
 
   /* ---- Demo results generator ---- */
 
+  const U = (id) => `https://images.unsplash.com/${id}?w=600&h=800&fit=crop&crop=center&q=80`;
+
   const DEMO_PRODUCTS = {
     bags: [
-      { store: 'ZARA', product_name: 'Quilted Chain Crossbody Bag', category: 'bags', dupe_price: 45.99, original_price: 2200, match_percentage: 94 },
-      { store: 'H&M', product_name: 'Padded Shoulder Bag', category: 'bags', dupe_price: 34.99, original_price: 2200, match_percentage: 91 },
-      { store: 'MANGO', product_name: 'Leather Effect Flap Bag', category: 'bags', dupe_price: 55.99, original_price: 2200, match_percentage: 89 },
-      { store: 'ASOS', product_name: 'Structured Mini Tote', category: 'bags', dupe_price: 42.00, original_price: 2200, match_percentage: 87 },
-      { store: 'COS', product_name: 'Minimalist Leather Bag', category: 'bags', dupe_price: 89.00, original_price: 2200, match_percentage: 85 },
-      { store: '& OTHER STORIES', product_name: 'Woven Chain Strap Bag', category: 'bags', dupe_price: 79.00, original_price: 2200, match_percentage: 82 }
+      { store: 'ZARA', product_name: 'Quilted Chain Crossbody Bag', category: 'bags', dupe_price: 45.99, original_price: 2200, match_percentage: 94, image_url: U('photo-1584917865442-de89df76afd3') },
+      { store: 'H&M', product_name: 'Padded Shoulder Bag', category: 'bags', dupe_price: 34.99, original_price: 2200, match_percentage: 91, image_url: U('photo-1566150905458-1bf1fc113f0d') },
+      { store: 'MANGO', product_name: 'Leather Effect Flap Bag', category: 'bags', dupe_price: 55.99, original_price: 2200, match_percentage: 89, image_url: U('photo-1590874103328-eac38a683ce7') },
+      { store: 'ASOS', product_name: 'Structured Mini Tote', category: 'bags', dupe_price: 42.00, original_price: 2200, match_percentage: 87, image_url: U('photo-1594223274512-ad4803739b7c') },
+      { store: 'COS', product_name: 'Minimalist Leather Bag', category: 'bags', dupe_price: 89.00, original_price: 2200, match_percentage: 85, image_url: U('photo-1598532163257-ae3c6b2524b6') },
+      { store: '& OTHER STORIES', product_name: 'Woven Chain Strap Bag', category: 'bags', dupe_price: 79.00, original_price: 2200, match_percentage: 82, image_url: U('photo-1591561954557-26941169b49e') }
     ],
     clothing: [
-      { store: 'ZARA', product_name: 'Satin Midi Skirt with Slit', category: 'clothing', dupe_price: 49.90, original_price: 890, match_percentage: 95 },
-      { store: 'H&M', product_name: 'Oversized Wool-Blend Blazer', category: 'clothing', dupe_price: 79.99, original_price: 890, match_percentage: 92 },
-      { store: 'MANGO', product_name: 'Flowing Printed Midi Dress', category: 'clothing', dupe_price: 59.99, original_price: 890, match_percentage: 90 },
-      { store: 'ASOS', product_name: 'Tailored Wide Leg Trousers', category: 'clothing', dupe_price: 65.00, original_price: 890, match_percentage: 88 },
-      { store: 'COS', product_name: 'Draped Jersey Top', category: 'clothing', dupe_price: 45.00, original_price: 890, match_percentage: 85 },
-      { store: '& OTHER STORIES', product_name: 'Belted Wrap Coat', category: 'clothing', dupe_price: 129.00, original_price: 890, match_percentage: 83 }
+      { store: 'ZARA', product_name: 'Satin Midi Skirt with Slit', category: 'clothing', dupe_price: 49.90, original_price: 890, match_percentage: 95, image_url: U('photo-1682397125309-56077754235d') },
+      { store: 'H&M', product_name: 'Oversized Wool-Blend Blazer', category: 'clothing', dupe_price: 79.99, original_price: 890, match_percentage: 92, image_url: U('photo-1653660666869-2345adc51155') },
+      { store: 'MANGO', product_name: 'Flowing Printed Midi Dress', category: 'clothing', dupe_price: 59.99, original_price: 890, match_percentage: 90, image_url: U('photo-1618597724686-aee8bba9cf99') },
+      { store: 'ASOS', product_name: 'Tailored Wide Leg Trousers', category: 'clothing', dupe_price: 65.00, original_price: 890, match_percentage: 88, image_url: U('photo-1509631179647-0177331693ae') },
+      { store: 'COS', product_name: 'Draped Jersey Top', category: 'clothing', dupe_price: 45.00, original_price: 890, match_percentage: 85, image_url: U('photo-1515886657613-9f3515b0c78f') },
+      { store: '& OTHER STORIES', product_name: 'Belted Wrap Coat', category: 'clothing', dupe_price: 129.00, original_price: 890, match_percentage: 83, image_url: U('photo-1606776627650-454d6d7bd7bf') }
     ],
     shoes: [
-      { store: 'ZARA', product_name: 'Leather Slingback Heels', category: 'shoes', dupe_price: 59.90, original_price: 750, match_percentage: 93 },
-      { store: 'H&M', product_name: 'Pointed Ballet Flats', category: 'shoes', dupe_price: 29.99, original_price: 750, match_percentage: 90 },
-      { store: 'MANGO', product_name: 'Leather Ankle Boots', category: 'shoes', dupe_price: 79.99, original_price: 750, match_percentage: 88 },
-      { store: 'ASOS', product_name: 'Chunky Platform Loafers', category: 'shoes', dupe_price: 55.00, original_price: 750, match_percentage: 86 },
-      { store: 'COS', product_name: 'Leather Mule Sandals', category: 'shoes', dupe_price: 89.00, original_price: 750, match_percentage: 84 },
-      { store: '& OTHER STORIES', product_name: 'Suede Knee-High Boots', category: 'shoes', dupe_price: 119.00, original_price: 750, match_percentage: 81 }
+      { store: 'ZARA', product_name: 'Leather Slingback Heels', category: 'shoes', dupe_price: 59.90, original_price: 750, match_percentage: 93, image_url: U('photo-1543163521-1bf539c55dd2') },
+      { store: 'H&M', product_name: 'Pointed Ballet Flats', category: 'shoes', dupe_price: 29.99, original_price: 750, match_percentage: 90, image_url: U('photo-1460353581641-37baddab0fa2') },
+      { store: 'MANGO', product_name: 'Leather Ankle Boots', category: 'shoes', dupe_price: 79.99, original_price: 750, match_percentage: 88, image_url: U('photo-1603808033192-082d6919d3e1') },
+      { store: 'ASOS', product_name: 'Chunky Platform Loafers', category: 'shoes', dupe_price: 55.00, original_price: 750, match_percentage: 86, image_url: U('photo-1606107557195-0e29a4b5b4aa') },
+      { store: 'COS', product_name: 'Leather Mule Sandals', category: 'shoes', dupe_price: 89.00, original_price: 750, match_percentage: 84, image_url: U('photo-1611652022419-a9419f74343d') },
+      { store: '& OTHER STORIES', product_name: 'Suede Knee-High Boots', category: 'shoes', dupe_price: 119.00, original_price: 750, match_percentage: 81, image_url: U('photo-1548036328-c9fa89d128fa') }
     ],
     jewellery: [
-      { store: 'ZARA', product_name: 'Layered Gold Chain Necklace', category: 'jewellery', dupe_price: 25.90, original_price: 480, match_percentage: 94 },
-      { store: 'H&M', product_name: 'Chunky Hoop Earrings', category: 'jewellery', dupe_price: 14.99, original_price: 480, match_percentage: 91 },
-      { store: 'MANGO', product_name: 'Crystal Pendant Necklace', category: 'jewellery', dupe_price: 29.99, original_price: 480, match_percentage: 89 },
-      { store: 'ASOS', product_name: 'Pearl Drop Earrings Set', category: 'jewellery', dupe_price: 18.00, original_price: 480, match_percentage: 86 },
-      { store: 'COS', product_name: 'Sculptural Cuff Bracelet', category: 'jewellery', dupe_price: 35.00, original_price: 480, match_percentage: 84 },
-      { store: '& OTHER STORIES', product_name: 'Twisted Ring Set', category: 'jewellery', dupe_price: 29.00, original_price: 480, match_percentage: 82 }
+      { store: 'ZARA', product_name: 'Layered Gold Chain Necklace', category: 'jewellery', dupe_price: 25.90, original_price: 480, match_percentage: 94, image_url: U('photo-1599643478518-a784e5dc4c8f') },
+      { store: 'H&M', product_name: 'Chunky Hoop Earrings', category: 'jewellery', dupe_price: 14.99, original_price: 480, match_percentage: 91, image_url: U('photo-1573408301185-9146fe634ad0') },
+      { store: 'MANGO', product_name: 'Crystal Pendant Necklace', category: 'jewellery', dupe_price: 29.99, original_price: 480, match_percentage: 89, image_url: U('photo-1611085583191-a3b181a88401') },
+      { store: 'ASOS', product_name: 'Pearl Drop Earrings Set', category: 'jewellery', dupe_price: 18.00, original_price: 480, match_percentage: 86, image_url: U('photo-1612817159949-195b6eb9e31a') },
+      { store: 'COS', product_name: 'Sculptural Cuff Bracelet', category: 'jewellery', dupe_price: 35.00, original_price: 480, match_percentage: 84, image_url: U('photo-1611591437281-460bfbe1220a') },
+      { store: '& OTHER STORIES', product_name: 'Twisted Ring Set', category: 'jewellery', dupe_price: 29.00, original_price: 480, match_percentage: 82, image_url: U('photo-1622434641406-a158123450f9') }
     ],
     accessories: [
-      { store: 'ZARA', product_name: 'Silk Square Scarf', category: 'accessories', dupe_price: 29.90, original_price: 450, match_percentage: 93 },
-      { store: 'H&M', product_name: 'Wide Leather Belt', category: 'accessories', dupe_price: 24.99, original_price: 450, match_percentage: 90 },
-      { store: 'MANGO', product_name: 'Oversized Sunglasses', category: 'accessories', dupe_price: 25.99, original_price: 450, match_percentage: 88 },
-      { store: 'ASOS', product_name: 'Logo Bucket Hat', category: 'accessories', dupe_price: 22.00, original_price: 450, match_percentage: 86 },
-      { store: 'COS', product_name: 'Cashmere Wool Scarf', category: 'accessories', dupe_price: 69.00, original_price: 450, match_percentage: 84 },
-      { store: '& OTHER STORIES', product_name: 'Leather Gloves', category: 'accessories', dupe_price: 49.00, original_price: 450, match_percentage: 81 }
+      { store: 'ZARA', product_name: 'Silk Square Scarf', category: 'accessories', dupe_price: 29.90, original_price: 450, match_percentage: 93, image_url: U('photo-1576566588028-4147f3842f27') },
+      { store: 'H&M', product_name: 'Wide Leather Belt', category: 'accessories', dupe_price: 24.99, original_price: 450, match_percentage: 90, image_url: U('photo-1617038220319-276d3cfab638') },
+      { store: 'MANGO', product_name: 'Oversized Sunglasses', category: 'accessories', dupe_price: 25.99, original_price: 450, match_percentage: 88, image_url: U('photo-1509319117193-57bab727e09d') },
+      { store: 'ASOS', product_name: 'Logo Bucket Hat', category: 'accessories', dupe_price: 22.00, original_price: 450, match_percentage: 86, image_url: U('photo-1521223890158-f9f7c3d5d504') },
+      { store: 'COS', product_name: 'Cashmere Wool Scarf', category: 'accessories', dupe_price: 69.00, original_price: 450, match_percentage: 84, image_url: U('photo-1576566588028-4147f3842f27') },
+      { store: '& OTHER STORIES', product_name: 'Leather Gloves', category: 'accessories', dupe_price: 49.00, original_price: 450, match_percentage: 81, image_url: U('photo-1509631179647-0177331693ae') }
     ]
   };
 
