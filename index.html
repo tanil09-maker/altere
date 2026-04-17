@@ -24,7 +24,7 @@
         <li><a href="#discover" data-i18n="nav.discover">Discover</a></li>
         <li><a href="#brands" data-i18n="nav.brands">Brands</a></li>
         <li><a href="#saved" class="nav__saved-link" id="savedLink" data-i18n="nav.saved">Saved<span class="nav__badge" id="savedBadge"></span></a></li>
-        <li><a href="#signin" class="nav__signin" data-i18n="nav.signin">Sign in</a></li>
+        <li><a href="#signin" class="nav__signin" id="authBtn" data-i18n="nav.signin">Sign in</a></li>
       </ul>
       <div class="nav__lang" id="langSwitcher">
         <button class="nav__lang-btn" id="langBtn" type="button" aria-label="Language">
@@ -1106,6 +1106,48 @@
       </div>
     </div>
   </section>
+
+  <!-- Auth Modal -->
+  <div class="modal-overlay" id="authModal">
+    <div class="modal">
+      <div class="modal__header">
+        <h3 id="authModalTitle" data-i18n="auth.title">Sign in to ALTERE</h3>
+        <button class="modal__close" id="authModalClose" aria-label="Close">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <!-- Sign in form -->
+      <div class="modal__body" id="authFormView">
+        <p class="auth__subtitle" data-i18n="auth.subtitle">Create a free account to save dupes and share finds.</p>
+        <label class="modal__label" for="authEmail" data-i18n="auth.email">Email</label>
+        <input type="email" class="modal__input" id="authEmail" placeholder="you@example.com" required>
+        <label class="modal__label" for="authName" style="margin-top:14px" data-i18n="auth.name">Name</label>
+        <input type="text" class="modal__input" id="authName" placeholder="Your name" required>
+        <div class="modal__status" id="authStatus"></div>
+        <div class="modal__footer" style="padding:16px 0 0">
+          <button class="modal__btn" id="authSubmitBtn" data-i18n="auth.create">Create free account</button>
+        </div>
+        <p class="auth__tiers-hint" data-i18n="auth.tiers">Free: 3 AI searches/day. Add your API key for unlimited.</p>
+      </div>
+      <!-- Signed in view -->
+      <div class="modal__body" id="authProfileView" style="display:none">
+        <div class="auth__profile">
+          <div class="auth__avatar" id="authAvatar">A</div>
+          <div>
+            <span class="auth__profile-name" id="authProfileName"></span>
+            <span class="auth__profile-email" id="authProfileEmail"></span>
+          </div>
+        </div>
+        <div class="auth__tier-card" id="authTierCard">
+          <span class="auth__tier-label" id="authTierLabel"></span>
+          <span class="auth__tier-desc" id="authTierDesc"></span>
+        </div>
+        <div class="modal__footer" style="padding:16px 0 0">
+          <button class="modal__btn" id="authSignOut" style="background:var(--grey-500)" data-i18n="auth.signout">Sign out</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Hidden canvas for story image generation -->
   <canvas id="storyCanvas" width="1080" height="1920" style="display:none"></canvas>

@@ -172,7 +172,8 @@ document.addEventListener('DOMContentLoaded', () => {
       'toast.saved': 'Saved to your collection', 'toast.removed': 'Removed from saved', 'toast.cleared': 'All saved items cleared',
       'search.searching': 'Searching...', 'search.joining': 'Joining...',
       'results.ai.eyebrow': 'AI Results', 'results.ai.title': 'Your dupes are ready', 'results.demo.eyebrow': 'Demo Results', 'results.demo.hint': 'Add your API key in settings for real AI results', 'results.bestDupe': 'Best Dupe', 'results.moreAlts': 'More alternatives',
-      'free.remaining': 'free AI searches left today', 'free.exhausted': 'Free searches used \u2014 showing demo results',
+      'free.remaining': 'free AI searches left today', 'free.exhausted': 'Free searches used \u2014 showing demo results', 'free.pro': 'Unlimited AI searches (Pro)',
+      'auth.title': 'Sign in to ALTERE', 'auth.subtitle': 'Create a free account to save dupes and share finds.', 'auth.email': 'Email', 'auth.name': 'Name', 'auth.create': 'Create free account', 'auth.tiers': 'Free: 3 AI searches/day. Add your API key for unlimited.', 'auth.signout': 'Sign out', 'auth.freeTier': 'Free', 'auth.freeDesc': '3 AI searches per day + unlimited demo', 'auth.proDesc': 'Unlimited AI searches with your API key', 'auth.welcome': 'Welcome!', 'auth.signedOut': 'Signed out', 'auth.invalidEmail': 'Please enter a valid email.', 'auth.invalidName': 'Please enter your name.',
       'results.loading.title': 'Our AI is analysing your item\u2026', 'results.loading.sub': 'Finding the best alternatives across 6 stores',
       'share.whatsapp': 'WhatsApp', 'share.copy': 'Copy link', 'share.copied': 'Copied!',
       'share.text': 'Check out this dupe: {name} from {store} for just {price} \u2014 found on ALTERE',
@@ -1534,6 +1535,133 @@ document.addEventListener('DOMContentLoaded', () => {
     apiStatus.className = 'modal__status success';
     setTimeout(closeModal, 800);
   });
+
+  /* ============================================================
+     Auth / Tier System
+     ============================================================ */
+
+  const AUTH_KEY      = 'altere_user';
+  const authBtn       = document.getElementById('authBtn');
+  const authModal     = document.getElementById('authModal');
+  const authModalClose = document.getElementById('authModalClose');
+  const authFormView  = document.getElementById('authFormView');
+  const authProfileView = document.getElementById('authProfileView');
+  const authEmail     = document.getElementById('authEmail');
+  const authName      = document.getElementById('authName');
+  const authStatus    = document.getElementById('authStatus');
+  const authSubmitBtn = document.getElementById('authSubmitBtn');
+  const authSignOut   = document.getElementById('authSignOut');
+
+  function getUser() {
+    try { return JSON.parse(localStorage.getItem(AUTH_KEY)); }
+    catch { return null; }
+  }
+
+  function setUser(user) {
+    if (user) localStorage.setItem(AUTH_KEY, JSON.stringify(user));
+    else localStorage.removeItem(AUTH_KEY);
+    updateAuthUI();
+  }
+
+  function getUserTier() {
+    if (getApiKey()) return 'pro';
+    if (getUser()) return 'registered';
+    return 'unregistered';
+  }
+
+  function updateAuthUI() {
+    const user = getUser();
+    const tier = getUserTier();
+
+    if (user) {
+      authBtn.textContent = user.name.split(' ')[0];
+      authBtn.classList.add('signed-in');
+      // Preserve the data-i18n so language switcher doesn't overwrite
+      authBtn.removeAttribute('data-i18n');
+    } else {
+      authBtn.textContent = t('nav.signin');
+      authBtn.setAttribute('data-i18n', 'nav.signin');
+      authBtn.classList.remove('signed-in');
+    }
+
+    // Update free counter text based on tier
+    const el = document.getElementById('freeCounter');
+    if (el && tier === 'pro') {
+      el.textContent = t('free.pro') || 'Unlimited AI searches (Pro)';
+      el.style.display = '';
+    }
+  }
+
+  // Open modal
+  authBtn.addEventListener('click', e => {
+    e.preventDefault();
+    hamburger.classList.remove('active');
+    navLinks.classList.remove('open');
+
+    const user = getUser();
+    if (user) {
+      // Show profile view
+      authFormView.style.display = 'none';
+      authProfileView.style.display = '';
+      document.getElementById('authAvatar').textContent = user.name.charAt(0).toUpperCase();
+      document.getElementById('authProfileName').textContent = user.name;
+      document.getElementById('authProfileEmail').textContent = user.email;
+
+      const tier = getUserTier();
+      const tierLabel = document.getElementById('authTierLabel');
+      const tierDesc  = document.getElementById('authTierDesc');
+      if (tier === 'pro') {
+        tierLabel.textContent = 'Pro';
+        tierDesc.textContent  = t('auth.proDesc') || 'Unlimited AI searches with your API key';
+      } else {
+        tierLabel.textContent = t('auth.freeTier') || 'Free';
+        tierDesc.textContent  = t('auth.freeDesc') || '3 AI searches per day + unlimited demo';
+      }
+    } else {
+      // Show sign in form
+      authFormView.style.display = '';
+      authProfileView.style.display = 'none';
+      authStatus.textContent = '';
+    }
+
+    authModal.classList.add('open');
+  });
+
+  // Close
+  authModalClose.addEventListener('click', () => authModal.classList.remove('open'));
+  authModal.addEventListener('click', e => { if (e.target === authModal) authModal.classList.remove('open'); });
+
+  // Submit
+  authSubmitBtn.addEventListener('click', () => {
+    const email = authEmail.value.trim();
+    const name  = authName.value.trim();
+
+    if (!email || !email.includes('@')) {
+      authStatus.textContent = t('auth.invalidEmail') || 'Please enter a valid email.';
+      authStatus.className = 'modal__status error';
+      return;
+    }
+    if (!name) {
+      authStatus.textContent = t('auth.invalidName') || 'Please enter your name.';
+      authStatus.className = 'modal__status error';
+      return;
+    }
+
+    setUser({ email, name, created: Date.now() });
+    authStatus.textContent = '';
+    authModal.classList.remove('open');
+    showToast(t('auth.welcome') || `Welcome, ${name}!`);
+  });
+
+  // Sign out
+  authSignOut.addEventListener('click', () => {
+    setUser(null);
+    authModal.classList.remove('open');
+    showToast(t('auth.signedOut') || 'Signed out');
+  });
+
+  // Init
+  updateAuthUI();
 
   /* ============================================================
      Toast notifications

@@ -4338,6 +4338,95 @@ img, video {
 }
 
 /* ============================================================
+   Auth Modal Extras
+   ============================================================ */
+
+.auth__subtitle {
+  font-size: 14px;
+  color: var(--grey-500);
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.auth__tiers-hint {
+  font-size: 11px;
+  color: var(--grey-500);
+  text-align: center;
+  margin-top: 16px;
+  line-height: 1.5;
+}
+
+.auth__profile {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.auth__avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--gold);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.auth__profile-name {
+  display: block;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--black);
+}
+
+.auth__profile-email {
+  display: block;
+  font-size: 12px;
+  color: var(--grey-500);
+}
+
+.auth__tier-card {
+  padding: 16px;
+  background: var(--cream);
+  border-radius: 12px;
+  border: 1px solid var(--cream-dark);
+  text-align: center;
+}
+
+.auth__tier-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 4px;
+}
+
+.auth__tier-desc {
+  font-size: 13px;
+  color: var(--grey-500);
+}
+
+/* Nav signed-in state */
+.nav__signin.signed-in {
+  background: var(--gold) !important;
+  border-color: var(--gold) !important;
+  color: var(--white) !important;
+}
+
+.nav__signin.signed-in::after { display: none !important; }
+
+/* Dark mode */
+[data-theme="dark"] .auth__tier-card { background: #1E1E1E; border-color: #333; }
+
+/* ============================================================
    About Page
    ============================================================ */
 
