@@ -1755,10 +1755,10 @@ Rules:
 
   function detectCategory(query) {
     const q = (typeof query === 'string' ? query : '').toLowerCase();
-    if (/bag|tote|clutch|purse|handbag|pochette/i.test(q)) return 'bags';
-    if (/shoe|boot|heel|sneaker|loafer|sandal|flat|mule/i.test(q)) return 'shoes';
-    if (/jewel|necklace|earring|ring|bracelet|chain|pearl|gold\s/i.test(q)) return 'jewellery';
-    if (/scarf|belt|hat|glove|sunglasses|watch|wallet/i.test(q)) return 'accessories';
+    if (/\b(bag|bags|tote|clutch|purse|handbag|pochette|backpack|satchel|crossbody|shoulder bag|bucket bag|hobo)\b/.test(q)) return 'bags';
+    if (/\b(shoe|shoes|boot|boots|heel|heels|sneaker|sneakers|loafer|loafers|sandal|sandals|flats|ballet|mule|mules|pump|pumps|trainer|trainers|espadrille)\b/.test(q)) return 'shoes';
+    if (/\b(jewel|jewelry|jewellery|necklace|earring|earrings|ring|rings|bracelet|pendant|chain|pearl|pearls|brooch|cuff|bangle|choker)\b/.test(q)) return 'jewellery';
+    if (/\b(scarf|scarves|belt|belts|hat|hats|cap|glove|gloves|sunglasses|watch|watches|wallet|headband|hairclip|tie|bow tie|beanie)\b/.test(q)) return 'accessories';
     return 'clothing';
   }
 
@@ -1773,14 +1773,13 @@ Rules:
 
   /* ---- API call with demo fallback ---- */
 
-  async function callClaude(userContent) {
+  async function callClaude(userContent, rawQuery) {
     const apiKey = getApiKey();
 
     // No API key → return demo results after a short delay
     if (!apiKey) {
-      const query = typeof userContent === 'string' ? userContent : 'fashion item';
       await new Promise(r => setTimeout(r, 1200 + Math.random() * 800));
-      return generateDemoResults(query);
+      return generateDemoResults(rawQuery || 'fashion item');
     }
 
     // Real API call
@@ -2128,7 +2127,7 @@ Rules:
         userContent = `Find 6 high-street dupes for this fashion item: ${query}`;
       }
 
-      const dupes = await callClaude(userContent);
+      const dupes = await callClaude(userContent, query);
       if (dupes) {
         renderResults(dupes, displayQuery, !getApiKey());
         saveRecentSearch(query, type);
