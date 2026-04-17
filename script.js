@@ -9,11 +9,13 @@ document.addEventListener('DOMContentLoaded', () => {
      ============================================================ */
 
   const API_URL      = 'https://api.anthropic.com/v1/messages';
+  const PROXY_URL    = '/api/chat';
   const MODEL        = 'claude-sonnet-4-20250514';
   const LS_KEY       = 'altere_api_key';
   const UNSPLASH_KEY = 'altere_unsplash_key';
   const UNSPLASH_API = 'https://api.unsplash.com/search/photos';
   const SAVED_KEY    = 'altere_saved_items';
+  const FREE_LIMIT   = 3;
 
   let currentFile = null;
   let isSearching = false;
@@ -170,6 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'toast.saved': 'Saved to your collection', 'toast.removed': 'Removed from saved', 'toast.cleared': 'All saved items cleared',
       'search.searching': 'Searching...', 'search.joining': 'Joining...',
       'results.ai.eyebrow': 'AI Results', 'results.ai.title': 'Your dupes are ready', 'results.demo.eyebrow': 'Demo Results', 'results.demo.hint': 'Add your API key in settings for real AI results',
+      'free.remaining': 'free AI searches left today', 'free.exhausted': 'Free searches used \u2014 showing demo results',
       'results.loading.title': 'Our AI is analysing your item\u2026', 'results.loading.sub': 'Finding the best alternatives across 6 stores',
       'share.whatsapp': 'WhatsApp', 'share.copy': 'Copy link', 'share.copied': 'Copied!',
       'share.text': 'Check out this dupe: {name} from {store} for just {price} \u2014 found on ALTERE',
@@ -1802,60 +1805,112 @@ Rules:
     }));
   }
 
-  /* ---- API call with demo fallback ---- */
+  /* ---- Free searches remaining tracker ---- */
 
-  async function callClaude(userContent, rawQuery) {
-    const apiKey = getApiKey();
+  let freeRemaining = FREE_LIMIT;
+  let lastResultWasDemo = false;
 
-    // No API key → return demo results after a short delay
-    if (!apiKey) {
-      await new Promise(r => setTimeout(r, 1200 + Math.random() * 800));
-      return generateDemoResults(rawQuery || 'fashion item');
-    }
-
-    // Real API call
-    const messages = [{ role: 'user', content: userContent }];
-
-    const body = {
-      model: MODEL,
-      max_tokens: 1024,
-      system: SYSTEM_PROMPT,
-      messages
-    };
-
-    const res = await fetch(API_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify(body)
-    });
-
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      if (res.status === 401) {
-        throw new Error('Invalid API key. Check your key in settings.');
+  function updateFreeCounter(remaining) {
+    freeRemaining = remaining;
+    const el = document.getElementById('freeCounter');
+    if (el) {
+      if (remaining > 0) {
+        el.textContent = `${remaining}/${FREE_LIMIT} ${t('free.remaining') || 'free AI searches left today'}`;
+        el.style.display = '';
+      } else {
+        el.textContent = t('free.exhausted') || 'Free searches used \u2014 showing demo results';
+        el.style.display = '';
       }
-      throw new Error(err.error?.message || `API error ${res.status}`);
     }
+  }
 
-    const data = await res.json();
+  /* ---- Parse Claude response JSON ---- */
+
+  function parseClaudeResponse(data) {
     const text = data.content?.[0]?.text || '';
-
     let cleaned = text.trim();
     if (cleaned.startsWith('```')) {
       cleaned = cleaned.replace(/^```(?:json)?\s*/, '').replace(/\s*```$/, '');
     }
-
     const dupes = JSON.parse(cleaned);
     if (!Array.isArray(dupes) || dupes.length === 0) {
       throw new Error('Unexpected AI response format.');
     }
-
     return dupes;
+  }
+
+  /* ---- API call with freemium model ---- */
+
+  async function callClaude(userContent, rawQuery) {
+    const apiKey = getApiKey();
+
+    // --- User has own API key → unlimited, direct to Anthropic ---
+    if (apiKey) {
+      const messages = [{ role: 'user', content: userContent }];
+      const body = { model: MODEL, max_tokens: 1024, system: SYSTEM_PROMPT, messages };
+
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': apiKey,
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-direct-browser-access': 'true'
+        },
+        body: JSON.stringify(body)
+      });
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        if (res.status === 401) throw new Error('Invalid API key. Check your key in settings.');
+        throw new Error(err.error?.message || `API error ${res.status}`);
+      }
+
+      lastResultWasDemo = false;
+      return parseClaudeResponse(await res.json());
+    }
+
+    // --- Free user → try proxy (3/day), fall back to demo ---
+    try {
+      const messages = [{ role: 'user', content: userContent }];
+      const body = { model: MODEL, max_tokens: 1024, system: SYSTEM_PROMPT, messages };
+
+      const res = await fetch(PROXY_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+
+      const data = await res.json();
+
+      // Rate limited → fall back to demo
+      if (res.status === 429) {
+        updateFreeCounter(0);
+        await new Promise(r => setTimeout(r, 800));
+        lastResultWasDemo = true;
+        return generateDemoResults(rawQuery || 'fashion item');
+      }
+
+      // Proxy not configured (no env var, or local dev) → demo
+      if (!res.ok) {
+        await new Promise(r => setTimeout(r, 1200 + Math.random() * 800));
+        lastResultWasDemo = true;
+        return generateDemoResults(rawQuery || 'fashion item');
+      }
+
+      // Success — update counter
+      if (data._rateLimit) {
+        updateFreeCounter(data._rateLimit.remaining);
+      }
+
+      lastResultWasDemo = false;
+      return parseClaudeResponse(data);
+
+    } catch {
+      // Network error / proxy unavailable → demo fallback
+      await new Promise(r => setTimeout(r, 1200 + Math.random() * 800));
+      return generateDemoResults(rawQuery || 'fashion item');
+    }
   }
 
   /* ============================================================
@@ -2160,7 +2215,7 @@ Rules:
 
       const dupes = await callClaude(userContent, query);
       if (dupes) {
-        renderResults(dupes, displayQuery, !getApiKey());
+        renderResults(dupes, displayQuery, lastResultWasDemo);
         saveRecentSearch(query, type);
       }
     } catch (err) {

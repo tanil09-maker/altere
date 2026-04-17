@@ -3289,6 +3289,20 @@ img, video {
 }
 
 /* ============================================================
+   Free Search Counter
+   ============================================================ */
+
+.free-counter {
+  text-align: center;
+  margin-top: 14px;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  color: rgba(255,255,255,0.35);
+  animation: fadeUp 0.4s var(--ease-out) both;
+}
+
+/* ============================================================
    Recent Searches
    ============================================================ */
 
