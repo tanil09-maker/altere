@@ -156,6 +156,78 @@
   transition: background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
 }
 
+/* ============================================================
+   RTL (Arabic) Overrides
+   ============================================================ */
+
+[dir="rtl"] {
+  --font-body: 'Noto Kufi Arabic', 'Inter', -apple-system, sans-serif;
+  --font-display: 'Noto Kufi Arabic', Georgia, serif;
+}
+
+[dir="rtl"] body { text-align: right; }
+[dir="rtl"] .nav__inner { flex-direction: row-reverse; }
+[dir="rtl"] .nav__links { flex-direction: row-reverse; }
+[dir="rtl"] .nav__links a::after { left: auto; right: 0; }
+[dir="rtl"] .nav__settings { margin-left: 0; margin-right: 12px; }
+[dir="rtl"] .nav__theme { margin-left: 0; margin-right: 12px; }
+[dir="rtl"] .nav__lang { margin-left: 0; margin-right: 12px; }
+[dir="rtl"] .nav__lang-menu { right: auto; left: 0; }
+[dir="rtl"] .nav__lang-option { text-align: right; }
+
+[dir="rtl"] .hero__content { text-align: center; }
+[dir="rtl"] .search-box__panel.active { flex-direction: row-reverse; }
+[dir="rtl"] .search-box__panel[data-panel="upload"].active { direction: rtl; }
+[dir="rtl"] .search-box__input { text-align: right; }
+
+[dir="rtl"] .upload__preview { flex-direction: row-reverse; }
+[dir="rtl"] .upload__meta { text-align: right; }
+
+[dir="rtl"] .dupe-card__save { right: auto; left: 14px; }
+[dir="rtl"] .dupe-card__share { right: auto; left: 14px; top: 58px; }
+[dir="rtl"] .dupe-card__badge { left: auto; right: 14px; }
+[dir="rtl"] .share-dropdown { right: auto; left: 0; transform-origin: top left; }
+[dir="rtl"] .dupe-card__info { text-align: right; }
+[dir="rtl"] .dupe-card__price-row { flex-direction: row-reverse; justify-content: flex-end; }
+
+[dir="rtl"] .results__sort-row { flex-direction: row-reverse; }
+[dir="rtl"] .sort-select__menu { left: auto; right: 50%; transform: translateX(50%) translateY(-4px); }
+[dir="rtl"] .sort-select.open .sort-select__menu { transform: translateX(50%) translateY(0); }
+[dir="rtl"] .sort-select__option { text-align: right; }
+[dir="rtl"] .results__share-menu { right: auto; left: 0; }
+
+[dir="rtl"] .how__step { direction: rtl; }
+[dir="rtl"] .faq__question { flex-direction: row-reverse; text-align: right; }
+[dir="rtl"] .faq__answer p { text-align: right; }
+
+[dir="rtl"] .review__author { flex-direction: row-reverse; }
+[dir="rtl"] .review__name, [dir="rtl"] .review__location { text-align: right; }
+[dir="rtl"] .review__quote { text-align: right; }
+
+[dir="rtl"] .dotd__meta { text-align: right; }
+[dir="rtl"] .celeb__info { text-align: right; }
+
+[dir="rtl"] .footer__top { direction: rtl; }
+[dir="rtl"] .footer__col { text-align: right; }
+[dir="rtl"] .footer__bottom { flex-direction: row-reverse; }
+[dir="rtl"] .footer__socials { flex-direction: row-reverse; }
+
+[dir="rtl"] .saved-page__header { flex-direction: row-reverse; }
+[dir="rtl"] .saved-card__remove { right: auto; left: 14px; }
+
+[dir="rtl"] .about-page__close { right: auto; left: 32px; }
+[dir="rtl"] .about-page__text p { text-align: right; }
+[dir="rtl"] .about-page__step { direction: rtl; }
+[dir="rtl"] .about-page__team-text { text-align: center; }
+
+[dir="rtl"] .modal__body { text-align: right; }
+[dir="rtl"] .modal__input { text-align: right; }
+
+@media (max-width: 768px) {
+  [dir="rtl"] .search-box__panel.active { flex-direction: column; }
+  [dir="rtl"] .about-page__close { left: 16px; }
+}
+
 html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
