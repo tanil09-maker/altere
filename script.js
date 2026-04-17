@@ -695,22 +695,26 @@ document.addEventListener('DOMContentLoaded', () => {
     langSwitcher.classList.remove('open');
   }
 
-  // Toggle dropdown
+  // Toggle dropdown — close others first
   langBtn.addEventListener('click', e => {
+    e.preventDefault();
     e.stopPropagation();
-    langSwitcher.classList.toggle('open');
+    // Close other open dropdowns
+    sortSelect.classList.remove('open');
+    resultsShareDiv?.classList.remove('open');
+    closeAllShareDropdowns();
+    // Toggle this one
+    const isOpen = langSwitcher.classList.contains('open');
+    langSwitcher.classList.toggle('open', !isOpen);
   });
 
-  // Option click
+  // Prevent clicks inside menu from closing it
   langMenu.addEventListener('click', e => {
+    e.stopPropagation();
     const opt = e.target.closest('.nav__lang-option');
     if (!opt) return;
-    e.stopPropagation();
     applyLanguage(opt.dataset.lang);
   });
-
-  // Close on outside click
-  document.addEventListener('click', () => langSwitcher.classList.remove('open'));
 
   // Apply saved language on load
   if (currentLang !== 'en') applyLanguage(currentLang);
@@ -1065,6 +1069,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   sortTrigger.addEventListener('click', e => {
     e.stopPropagation();
+    langSwitcher.classList.remove('open');
+    resultsShareDiv?.classList.remove('open');
     sortSelect.classList.toggle('open');
   });
 
@@ -1082,8 +1088,7 @@ document.addEventListener('DOMContentLoaded', () => {
     applySortAndFilter();
   });
 
-  // Close sort dropdown on outside click
-  document.addEventListener('click', () => sortSelect.classList.remove('open'));
+  // Sort dropdown close is handled by the global handler below
 
   function applySortAndFilter() {
     // Gather non-skeleton cards
@@ -1259,8 +1264,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.dupe-card__share.active').forEach(s => s.classList.remove('active'));
   }
 
-  // Close dropdowns when clicking anywhere else
-  document.addEventListener('click', () => closeAllShareDropdowns());
+  // Card share dropdown close is handled by the global handler below
 
   // --- Saved page ---
   savedLink.addEventListener('click', e => {
@@ -2232,7 +2236,7 @@ Rules:
     resultsShareDiv.classList.toggle('open');
   });
 
-  document.addEventListener('click', () => resultsShareDiv.classList.remove('open'));
+  // Results share close is handled by the global handler below
 
   function getResultsSummary() {
     const cards = resultsGrid.querySelectorAll('.dupe-card:not(.dupe-card--skeleton):not(.filter-hidden)');
@@ -2422,6 +2426,17 @@ Rules:
     navigator.clipboard.writeText(inviteText() + '\n' + siteUrl).then(() => {
       showToast(t('share.copied'));
     });
+  });
+
+  /* ============================================================
+     Global click handler — close all dropdowns
+     ============================================================ */
+
+  document.addEventListener('click', () => {
+    langSwitcher.classList.remove('open');
+    sortSelect.classList.remove('open');
+    resultsShareDiv.classList.remove('open');
+    closeAllShareDropdowns();
   });
 
   /* ============================================================

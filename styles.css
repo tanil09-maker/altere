@@ -2881,7 +2881,7 @@ img, video {
   position: absolute;
   top: calc(100% + 8px);
   right: 0;
-  min-width: 140px;
+  min-width: 160px;
   background: var(--white);
   border: 1px solid var(--cream-dark);
   border-radius: 12px;
@@ -2891,7 +2891,7 @@ img, video {
   pointer-events: none;
   transform: translateY(-4px);
   transition: opacity 0.2s var(--ease-out), transform 0.2s var(--ease-out);
-  z-index: 100;
+  z-index: 1100;
 }
 
 .nav__lang.open .nav__lang-menu {
