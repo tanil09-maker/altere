@@ -169,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'footer.company': 'Company', 'footer.about': 'About', 'footer.careers': 'Careers', 'footer.privacy': 'Privacy', 'footer.terms': 'Terms',
       'toast.saved': 'Saved to your collection', 'toast.removed': 'Removed from saved', 'toast.cleared': 'All saved items cleared',
       'search.searching': 'Searching...', 'search.joining': 'Joining...',
-      'results.ai.eyebrow': 'AI Results', 'results.ai.title': 'Your dupes are ready',
+      'results.ai.eyebrow': 'AI Results', 'results.ai.title': 'Your dupes are ready', 'results.demo.eyebrow': 'Demo Results', 'results.demo.hint': 'Add your API key in settings for real AI results',
       'results.loading.title': 'Our AI is analysing your item\u2026', 'results.loading.sub': 'Finding the best alternatives across 6 stores',
       'share.whatsapp': 'WhatsApp', 'share.copy': 'Copy link', 'share.copied': 'Copied!',
       'share.text': 'Check out this dupe: {name} from {store} for just {price} \u2014 found on ALTERE',
@@ -248,7 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'footer.company': 'Bedrijf', 'footer.about': 'Over ons', 'footer.careers': 'Vacatures', 'footer.privacy': 'Privacy', 'footer.terms': 'Voorwaarden',
       'toast.saved': 'Opgeslagen in je collectie', 'toast.removed': 'Verwijderd uit opgeslagen', 'toast.cleared': 'Alle opgeslagen items gewist',
       'search.searching': 'Zoeken...', 'search.joining': 'Aanmelden...',
-      'results.ai.eyebrow': 'AI Resultaten', 'results.ai.title': 'Je dupes zijn klaar',
+      'results.ai.eyebrow': 'AI Resultaten', 'results.ai.title': 'Je dupes zijn klaar', 'results.demo.eyebrow': 'Demoresultaten', 'results.demo.hint': 'Voeg je API-sleutel toe in instellingen voor echte AI-resultaten',
       'results.loading.title': 'Onze AI analyseert je item\u2026', 'results.loading.sub': 'De beste alternatieven zoeken bij 6 winkels',
       'share.whatsapp': 'WhatsApp', 'share.copy': 'Link kopi\u00ebren', 'share.copied': 'Gekopieerd!',
       'share.text': 'Bekijk deze dupe: {name} van {store} voor slechts {price} \u2014 gevonden op ALTERE',
@@ -327,7 +327,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'footer.company': 'Entreprise', 'footer.about': '\u00c0 propos', 'footer.careers': 'Carri\u00e8res', 'footer.privacy': 'Confidentialit\u00e9', 'footer.terms': 'Conditions',
       'toast.saved': 'Sauv\u00e9 dans votre collection', 'toast.removed': 'Retir\u00e9 des sauvegardes', 'toast.cleared': 'Tous les articles sauv\u00e9s effac\u00e9s',
       'search.searching': 'Recherche...', 'search.joining': 'Inscription...',
-      'results.ai.eyebrow': 'R\u00e9sultats IA', 'results.ai.title': 'Vos dupes sont pr\u00eats',
+      'results.ai.eyebrow': 'R\u00e9sultats IA', 'results.ai.title': 'Vos dupes sont pr\u00eats', 'results.demo.eyebrow': 'R\u00e9sultats d\u00e9mo', 'results.demo.hint': 'Ajoutez votre cl\u00e9 API dans les param\u00e8tres pour de vrais r\u00e9sultats IA',
       'results.loading.title': 'Notre IA analyse votre article\u2026', 'results.loading.sub': 'Recherche des meilleures alternatives dans 6 magasins',
       'share.whatsapp': 'WhatsApp', 'share.copy': 'Copier le lien', 'share.copied': 'Copi\u00e9 !',
       'share.text': 'D\u00e9couvrez ce dupe : {name} de {store} pour seulement {price} \u2014 trouv\u00e9 sur ALTERE',
@@ -406,7 +406,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'footer.company': 'Unternehmen', 'footer.about': '\u00dcber uns', 'footer.careers': 'Karriere', 'footer.privacy': 'Datenschutz', 'footer.terms': 'AGB',
       'toast.saved': 'In deiner Kollektion gespeichert', 'toast.removed': 'Aus Gespeicherten entfernt', 'toast.cleared': 'Alle gespeicherten Artikel gel\u00f6scht',
       'search.searching': 'Suche...', 'search.joining': 'Anmelden...',
-      'results.ai.eyebrow': 'KI-Ergebnisse', 'results.ai.title': 'Deine Dupes sind bereit',
+      'results.ai.eyebrow': 'KI-Ergebnisse', 'results.ai.title': 'Deine Dupes sind bereit', 'results.demo.eyebrow': 'Demo-Ergebnisse', 'results.demo.hint': 'F\u00fcge deinen API-Schl\u00fcssel in den Einstellungen hinzu f\u00fcr echte KI-Ergebnisse',
       'results.loading.title': 'Unsere KI analysiert deinen Artikel\u2026', 'results.loading.sub': 'Suche nach den besten Alternativen in 6 Gesch\u00e4ften',
       'share.whatsapp': 'WhatsApp', 'share.copy': 'Link kopieren', 'share.copied': 'Kopiert!',
       'share.text': 'Schau dir diesen Dupe an: {name} von {store} f\u00fcr nur {price} \u2014 gefunden auf ALTERE',
@@ -485,7 +485,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'footer.company': 'Empresa', 'footer.about': 'Acerca de', 'footer.careers': 'Empleo', 'footer.privacy': 'Privacidad', 'footer.terms': 'T\u00e9rminos',
       'toast.saved': 'Guardado en tu colecci\u00f3n', 'toast.removed': 'Eliminado de guardados', 'toast.cleared': 'Todos los art\u00edculos guardados eliminados',
       'search.searching': 'Buscando...', 'search.joining': 'Uni\u00e9ndose...',
-      'results.ai.eyebrow': 'Resultados IA', 'results.ai.title': 'Tus dupes est\u00e1n listos',
+      'results.ai.eyebrow': 'Resultados IA', 'results.ai.title': 'Tus dupes est\u00e1n listos', 'results.demo.eyebrow': 'Resultados demo', 'results.demo.hint': 'A\u00f1ade tu clave API en ajustes para resultados reales de IA',
       'results.loading.title': 'Nuestra IA analiza tu art\u00edculo\u2026', 'results.loading.sub': 'Buscando las mejores alternativas en 6 tiendas',
       'share.whatsapp': 'WhatsApp', 'share.copy': 'Copiar enlace', 'share.copied': '\u00a1Copiado!',
       'share.text': 'Mira este dupe: {name} de {store} por solo {price} \u2014 encontrado en ALTERE',
@@ -564,7 +564,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'footer.company': 'Azienda', 'footer.about': 'Chi siamo', 'footer.careers': 'Lavora con noi', 'footer.privacy': 'Privacy', 'footer.terms': 'Termini',
       'toast.saved': 'Salvato nella tua collezione', 'toast.removed': 'Rimosso dai salvati', 'toast.cleared': 'Tutti gli articoli salvati cancellati',
       'search.searching': 'Ricerca...', 'search.joining': 'Iscrizione...',
-      'results.ai.eyebrow': 'Risultati IA', 'results.ai.title': 'I tuoi dupes sono pronti',
+      'results.ai.eyebrow': 'Risultati IA', 'results.ai.title': 'I tuoi dupes sono pronti', 'results.demo.eyebrow': 'Risultati demo', 'results.demo.hint': 'Aggiungi la tua chiave API nelle impostazioni per risultati IA reali',
       'results.loading.title': 'La nostra IA analizza il tuo articolo\u2026', 'results.loading.sub': 'Ricerca delle migliori alternative in 6 negozi',
       'share.whatsapp': 'WhatsApp', 'share.copy': 'Copia link', 'share.copied': 'Copiato!',
       'share.text': 'Guarda questo dupe: {name} di {store} a solo {price} \u2014 trovato su ALTERE',
@@ -643,7 +643,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'footer.company': '\u0627\u0644\u0634\u0631\u0643\u0629', 'footer.about': '\u0639\u0646\u0651\u0627', 'footer.careers': '\u0648\u0638\u0627\u0626\u0641', 'footer.privacy': '\u0627\u0644\u062e\u0635\u0648\u0635\u064a\u0629', 'footer.terms': '\u0627\u0644\u0634\u0631\u0648\u0637',
       'toast.saved': '\u062a\u0645 \u0627\u0644\u062d\u0641\u0638 \u0641\u064a \u0645\u062c\u0645\u0648\u0639\u062a\u0643', 'toast.removed': '\u062a\u0645 \u0627\u0644\u0625\u0632\u0627\u0644\u0629 \u0645\u0646 \u0627\u0644\u0645\u062d\u0641\u0648\u0638\u0627\u062a', 'toast.cleared': '\u062a\u0645 \u0645\u0633\u062d \u0643\u0644 \u0627\u0644\u0639\u0646\u0627\u0635\u0631 \u0627\u0644\u0645\u062d\u0641\u0648\u0638\u0629',
       'search.searching': '\u062c\u0627\u0631\u064a \u0627\u0644\u0628\u062d\u062b...', 'search.joining': '\u062c\u0627\u0631\u064a \u0627\u0644\u0627\u0646\u0636\u0645\u0627\u0645...',
-      'results.ai.eyebrow': '\u0646\u062a\u0627\u0626\u062c \u0627\u0644\u0630\u0643\u0627\u0621 \u0627\u0644\u0627\u0635\u0637\u0646\u0627\u0639\u064a', 'results.ai.title': '\u0628\u062f\u0627\u0626\u0644\u0643 \u062c\u0627\u0647\u0632\u0629',
+      'results.ai.eyebrow': '\u0646\u062a\u0627\u0626\u062c \u0627\u0644\u0630\u0643\u0627\u0621 \u0627\u0644\u0627\u0635\u0637\u0646\u0627\u0639\u064a', 'results.ai.title': '\u0628\u062f\u0627\u0626\u0644\u0643 \u062c\u0627\u0647\u0632\u0629', 'results.demo.eyebrow': '\u0646\u062a\u0627\u0626\u062c \u062a\u062c\u0631\u064a\u0628\u064a\u0629', 'results.demo.hint': '\u0623\u0636\u0641 \u0645\u0641\u062a\u0627\u062d API \u0641\u064a \u0627\u0644\u0625\u0639\u062f\u0627\u062f\u0627\u062a \u0644\u0646\u062a\u0627\u0626\u062c \u0630\u0643\u0627\u0621 \u0627\u0635\u0637\u0646\u0627\u0639\u064a \u062d\u0642\u064a\u0642\u064a\u0629',
       'results.loading.title': '\u0630\u0643\u0627\u0624\u0646\u0627 \u0627\u0644\u0627\u0635\u0637\u0646\u0627\u0639\u064a \u064a\u062d\u0644\u0644 \u0642\u0637\u0639\u062a\u0643\u2026', 'results.loading.sub': '\u0627\u0644\u0628\u062d\u062b \u0639\u0646 \u0623\u0641\u0636\u0644 \u0627\u0644\u0628\u062f\u0627\u0626\u0644 \u0641\u064a 6 \u0645\u062a\u0627\u062c\u0631',
       'share.whatsapp': 'WhatsApp', 'share.copy': '\u0646\u0633\u062e \u0627\u0644\u0631\u0627\u0628\u0637', 'share.copied': '\u062a\u0645 \u0627\u0644\u0646\u0633\u062e!',
       'share.text': '\u0634\u0627\u0647\u062f \u0647\u0630\u0627 \u0627\u0644\u0628\u062f\u064a\u0644: {name} \u0645\u0646 {store} \u0628\u0633\u0639\u0631 {price} \u0641\u0642\u0637 \u2014 \u0639\u0628\u0631 ALTERE',
@@ -1528,7 +1528,7 @@ document.addEventListener('DOMContentLoaded', () => {
      Render real result cards
      ============================================================ */
 
-  function renderResults(dupes, query) {
+  function renderResults(dupes, query, isDemo) {
     resultsGrid.innerHTML = '';
     resetFilters();
 
@@ -1536,9 +1536,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const eyebrow = resultsHeader.querySelector('.results__eyebrow');
     const title   = resultsHeader.querySelector('.results__title');
     const sub     = resultsHeader.querySelector('.results__subtitle');
-    eyebrow.textContent = t('results.ai.eyebrow');
+    eyebrow.textContent = isDemo ? (t('results.demo.eyebrow') || 'Demo Results') : t('results.ai.eyebrow');
     title.textContent   = t('results.ai.title');
-    sub.textContent     = `Showing ${dupes.length} alternatives for \u201c${query}\u201d`;
+    const demoHint = isDemo ? (' \u2014 ' + (t('results.demo.hint') || 'Add your API key in settings for real AI results')) : '';
+    sub.textContent     = `${dupes.length} alternatives for \u201c${query}\u201d${demoHint}`;
 
     const hasUnsplash = !!getUnsplashKey();
 
@@ -1702,16 +1703,82 @@ Rules:
 - original_price should be the same across all 6 (the price of the luxury item)
 - Vary the dupe_price realistically per store`;
 
+  /* ---- Demo results generator ---- */
+
+  const DEMO_PRODUCTS = {
+    bags: [
+      { store: 'ZARA', product_name: 'Quilted Chain Crossbody Bag', category: 'bags', dupe_price: 45.99, original_price: 2200, match_percentage: 94 },
+      { store: 'H&M', product_name: 'Padded Shoulder Bag', category: 'bags', dupe_price: 34.99, original_price: 2200, match_percentage: 91 },
+      { store: 'MANGO', product_name: 'Leather Effect Flap Bag', category: 'bags', dupe_price: 55.99, original_price: 2200, match_percentage: 89 },
+      { store: 'ASOS', product_name: 'Structured Mini Tote', category: 'bags', dupe_price: 42.00, original_price: 2200, match_percentage: 87 },
+      { store: 'COS', product_name: 'Minimalist Leather Bag', category: 'bags', dupe_price: 89.00, original_price: 2200, match_percentage: 85 },
+      { store: '& OTHER STORIES', product_name: 'Woven Chain Strap Bag', category: 'bags', dupe_price: 79.00, original_price: 2200, match_percentage: 82 }
+    ],
+    clothing: [
+      { store: 'ZARA', product_name: 'Satin Midi Skirt with Slit', category: 'clothing', dupe_price: 49.90, original_price: 890, match_percentage: 95 },
+      { store: 'H&M', product_name: 'Oversized Wool-Blend Blazer', category: 'clothing', dupe_price: 79.99, original_price: 890, match_percentage: 92 },
+      { store: 'MANGO', product_name: 'Flowing Printed Midi Dress', category: 'clothing', dupe_price: 59.99, original_price: 890, match_percentage: 90 },
+      { store: 'ASOS', product_name: 'Tailored Wide Leg Trousers', category: 'clothing', dupe_price: 65.00, original_price: 890, match_percentage: 88 },
+      { store: 'COS', product_name: 'Draped Jersey Top', category: 'clothing', dupe_price: 45.00, original_price: 890, match_percentage: 85 },
+      { store: '& OTHER STORIES', product_name: 'Belted Wrap Coat', category: 'clothing', dupe_price: 129.00, original_price: 890, match_percentage: 83 }
+    ],
+    shoes: [
+      { store: 'ZARA', product_name: 'Leather Slingback Heels', category: 'shoes', dupe_price: 59.90, original_price: 750, match_percentage: 93 },
+      { store: 'H&M', product_name: 'Pointed Ballet Flats', category: 'shoes', dupe_price: 29.99, original_price: 750, match_percentage: 90 },
+      { store: 'MANGO', product_name: 'Leather Ankle Boots', category: 'shoes', dupe_price: 79.99, original_price: 750, match_percentage: 88 },
+      { store: 'ASOS', product_name: 'Chunky Platform Loafers', category: 'shoes', dupe_price: 55.00, original_price: 750, match_percentage: 86 },
+      { store: 'COS', product_name: 'Leather Mule Sandals', category: 'shoes', dupe_price: 89.00, original_price: 750, match_percentage: 84 },
+      { store: '& OTHER STORIES', product_name: 'Suede Knee-High Boots', category: 'shoes', dupe_price: 119.00, original_price: 750, match_percentage: 81 }
+    ],
+    jewellery: [
+      { store: 'ZARA', product_name: 'Layered Gold Chain Necklace', category: 'jewellery', dupe_price: 25.90, original_price: 480, match_percentage: 94 },
+      { store: 'H&M', product_name: 'Chunky Hoop Earrings', category: 'jewellery', dupe_price: 14.99, original_price: 480, match_percentage: 91 },
+      { store: 'MANGO', product_name: 'Crystal Pendant Necklace', category: 'jewellery', dupe_price: 29.99, original_price: 480, match_percentage: 89 },
+      { store: 'ASOS', product_name: 'Pearl Drop Earrings Set', category: 'jewellery', dupe_price: 18.00, original_price: 480, match_percentage: 86 },
+      { store: 'COS', product_name: 'Sculptural Cuff Bracelet', category: 'jewellery', dupe_price: 35.00, original_price: 480, match_percentage: 84 },
+      { store: '& OTHER STORIES', product_name: 'Twisted Ring Set', category: 'jewellery', dupe_price: 29.00, original_price: 480, match_percentage: 82 }
+    ],
+    accessories: [
+      { store: 'ZARA', product_name: 'Silk Square Scarf', category: 'accessories', dupe_price: 29.90, original_price: 450, match_percentage: 93 },
+      { store: 'H&M', product_name: 'Wide Leather Belt', category: 'accessories', dupe_price: 24.99, original_price: 450, match_percentage: 90 },
+      { store: 'MANGO', product_name: 'Oversized Sunglasses', category: 'accessories', dupe_price: 25.99, original_price: 450, match_percentage: 88 },
+      { store: 'ASOS', product_name: 'Logo Bucket Hat', category: 'accessories', dupe_price: 22.00, original_price: 450, match_percentage: 86 },
+      { store: 'COS', product_name: 'Cashmere Wool Scarf', category: 'accessories', dupe_price: 69.00, original_price: 450, match_percentage: 84 },
+      { store: '& OTHER STORIES', product_name: 'Leather Gloves', category: 'accessories', dupe_price: 49.00, original_price: 450, match_percentage: 81 }
+    ]
+  };
+
+  function detectCategory(query) {
+    const q = (typeof query === 'string' ? query : '').toLowerCase();
+    if (/bag|tote|clutch|purse|handbag|pochette/i.test(q)) return 'bags';
+    if (/shoe|boot|heel|sneaker|loafer|sandal|flat|mule/i.test(q)) return 'shoes';
+    if (/jewel|necklace|earring|ring|bracelet|chain|pearl|gold\s/i.test(q)) return 'jewellery';
+    if (/scarf|belt|hat|glove|sunglasses|watch|wallet/i.test(q)) return 'accessories';
+    return 'clothing';
+  }
+
+  function generateDemoResults(query) {
+    const cat = detectCategory(query);
+    // Deep clone and add slight randomness
+    return DEMO_PRODUCTS[cat].map(item => ({
+      ...item,
+      match_percentage: item.match_percentage + Math.floor(Math.random() * 3) - 1
+    }));
+  }
+
+  /* ---- API call with demo fallback ---- */
+
   async function callClaude(userContent) {
     const apiKey = getApiKey();
+
+    // No API key → return demo results after a short delay
     if (!apiKey) {
-      settingsModal.classList.add('open');
-      apiKeyInput.value = '';
-      apiStatus.textContent = 'Enter your API key to use AI search.';
-      apiStatus.className = 'modal__status error';
-      return null;
+      const query = typeof userContent === 'string' ? userContent : 'fashion item';
+      await new Promise(r => setTimeout(r, 1200 + Math.random() * 800));
+      return generateDemoResults(query);
     }
 
+    // Real API call
     const messages = [{ role: 'user', content: userContent }];
 
     const body = {
@@ -2058,7 +2125,7 @@ Rules:
 
       const dupes = await callClaude(userContent);
       if (dupes) {
-        renderResults(dupes, displayQuery);
+        renderResults(dupes, displayQuery, !getApiKey());
         saveRecentSearch(query, type);
       }
     } catch (err) {
