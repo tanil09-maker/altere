@@ -172,7 +172,10 @@ document.addEventListener('DOMContentLoaded', () => {
       'results.ai.eyebrow': 'AI Results', 'results.ai.title': 'Your dupes are ready',
       'results.loading.title': 'Our AI is analysing your item\u2026', 'results.loading.sub': 'Finding the best alternatives across 6 stores',
       'share.whatsapp': 'WhatsApp', 'share.copy': 'Copy link', 'share.copied': 'Copied!',
-      'share.text': 'Check out this dupe: {name} from {store} for just {price} \u2014 found on ALTERE'
+      'share.text': 'Check out this dupe: {name} from {store} for just {price} \u2014 found on ALTERE',
+      'share.results': 'Share results', 'share.story': 'Download for Stories', 'share.story.footer': 'Found with ALTERE', 'share.story.downloaded': 'Story image downloaded',
+      'invite.eyebrow': 'Spread the Word', 'invite.title': 'Share ALTERE with friends', 'invite.sub': 'Know someone who loves fashion but hates overpaying? Send them our way.', 'invite.copyLink': 'Copy link',
+      'invite.message': 'Check out ALTERE \u2014 an AI-powered fashion dupe finder that finds luxury look-alikes at high-street prices!'
     },
     nl: {
       'nav.discover': 'Ontdek', 'nav.brands': 'Merken', 'nav.saved': 'Opgeslagen', 'nav.signin': 'Inloggen',
@@ -248,7 +251,10 @@ document.addEventListener('DOMContentLoaded', () => {
       'results.ai.eyebrow': 'AI Resultaten', 'results.ai.title': 'Je dupes zijn klaar',
       'results.loading.title': 'Onze AI analyseert je item\u2026', 'results.loading.sub': 'De beste alternatieven zoeken bij 6 winkels',
       'share.whatsapp': 'WhatsApp', 'share.copy': 'Link kopi\u00ebren', 'share.copied': 'Gekopieerd!',
-      'share.text': 'Bekijk deze dupe: {name} van {store} voor slechts {price} \u2014 gevonden op ALTERE'
+      'share.text': 'Bekijk deze dupe: {name} van {store} voor slechts {price} \u2014 gevonden op ALTERE',
+      'share.results': 'Resultaten delen', 'share.story': 'Download voor Stories', 'share.story.footer': 'Gevonden met ALTERE', 'share.story.downloaded': 'Story-afbeelding gedownload',
+      'invite.eyebrow': 'Vertel het Verder', 'invite.title': 'Deel ALTERE met vrienden', 'invite.sub': 'Ken je iemand die van mode houdt maar niet te veel wil betalen? Stuur ze onze kant op.', 'invite.copyLink': 'Link kopi\u00ebren',
+      'invite.message': 'Bekijk ALTERE \u2014 een AI-gestuurde mode dupe finder die luxe look-alikes vindt voor lage prijzen!'
     },
     fr: {
       'nav.discover': 'D\u00e9couvrir', 'nav.brands': 'Marques', 'nav.saved': 'Sauv\u00e9s', 'nav.signin': 'Connexion',
@@ -324,7 +330,10 @@ document.addEventListener('DOMContentLoaded', () => {
       'results.ai.eyebrow': 'R\u00e9sultats IA', 'results.ai.title': 'Vos dupes sont pr\u00eats',
       'results.loading.title': 'Notre IA analyse votre article\u2026', 'results.loading.sub': 'Recherche des meilleures alternatives dans 6 magasins',
       'share.whatsapp': 'WhatsApp', 'share.copy': 'Copier le lien', 'share.copied': 'Copi\u00e9 !',
-      'share.text': 'D\u00e9couvrez ce dupe : {name} de {store} pour seulement {price} \u2014 trouv\u00e9 sur ALTERE'
+      'share.text': 'D\u00e9couvrez ce dupe : {name} de {store} pour seulement {price} \u2014 trouv\u00e9 sur ALTERE',
+      'share.results': 'Partager les r\u00e9sultats', 'share.story': 'T\u00e9l\u00e9charger pour Stories', 'share.story.footer': 'Trouv\u00e9 avec ALTERE', 'share.story.downloaded': 'Image story t\u00e9l\u00e9charg\u00e9e',
+      'invite.eyebrow': 'Faites Passer le Mot', 'invite.title': 'Partagez ALTERE avec vos amis', 'invite.sub': 'Vous connaissez quelqu\u2019un qui aime la mode mais d\u00e9teste surpayer ? Envoyez-le chez nous.', 'invite.copyLink': 'Copier le lien',
+      'invite.message': 'D\u00e9couvrez ALTERE \u2014 un trouveur de dupes mode par IA qui d\u00e9niche des alternatives luxe \u00e0 petits prix !'
     },
     de: {
       'nav.discover': 'Entdecken', 'nav.brands': 'Marken', 'nav.saved': 'Gespeichert', 'nav.signin': 'Anmelden',
@@ -400,7 +409,10 @@ document.addEventListener('DOMContentLoaded', () => {
       'results.ai.eyebrow': 'KI-Ergebnisse', 'results.ai.title': 'Deine Dupes sind bereit',
       'results.loading.title': 'Unsere KI analysiert deinen Artikel\u2026', 'results.loading.sub': 'Suche nach den besten Alternativen in 6 Gesch\u00e4ften',
       'share.whatsapp': 'WhatsApp', 'share.copy': 'Link kopieren', 'share.copied': 'Kopiert!',
-      'share.text': 'Schau dir diesen Dupe an: {name} von {store} f\u00fcr nur {price} \u2014 gefunden auf ALTERE'
+      'share.text': 'Schau dir diesen Dupe an: {name} von {store} f\u00fcr nur {price} \u2014 gefunden auf ALTERE',
+      'share.results': 'Ergebnisse teilen', 'share.story': 'F\u00fcr Stories herunterladen', 'share.story.footer': 'Gefunden mit ALTERE', 'share.story.downloaded': 'Story-Bild heruntergeladen',
+      'invite.eyebrow': 'Weitersagen', 'invite.title': 'Teile ALTERE mit Freunden', 'invite.sub': 'Kennst du jemanden, der Mode liebt, aber nicht zu viel ausgeben will? Schick sie zu uns.', 'invite.copyLink': 'Link kopieren',
+      'invite.message': 'Schau dir ALTERE an \u2014 ein KI-gest\u00fctzter Mode-Dupe-Finder, der Luxus-Lookalikes zu g\u00fcnstigen Preisen findet!'
     },
     es: {
       'nav.discover': 'Descubrir', 'nav.brands': 'Marcas', 'nav.saved': 'Guardados', 'nav.signin': 'Iniciar sesi\u00f3n',
@@ -476,7 +488,10 @@ document.addEventListener('DOMContentLoaded', () => {
       'results.ai.eyebrow': 'Resultados IA', 'results.ai.title': 'Tus dupes est\u00e1n listos',
       'results.loading.title': 'Nuestra IA analiza tu art\u00edculo\u2026', 'results.loading.sub': 'Buscando las mejores alternativas en 6 tiendas',
       'share.whatsapp': 'WhatsApp', 'share.copy': 'Copiar enlace', 'share.copied': '\u00a1Copiado!',
-      'share.text': 'Mira este dupe: {name} de {store} por solo {price} \u2014 encontrado en ALTERE'
+      'share.text': 'Mira este dupe: {name} de {store} por solo {price} \u2014 encontrado en ALTERE',
+      'share.results': 'Compartir resultados', 'share.story': 'Descargar para Stories', 'share.story.footer': 'Encontrado con ALTERE', 'share.story.downloaded': 'Imagen de story descargada',
+      'invite.eyebrow': 'Corre la Voz', 'invite.title': 'Comparte ALTERE con amigos', 'invite.sub': '\u00bfConoces a alguien que ama la moda pero odia pagar de m\u00e1s? Env\u00edalos hacia nosotros.', 'invite.copyLink': 'Copiar enlace',
+      'invite.message': '\u00a1Mira ALTERE \u2014 un buscador de dupes de moda con IA que encuentra imitaciones de lujo a precios accesibles!'
     },
     it: {
       'nav.discover': 'Scopri', 'nav.brands': 'Marchi', 'nav.saved': 'Salvati', 'nav.signin': 'Accedi',
@@ -552,7 +567,10 @@ document.addEventListener('DOMContentLoaded', () => {
       'results.ai.eyebrow': 'Risultati IA', 'results.ai.title': 'I tuoi dupes sono pronti',
       'results.loading.title': 'La nostra IA analizza il tuo articolo\u2026', 'results.loading.sub': 'Ricerca delle migliori alternative in 6 negozi',
       'share.whatsapp': 'WhatsApp', 'share.copy': 'Copia link', 'share.copied': 'Copiato!',
-      'share.text': 'Guarda questo dupe: {name} di {store} a solo {price} \u2014 trovato su ALTERE'
+      'share.text': 'Guarda questo dupe: {name} di {store} a solo {price} \u2014 trovato su ALTERE',
+      'share.results': 'Condividi risultati', 'share.story': 'Scarica per Stories', 'share.story.footer': 'Trovato con ALTERE', 'share.story.downloaded': 'Immagine story scaricata',
+      'invite.eyebrow': 'Passa Parola', 'invite.title': 'Condividi ALTERE con gli amici', 'invite.sub': 'Conosci qualcuno che ama la moda ma odia spendere troppo? Mandalo da noi.', 'invite.copyLink': 'Copia link',
+      'invite.message': 'Scopri ALTERE \u2014 un trova-dupes di moda con IA che scova alternative di lusso a prezzi accessibili!'
     }
   };
 
@@ -2118,6 +2136,211 @@ Rules:
     aboutPage.classList.remove('open');
     document.body.style.overflow = '';
     document.getElementById('discover').scrollIntoView({ behavior: 'smooth' });
+  });
+
+  /* ============================================================
+     Share Results
+     ============================================================ */
+
+  const shareResultsBtn  = document.getElementById('shareResultsBtn');
+  const shareResultsMenu = document.getElementById('shareResultsMenu');
+  const resultsShareDiv  = document.getElementById('resultsShare');
+
+  shareResultsBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    resultsShareDiv.classList.toggle('open');
+  });
+
+  document.addEventListener('click', () => resultsShareDiv.classList.remove('open'));
+
+  function getResultsSummary() {
+    const cards = resultsGrid.querySelectorAll('.dupe-card:not(.dupe-card--skeleton):not(.filter-hidden)');
+    if (cards.length === 0) return t('share.results') + ' \u2014 ALTERE';
+    const items = [];
+    cards.forEach(card => {
+      const name = card.querySelector('.dupe-card__name')?.textContent || '';
+      const store = card.querySelector('.dupe-card__store')?.textContent || '';
+      const price = card.querySelector('.dupe-card__price')?.textContent || '';
+      if (name) items.push(`${name} (${store}) ${price}`);
+    });
+    return `${t('share.results')} on ALTERE:\n${items.slice(0, 4).join('\n')}${items.length > 4 ? '\n...' : ''}`;
+  }
+
+  const siteUrl = 'https://altere-chi.vercel.app';
+
+  document.getElementById('shareResultsWA').addEventListener('click', () => {
+    window.open(`https://wa.me/?text=${encodeURIComponent(getResultsSummary() + '\n' + siteUrl)}`, '_blank');
+    resultsShareDiv.classList.remove('open');
+  });
+
+  document.getElementById('shareResultsX').addEventListener('click', () => {
+    window.open(`https://x.com/intent/tweet?text=${encodeURIComponent(getResultsSummary())}&url=${encodeURIComponent(siteUrl)}`, '_blank');
+    resultsShareDiv.classList.remove('open');
+  });
+
+  document.getElementById('shareResultsCopy').addEventListener('click', () => {
+    navigator.clipboard.writeText(getResultsSummary() + '\n' + siteUrl).then(() => {
+      showToast(t('share.copied'));
+    });
+    resultsShareDiv.classList.remove('open');
+  });
+
+  /* ============================================================
+     Share to Instagram Stories (image generator)
+     ============================================================ */
+
+  document.getElementById('shareResultsStory').addEventListener('click', () => {
+    resultsShareDiv.classList.remove('open');
+    generateStoryImage();
+  });
+
+  function generateStoryImage() {
+    const canvas = document.getElementById('storyCanvas');
+    const ctx = canvas.getContext('2d');
+    const W = 1080, H = 1920;
+
+    // Background
+    ctx.fillStyle = '#FAF8F5';
+    ctx.fillRect(0, 0, W, H);
+
+    // Gold accent bar at top
+    const grad = ctx.createLinearGradient(0, 0, W, 0);
+    grad.addColorStop(0, '#C9A96E');
+    grad.addColorStop(1, '#D4BA85');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, W, 6);
+
+    // Logo
+    ctx.fillStyle = '#1A1A1A';
+    ctx.font = '500 64px "Cormorant Garamond", Georgia, serif';
+    ctx.letterSpacing = '12px';
+    ctx.textAlign = 'center';
+    ctx.fillText('ALTERE', W / 2, 160);
+
+    // Tagline
+    ctx.fillStyle = '#C9A96E';
+    ctx.font = '300 italic 28px "Cormorant Garamond", Georgia, serif';
+    ctx.letterSpacing = '0px';
+    ctx.fillText(t('about.mission'), W / 2, 220);
+
+    // Divider line
+    ctx.strokeStyle = '#F0EDE8';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(340, 280);
+    ctx.lineTo(740, 280);
+    ctx.stroke();
+
+    // "My dupes" heading
+    ctx.fillStyle = '#1A1A1A';
+    ctx.font = '300 42px "Cormorant Garamond", Georgia, serif';
+    ctx.fillText(t('results.ai.title'), W / 2, 350);
+
+    // List visible cards
+    const cards = resultsGrid.querySelectorAll('.dupe-card:not(.dupe-card--skeleton):not(.filter-hidden)');
+    let y = 430;
+
+    cards.forEach((card, i) => {
+      if (i >= 4 || y > 1500) return;
+      const store = card.querySelector('.dupe-card__store')?.textContent || '';
+      const name = card.querySelector('.dupe-card__name')?.textContent || '';
+      const price = card.querySelector('.dupe-card__price')?.textContent || '';
+      const orig = card.querySelector('.dupe-card__original')?.textContent || '';
+
+      // Card background
+      ctx.fillStyle = '#FFFFFF';
+      roundRect(ctx, 80, y, W - 160, 180, 20);
+      ctx.fill();
+
+      // Store name
+      ctx.fillStyle = '#C9A96E';
+      ctx.font = '600 20px Inter, sans-serif';
+      ctx.textAlign = 'left';
+      ctx.letterSpacing = '3px';
+      ctx.fillText(store.toUpperCase(), 120, y + 48);
+
+      // Product name
+      ctx.fillStyle = '#1A1A1A';
+      ctx.font = '400 30px "Cormorant Garamond", Georgia, serif';
+      ctx.letterSpacing = '0px';
+      ctx.fillText(name.slice(0, 35), 120, y + 95);
+
+      // Dupe price
+      ctx.fillStyle = '#1A1A1A';
+      ctx.font = '600 32px Inter, sans-serif';
+      ctx.fillText(price, 120, y + 145);
+
+      // Original price (strikethrough)
+      if (orig) {
+        const priceWidth = ctx.measureText(price).width;
+        ctx.fillStyle = '#888888';
+        ctx.font = '400 22px Inter, sans-serif';
+        ctx.fillText(orig, 120 + priceWidth + 16, y + 145);
+      }
+
+      y += 200;
+    });
+
+    // Bottom CTA
+    ctx.fillStyle = '#C9A96E';
+    roundRect(ctx, 280, H - 260, W - 560, 60, 30);
+    ctx.fill();
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = '500 22px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.letterSpacing = '1px';
+    ctx.fillText('altere-chi.vercel.app', W / 2, H - 222);
+
+    // Footer text
+    ctx.fillStyle = '#CCCCCC';
+    ctx.font = '400 20px Inter, sans-serif';
+    ctx.letterSpacing = '0px';
+    ctx.fillText(t('share.story.footer') || 'Found with ALTERE', W / 2, H - 140);
+
+    // Download
+    canvas.toBlob(blob => {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'altere-dupes.png';
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast(t('share.story.downloaded') || 'Story image downloaded');
+    }, 'image/png');
+  }
+
+  function roundRect(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+    ctx.lineTo(x + w, y + h - r);
+    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    ctx.lineTo(x + r, y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+    ctx.lineTo(x, y + r);
+    ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.closePath();
+  }
+
+  /* ============================================================
+     Invite Friends
+     ============================================================ */
+
+  const inviteText = () => t('invite.message') || 'Check out ALTERE \u2014 an AI-powered fashion dupe finder that finds luxury look-alikes at high-street prices!';
+
+  document.getElementById('inviteWA').addEventListener('click', () => {
+    window.open(`https://wa.me/?text=${encodeURIComponent(inviteText() + '\n' + siteUrl)}`, '_blank');
+  });
+
+  document.getElementById('inviteX').addEventListener('click', () => {
+    window.open(`https://x.com/intent/tweet?text=${encodeURIComponent(inviteText())}&url=${encodeURIComponent(siteUrl)}`, '_blank');
+  });
+
+  document.getElementById('inviteCopy').addEventListener('click', () => {
+    navigator.clipboard.writeText(inviteText() + '\n' + siteUrl).then(() => {
+      showToast(t('share.copied'));
+    });
   });
 
   /* ============================================================
