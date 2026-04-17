@@ -171,7 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'footer.company': 'Company', 'footer.about': 'About', 'footer.careers': 'Careers', 'footer.privacy': 'Privacy', 'footer.terms': 'Terms',
       'toast.saved': 'Saved to your collection', 'toast.removed': 'Removed from saved', 'toast.cleared': 'All saved items cleared',
       'search.searching': 'Searching...', 'search.joining': 'Joining...',
-      'results.ai.eyebrow': 'AI Results', 'results.ai.title': 'Your dupes are ready', 'results.demo.eyebrow': 'Demo Results', 'results.demo.hint': 'Add your API key in settings for real AI results',
+      'results.ai.eyebrow': 'AI Results', 'results.ai.title': 'Your dupes are ready', 'results.demo.eyebrow': 'Demo Results', 'results.demo.hint': 'Add your API key in settings for real AI results', 'results.bestDupe': 'Best Dupe', 'results.moreAlts': 'More alternatives',
       'free.remaining': 'free AI searches left today', 'free.exhausted': 'Free searches used \u2014 showing demo results',
       'results.loading.title': 'Our AI is analysing your item\u2026', 'results.loading.sub': 'Finding the best alternatives across 6 stores',
       'share.whatsapp': 'WhatsApp', 'share.copy': 'Copy link', 'share.copied': 'Copied!',
@@ -251,7 +251,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'footer.company': 'Bedrijf', 'footer.about': 'Over ons', 'footer.careers': 'Vacatures', 'footer.privacy': 'Privacy', 'footer.terms': 'Voorwaarden',
       'toast.saved': 'Opgeslagen in je collectie', 'toast.removed': 'Verwijderd uit opgeslagen', 'toast.cleared': 'Alle opgeslagen items gewist',
       'search.searching': 'Zoeken...', 'search.joining': 'Aanmelden...',
-      'results.ai.eyebrow': 'AI Resultaten', 'results.ai.title': 'Je dupes zijn klaar', 'results.demo.eyebrow': 'Demoresultaten', 'results.demo.hint': 'Voeg je API-sleutel toe in instellingen voor echte AI-resultaten',
+      'results.ai.eyebrow': 'AI Resultaten', 'results.ai.title': 'Je dupes zijn klaar', 'results.demo.eyebrow': 'Demoresultaten', 'results.demo.hint': 'Voeg je API-sleutel toe in instellingen voor echte AI-resultaten', 'results.bestDupe': 'Beste Dupe', 'results.moreAlts': 'Meer alternatieven',
       'results.loading.title': 'Onze AI analyseert je item\u2026', 'results.loading.sub': 'De beste alternatieven zoeken bij 6 winkels',
       'share.whatsapp': 'WhatsApp', 'share.copy': 'Link kopi\u00ebren', 'share.copied': 'Gekopieerd!',
       'share.text': 'Bekijk deze dupe: {name} van {store} voor slechts {price} \u2014 gevonden op ALTERE',
@@ -330,7 +330,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'footer.company': 'Entreprise', 'footer.about': '\u00c0 propos', 'footer.careers': 'Carri\u00e8res', 'footer.privacy': 'Confidentialit\u00e9', 'footer.terms': 'Conditions',
       'toast.saved': 'Sauv\u00e9 dans votre collection', 'toast.removed': 'Retir\u00e9 des sauvegardes', 'toast.cleared': 'Tous les articles sauv\u00e9s effac\u00e9s',
       'search.searching': 'Recherche...', 'search.joining': 'Inscription...',
-      'results.ai.eyebrow': 'R\u00e9sultats IA', 'results.ai.title': 'Vos dupes sont pr\u00eats', 'results.demo.eyebrow': 'R\u00e9sultats d\u00e9mo', 'results.demo.hint': 'Ajoutez votre cl\u00e9 API dans les param\u00e8tres pour de vrais r\u00e9sultats IA',
+      'results.ai.eyebrow': 'R\u00e9sultats IA', 'results.ai.title': 'Vos dupes sont pr\u00eats', 'results.demo.eyebrow': 'R\u00e9sultats d\u00e9mo', 'results.demo.hint': 'Ajoutez votre cl\u00e9 API dans les param\u00e8tres pour de vrais r\u00e9sultats IA', 'results.bestDupe': 'Meilleur Dupe', 'results.moreAlts': 'Plus d\u2019alternatives',
       'results.loading.title': 'Notre IA analyse votre article\u2026', 'results.loading.sub': 'Recherche des meilleures alternatives dans 6 magasins',
       'share.whatsapp': 'WhatsApp', 'share.copy': 'Copier le lien', 'share.copied': 'Copi\u00e9 !',
       'share.text': 'D\u00e9couvrez ce dupe : {name} de {store} pour seulement {price} \u2014 trouv\u00e9 sur ALTERE',
@@ -409,7 +409,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'footer.company': 'Unternehmen', 'footer.about': '\u00dcber uns', 'footer.careers': 'Karriere', 'footer.privacy': 'Datenschutz', 'footer.terms': 'AGB',
       'toast.saved': 'In deiner Kollektion gespeichert', 'toast.removed': 'Aus Gespeicherten entfernt', 'toast.cleared': 'Alle gespeicherten Artikel gel\u00f6scht',
       'search.searching': 'Suche...', 'search.joining': 'Anmelden...',
-      'results.ai.eyebrow': 'KI-Ergebnisse', 'results.ai.title': 'Deine Dupes sind bereit', 'results.demo.eyebrow': 'Demo-Ergebnisse', 'results.demo.hint': 'F\u00fcge deinen API-Schl\u00fcssel in den Einstellungen hinzu f\u00fcr echte KI-Ergebnisse',
+      'results.ai.eyebrow': 'KI-Ergebnisse', 'results.ai.title': 'Deine Dupes sind bereit', 'results.demo.eyebrow': 'Demo-Ergebnisse', 'results.demo.hint': 'F\u00fcge deinen API-Schl\u00fcssel in den Einstellungen hinzu f\u00fcr echte KI-Ergebnisse', 'results.bestDupe': 'Bester Dupe', 'results.moreAlts': 'Weitere Alternativen',
       'results.loading.title': 'Unsere KI analysiert deinen Artikel\u2026', 'results.loading.sub': 'Suche nach den besten Alternativen in 6 Gesch\u00e4ften',
       'share.whatsapp': 'WhatsApp', 'share.copy': 'Link kopieren', 'share.copied': 'Kopiert!',
       'share.text': 'Schau dir diesen Dupe an: {name} von {store} f\u00fcr nur {price} \u2014 gefunden auf ALTERE',
@@ -488,7 +488,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'footer.company': 'Empresa', 'footer.about': 'Acerca de', 'footer.careers': 'Empleo', 'footer.privacy': 'Privacidad', 'footer.terms': 'T\u00e9rminos',
       'toast.saved': 'Guardado en tu colecci\u00f3n', 'toast.removed': 'Eliminado de guardados', 'toast.cleared': 'Todos los art\u00edculos guardados eliminados',
       'search.searching': 'Buscando...', 'search.joining': 'Uni\u00e9ndose...',
-      'results.ai.eyebrow': 'Resultados IA', 'results.ai.title': 'Tus dupes est\u00e1n listos', 'results.demo.eyebrow': 'Resultados demo', 'results.demo.hint': 'A\u00f1ade tu clave API en ajustes para resultados reales de IA',
+      'results.ai.eyebrow': 'Resultados IA', 'results.ai.title': 'Tus dupes est\u00e1n listos', 'results.demo.eyebrow': 'Resultados demo', 'results.demo.hint': 'A\u00f1ade tu clave API en ajustes para resultados reales de IA', 'results.bestDupe': 'Mejor Dupe', 'results.moreAlts': 'M\u00e1s alternativas',
       'results.loading.title': 'Nuestra IA analiza tu art\u00edculo\u2026', 'results.loading.sub': 'Buscando las mejores alternativas en 6 tiendas',
       'share.whatsapp': 'WhatsApp', 'share.copy': 'Copiar enlace', 'share.copied': '\u00a1Copiado!',
       'share.text': 'Mira este dupe: {name} de {store} por solo {price} \u2014 encontrado en ALTERE',
@@ -567,7 +567,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'footer.company': 'Azienda', 'footer.about': 'Chi siamo', 'footer.careers': 'Lavora con noi', 'footer.privacy': 'Privacy', 'footer.terms': 'Termini',
       'toast.saved': 'Salvato nella tua collezione', 'toast.removed': 'Rimosso dai salvati', 'toast.cleared': 'Tutti gli articoli salvati cancellati',
       'search.searching': 'Ricerca...', 'search.joining': 'Iscrizione...',
-      'results.ai.eyebrow': 'Risultati IA', 'results.ai.title': 'I tuoi dupes sono pronti', 'results.demo.eyebrow': 'Risultati demo', 'results.demo.hint': 'Aggiungi la tua chiave API nelle impostazioni per risultati IA reali',
+      'results.ai.eyebrow': 'Risultati IA', 'results.ai.title': 'I tuoi dupes sono pronti', 'results.demo.eyebrow': 'Risultati demo', 'results.demo.hint': 'Aggiungi la tua chiave API nelle impostazioni per risultati IA reali', 'results.bestDupe': 'Miglior Dupe', 'results.moreAlts': 'Altre alternative',
       'results.loading.title': 'La nostra IA analizza il tuo articolo\u2026', 'results.loading.sub': 'Ricerca delle migliori alternative in 6 negozi',
       'share.whatsapp': 'WhatsApp', 'share.copy': 'Copia link', 'share.copied': 'Copiato!',
       'share.text': 'Guarda questo dupe: {name} di {store} a solo {price} \u2014 trovato su ALTERE',
@@ -1535,6 +1535,9 @@ document.addEventListener('DOMContentLoaded', () => {
     resultsGrid.innerHTML = '';
     resetFilters();
 
+    const bestDupeEl = document.getElementById('bestDupe');
+    const moreAltsEl = document.getElementById('moreAlts');
+
     // Update header
     const eyebrow = resultsHeader.querySelector('.results__eyebrow');
     const title   = resultsHeader.querySelector('.results__title');
@@ -1546,7 +1549,84 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const hasUnsplash = !!getUnsplashKey();
 
-    dupes.forEach((dupe, i) => {
+    // --- Best Dupe hero card (first result) ---
+    if (dupes.length > 0) {
+      const best = dupes[0];
+      const bestSavings = Math.round(((best.original_price - best.dupe_price) / best.original_price) * 100);
+      const bestHasImg = best.image_url;
+      let bestImgHTML;
+      if (bestHasImg) {
+        bestImgHTML = `<img src="${escapeAttr(best.image_url)}" alt="${escapeAttr(best.product_name)}" loading="lazy">`;
+      } else {
+        bestImgHTML = `<div class="dupe-card__color-placeholder" style="background:${CARD_COLORS[0]}"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>`;
+      }
+
+      bestDupeEl.innerHTML = `
+        <article class="best-dupe__card" data-price="${best.dupe_price.toFixed(2)}" data-store="${escapeAttr(best.store)}" data-category="${best.category || 'clothing'}">
+          <div class="best-dupe__image">
+            ${bestImgHTML}
+            <span class="best-dupe__ribbon" data-i18n="results.bestDupe">${t('results.bestDupe') || 'Best Dupe'}</span>
+            <div class="best-dupe__actions">
+              <span class="dupe-card__save" aria-label="Save">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              </span>
+              <span class="dupe-card__share" aria-label="Share">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                <div class="share-dropdown">
+                  <button class="share-dropdown__item share-dropdown__whatsapp" type="button"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>WhatsApp</button>
+                  <button class="share-dropdown__item share-dropdown__copy" type="button"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copy link</button>
+                </div>
+              </span>
+            </div>
+          </div>
+          <div class="best-dupe__body">
+            <span class="best-dupe__store">${escapeHtml(best.store)}</span>
+            <h3 class="best-dupe__name">${escapeHtml(best.product_name)}</h3>
+            <div class="best-dupe__prices">
+              <span class="best-dupe__price">$${best.dupe_price.toFixed(2)}</span>
+              <span class="best-dupe__original">$${best.original_price.toFixed(2)}</span>
+              <span class="best-dupe__savings">&minus;${bestSavings}%</span>
+            </div>
+            <div class="best-dupe__match">
+              <div class="best-dupe__match-bar"><div class="best-dupe__match-fill" style="width:0%"></div></div>
+              <span>${best.match_percentage}% match</span>
+            </div>
+            <span class="best-dupe__category">${escapeHtml(best.category || 'clothing')}</span>
+          </div>
+        </article>`;
+
+      bestDupeEl.classList.add('visible');
+
+      // Animate match bar
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        const fill = bestDupeEl.querySelector('.best-dupe__match-fill');
+        if (fill) fill.style.width = `${best.match_percentage}%`;
+      }));
+
+      // Unsplash for best dupe if needed
+      if (!bestHasImg && hasUnsplash) {
+        loadCardImage(bestDupeEl.querySelector('.best-dupe__card'), best, 0);
+      }
+
+      // Bind save/share on best dupe
+      bindSaveButtons(bestDupeEl);
+      bindShareButtons(bestDupeEl);
+      syncSaveStates(bestDupeEl);
+
+      // Show "More alternatives" label
+      if (dupes.length > 1) {
+        moreAltsEl.classList.add('visible');
+      }
+    } else {
+      bestDupeEl.innerHTML = '';
+      bestDupeEl.classList.remove('visible');
+      moreAltsEl.classList.remove('visible');
+    }
+
+    // --- Remaining dupes in the grid (skip first) ---
+    const remainingDupes = dupes.slice(1);
+
+    remainingDupes.forEach((dupe, i) => {
       const savings = Math.round(((dupe.original_price - dupe.dupe_price) / dupe.original_price) * 100);
       const card = document.createElement('article');
       card.className = 'dupe-card reveal';
@@ -2244,6 +2324,10 @@ Rules:
   function restoreDefaultCards() {
     resultsGrid.innerHTML = defaultCardsHTML;
     resetFilters();
+    // Hide best dupe and more alts
+    document.getElementById('bestDupe').innerHTML = '';
+    document.getElementById('bestDupe').classList.remove('visible');
+    document.getElementById('moreAlts').classList.remove('visible');
     bindSaveButtons(resultsGrid);
     bindShareButtons(resultsGrid);
     syncSaveStates(resultsGrid);

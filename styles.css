@@ -1554,6 +1554,206 @@ img, video {
    Results Section
    ============================================================ */
 
+/* Best Dupe hero card */
+.best-dupe {
+  display: none;
+  margin-bottom: 40px;
+}
+
+.best-dupe.visible {
+  display: block;
+}
+
+.best-dupe__card {
+  display: flex;
+  background: var(--white);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.06);
+  animation: fadeUp 0.6s var(--ease-out) both;
+}
+
+.best-dupe__image {
+  flex: 0 0 40%;
+  position: relative;
+  aspect-ratio: 3 / 4;
+  background: var(--cream-dark);
+  overflow: hidden;
+}
+
+.best-dupe__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s var(--ease-out);
+}
+
+.best-dupe__card:hover .best-dupe__image img {
+  transform: scale(1.03);
+}
+
+.best-dupe__ribbon {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 10;
+  padding: 6px 16px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--white);
+  background: var(--gold);
+  border-radius: 100px;
+}
+
+.best-dupe__actions {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.best-dupe__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 40px;
+}
+
+.best-dupe__store {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.best-dupe__name {
+  font-family: var(--font-display);
+  font-size: clamp(22px, 2.5vw, 30px);
+  font-weight: 400;
+  color: var(--black);
+  margin: 8px 0 16px;
+  line-height: 1.3;
+}
+
+.best-dupe__prices {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.best-dupe__price {
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--black);
+}
+
+.best-dupe__original {
+  font-size: 16px;
+  color: var(--grey-500);
+  text-decoration: line-through;
+}
+
+.best-dupe__savings {
+  display: inline-block;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--white);
+  background: var(--gold);
+  border-radius: 100px;
+  margin-left: 4px;
+}
+
+.best-dupe__match {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.best-dupe__match-bar {
+  flex: 1;
+  max-width: 180px;
+  height: 4px;
+  background: var(--cream-dark);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.best-dupe__match-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold), var(--gold-light));
+  border-radius: 2px;
+  transition: width 1s var(--ease-out);
+}
+
+.best-dupe__match span {
+  font-size: 13px;
+  color: var(--grey-500);
+}
+
+.best-dupe__category {
+  font-size: 12px;
+  color: var(--grey-500);
+  text-transform: capitalize;
+}
+
+/* More alternatives label */
+.more-alts {
+  display: none;
+  margin-bottom: 24px;
+}
+
+.more-alts.visible {
+  display: block;
+}
+
+.more-alts__label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--grey-500);
+  text-align: center;
+  position: relative;
+}
+
+.more-alts__label::before,
+.more-alts__label::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: calc(50% - 100px);
+  height: 1px;
+  background: var(--cream-dark);
+}
+
+.more-alts__label::before { left: 0; }
+.more-alts__label::after { right: 0; }
+
+/* Dark mode */
+[data-theme="dark"] .best-dupe__card { background: #252525; box-shadow: 0 8px 40px rgba(0,0,0,0.15); }
+[data-theme="dark"] .best-dupe__image { background: #2A2A2A; }
+[data-theme="dark"] .best-dupe__match-bar { background: #333; }
+[data-theme="dark"] .more-alts__label::before,
+[data-theme="dark"] .more-alts__label::after { background: #333; }
+
+@media (max-width: 768px) {
+  .best-dupe__card { flex-direction: column; }
+  .best-dupe__image { flex: none; aspect-ratio: 4 / 3; }
+  .best-dupe__body { padding: 24px 20px; }
+  .best-dupe__price { font-size: 22px; }
+  .more-alts__label::before, .more-alts__label::after { width: calc(50% - 80px); }
+}
+
 .results {
   padding: 100px 24px 120px;
   background: var(--cream);
