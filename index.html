@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ALTERE — AI-Powered Fashion Dupe Finder</title>
+  <title>ALTERE — Found a dupe? We'll find the original.</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&family=Noto+Kufi+Arabic:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -63,13 +63,21 @@
 
     <div class="hero__content">
       <p class="hero__eyebrow" data-i18n="hero.eyebrow">AI-Powered Fashion Discovery</p>
-      <h1 class="hero__headline" data-i18n="hero.headline">Find the look.<br>Not the price tag.</h1>
-      <p class="hero__sub" data-i18n="hero.sub">Upload any luxury piece and we'll find stunning alternatives from your favourite high-street brands — instantly.</p>
+      <h1 class="hero__headline" data-i18n="hero.headline">Found a dupe?<br>We'll find the original.</h1>
+      <p class="hero__sub" data-i18n="hero.sub">Describe any high-street item and our AI identifies the luxury original it was inspired by — plus more affordable alternatives.</p>
 
       <!-- Search Box -->
       <div class="search-box">
         <div class="search-box__tabs">
-          <button class="search-box__tab active" data-tab="link">
+          <button class="search-box__tab active" data-tab="reverse">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><polyline points="23 20 23 14 17 14"/><path d="M20.49 9A9 9 0 005.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 013.51 15"/></svg>
+            <span data-i18n="search.tab.reverse">Find original</span>
+          </button>
+          <button class="search-box__tab" data-tab="text">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <span data-i18n="search.tab.text">Find dupes</span>
+          </button>
+          <button class="search-box__tab" data-tab="link">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
             <span data-i18n="search.tab.link">Paste link</span>
           </button>
@@ -81,19 +89,21 @@
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
             <span data-i18n="search.tab.camera">Take photo</span>
           </button>
-          <button class="search-box__tab" data-tab="text">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <span data-i18n="search.tab.text">Search text</span>
-          </button>
-          <button class="search-box__tab" data-tab="reverse">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><polyline points="23 20 23 14 17 14"/><path d="M20.49 9A9 9 0 005.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 013.51 15"/></svg>
-            <span data-i18n="search.tab.reverse">Find original</span>
-          </button>
         </div>
 
         <div class="search-box__body">
+          <!-- Reverse / Find Original Panel (DEFAULT) -->
+          <div class="search-box__panel active" data-panel="reverse">
+            <input type="text" class="search-box__input" id="reverseInput" data-i18n-placeholder="search.placeholder.reverse" placeholder="Describe your high-street item, e.g. &quot;Zara quilted chain bag&quot;...">
+            <button class="search-box__btn search-box__btn--reverse" id="reverseBtn" data-i18n="search.btnReverse">Find original</button>
+          </div>
+          <!-- Search Text Panel (Find Dupes) -->
+          <div class="search-box__panel" data-panel="text">
+            <input type="text" class="search-box__input" data-i18n-placeholder="search.placeholder.text" placeholder="Describe the item, e.g. &quot;cream satin midi skirt&quot;...">
+            <button class="search-box__btn" data-i18n="search.btn">Find dupes</button>
+          </div>
           <!-- Paste Link Panel -->
-          <div class="search-box__panel active" data-panel="link">
+          <div class="search-box__panel" data-panel="link">
             <input type="url" class="search-box__input" id="linkInput" data-i18n-placeholder="search.placeholder.link" placeholder="Paste a product URL from any fashion site...">
             <button class="search-box__btn" data-i18n="search.btn">Find dupes</button>
             <div class="link-preview" id="linkPreview">
@@ -170,16 +180,6 @@
                 </div>
               </div>
             </div>
-          </div>
-          <!-- Search Text Panel -->
-          <div class="search-box__panel" data-panel="text">
-            <input type="text" class="search-box__input" data-i18n-placeholder="search.placeholder.text" placeholder="Describe the item, e.g. &quot;cream satin midi skirt&quot;...">
-            <button class="search-box__btn" data-i18n="search.btn">Find dupes</button>
-          </div>
-          <!-- Reverse / Find Original Panel -->
-          <div class="search-box__panel" data-panel="reverse">
-            <input type="text" class="search-box__input" id="reverseInput" data-i18n-placeholder="search.placeholder.reverse" placeholder="Describe your high-street item, e.g. &quot;Zara quilted chain bag&quot;...">
-            <button class="search-box__btn search-box__btn--reverse" id="reverseBtn" data-i18n="search.btnReverse">Find original</button>
           </div>
         </div>
       </div>
