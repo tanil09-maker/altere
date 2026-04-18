@@ -669,7 +669,7 @@ document.addEventListener('DOMContentLoaded', () => {
     zh: {
       'nav.discover': '\u53d1\u73b0', 'nav.brands': '\u54c1\u724c', 'nav.saved': '\u6536\u85cf', 'nav.signin': '\u767b\u5f55',
       'hero.eyebrow': 'AI\u65f6\u5c1a\u53d1\u73b0',
-      'hero.headline': '\u770b\u5230\u559c\u6b22\u7684\u3002<br>\u6211\u4eec\u5e2e\u4f60\u627e\u3002',
+      'hero.headline': '\u53d1\u73b0\u5b83\u3002<br>\u6211\u4eec\u627e\u5230\u5b83\u3002',
       'hero.sub': '\u63cf\u8ff0\u4efb\u4f55\u5feb\u65f6\u5c1a\u5355\u54c1\uff0c\u6211\u4eec\u7684AI\u4f1a\u8bc6\u522b\u5b83\u7684\u5962\u4f88\u54c1\u539f\u578b \u2014 \u8fd8\u6709\u66f4\u591a\u5e73\u4ef7\u66ff\u4ee3\u3002',
       'search.tab.link': '\u7c98\u8d34\u94fe\u63a5', 'search.tab.upload': '\u4e0a\u4f20\u7167\u7247', 'search.tab.text': 'Spot & Source', 'search.tab.camera': '\u62cd\u7167',
       'search.tab.reverse': '\u627e\u539f\u578b', 'search.btnReverse': '\u627e\u539f\u578b', 'search.placeholder.reverse': '\u63cf\u8ff0\u4f60\u7684\u5355\u54c1\uff0c\u4f8b\u5982\u201cZara\u7ed7\u7f1d\u94fe\u6761\u5305\u201d...',
