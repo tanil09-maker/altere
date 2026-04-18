@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
     en: {
       'nav.discover': 'Discover', 'nav.brands': 'Brands', 'nav.saved': 'Saved', 'nav.signin': 'Sign in',
       'hero.eyebrow': 'AI-Powered Fashion Discovery',
-      'hero.headline': 'Found a dupe?<br>We\u2019ll find the original.',
+      'hero.headline': 'Spot it.<br>We\u2019ll source it.',
       'hero.sub': 'Describe any high-street item and our AI identifies the luxury original it was inspired by \u2014 plus more affordable alternatives.',
       'search.tab.link': 'Paste link', 'search.tab.upload': 'Upload photo', 'search.tab.text': 'Find dupes',
       'search.placeholder.link': 'Paste a product URL from any fashion site...',
@@ -186,7 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
     nl: {
       'nav.discover': 'Ontdek', 'nav.brands': 'Merken', 'nav.saved': 'Opgeslagen', 'nav.signin': 'Inloggen',
       'hero.eyebrow': 'AI-Gestuurde Mode Ontdekking',
-      'hero.headline': 'Dupe gevonden?<br>Wij vinden het origineel.',
+      'hero.headline': 'Spot het.<br>Wij vinden het.',
       'hero.sub': 'Beschrijf een winkelstraat-item en onze AI identificeert het luxe origineel \u2014 plus betaalbare alternatieven.',
       'search.tab.link': 'Link plakken', 'search.tab.upload': 'Foto uploaden', 'search.tab.text': 'Vind dupes',
       'search.placeholder.link': 'Plak een product-URL van een modesite...',
@@ -265,7 +265,7 @@ document.addEventListener('DOMContentLoaded', () => {
     fr: {
       'nav.discover': 'D\u00e9couvrir', 'nav.brands': 'Marques', 'nav.saved': 'Sauv\u00e9s', 'nav.signin': 'Connexion',
       'hero.eyebrow': 'D\u00e9couverte Mode par IA',
-      'hero.headline': 'Trouv\u00e9 un dupe ?<br>On trouve l\u2019original.',
+      'hero.headline': 'Rep\u00e9rez-le.<br>On le trouve.',
       'hero.sub': 'D\u00e9crivez un article de fast-fashion et notre IA identifie l\u2019original de luxe \u2014 plus des alternatives abordables.',
       'search.tab.link': 'Coller un lien', 'search.tab.upload': 'Uploader une photo', 'search.tab.text': 'Trouver dupes',
       'search.placeholder.link': 'Collez l\u2019URL d\u2019un produit de mode...',
@@ -344,7 +344,7 @@ document.addEventListener('DOMContentLoaded', () => {
     de: {
       'nav.discover': 'Entdecken', 'nav.brands': 'Marken', 'nav.saved': 'Gespeichert', 'nav.signin': 'Anmelden',
       'hero.eyebrow': 'KI-gest\u00fctzte Mode-Entdeckung',
-      'hero.headline': 'Dupe gefunden?<br>Wir finden das Original.',
+      'hero.headline': 'Entdeckt.<br>Wir finden es.',
       'hero.sub': 'Beschreibe ein High-Street-Item und unsere KI identifiziert das Luxus-Original \u2014 plus bezahlbare Alternativen.',
       'search.tab.link': 'Link einf\u00fcgen', 'search.tab.upload': 'Foto hochladen', 'search.tab.text': 'Dupes finden',
       'search.placeholder.link': 'Produkt-URL von einer Modeseite einf\u00fcgen...',
@@ -423,7 +423,7 @@ document.addEventListener('DOMContentLoaded', () => {
     es: {
       'nav.discover': 'Descubrir', 'nav.brands': 'Marcas', 'nav.saved': 'Guardados', 'nav.signin': 'Iniciar sesi\u00f3n',
       'hero.eyebrow': 'Descubrimiento de Moda con IA',
-      'hero.headline': '\u00bfEncontraste un dupe?<br>Encontramos el original.',
+      'hero.headline': 'Lo viste.<br>Nosotros lo encontramos.',
       'hero.sub': 'Describe cualquier art\u00edculo de moda accesible y nuestra IA identifica el original de lujo \u2014 m\u00e1s alternativas asequibles.',
       'search.tab.link': 'Pegar enlace', 'search.tab.upload': 'Subir foto', 'search.tab.text': 'Buscar dupes',
       'search.placeholder.link': 'Pega la URL de un producto de cualquier tienda de moda...',
@@ -502,7 +502,7 @@ document.addEventListener('DOMContentLoaded', () => {
     it: {
       'nav.discover': 'Scopri', 'nav.brands': 'Marchi', 'nav.saved': 'Salvati', 'nav.signin': 'Accedi',
       'hero.eyebrow': 'Scoperta Moda con IA',
-      'hero.headline': 'Trovato un dupe?<br>Troviamo l\u2019originale.',
+      'hero.headline': 'L\u2019hai visto.<br>Noi lo troviamo.',
       'hero.sub': 'Descrivi un capo high-street e la nostra IA identifica l\u2019originale di lusso \u2014 pi\u00f9 alternative accessibili.',
       'search.tab.link': 'Incolla link', 'search.tab.upload': 'Carica foto', 'search.tab.text': 'Trova dupes',
       'search.placeholder.link': 'Incolla l\u2019URL di un prodotto da un sito di moda...',
@@ -581,7 +581,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ar: {
       'nav.discover': '\u0627\u0643\u062a\u0634\u0641', 'nav.brands': '\u0627\u0644\u0639\u0644\u0627\u0645\u0627\u062a', 'nav.saved': '\u0627\u0644\u0645\u062d\u0641\u0648\u0638\u0627\u062a', 'nav.signin': '\u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u062f\u062e\u0648\u0644',
       'hero.eyebrow': '\u0627\u0643\u062a\u0634\u0627\u0641 \u0627\u0644\u0645\u0648\u0636\u0629 \u0628\u0627\u0644\u0630\u0643\u0627\u0621 \u0627\u0644\u0627\u0635\u0637\u0646\u0627\u0639\u064a',
-      'hero.headline': '\u0648\u062c\u062f\u062a \u0628\u062f\u064a\u0644\u0627\u064b\u061f<br>\u0633\u0646\u062c\u062f \u0627\u0644\u0623\u0635\u0644\u064a.',
+      'hero.headline': '\u0634\u0641\u062a\u0647.<br>\u0646\u062d\u0646 \u0646\u062c\u062f\u0647.',
       'hero.sub': '\u0635\u0641 \u0623\u064a \u0642\u0637\u0639\u0629 \u0645\u0646 \u0627\u0644\u0634\u0627\u0631\u0639 \u0648\u0633\u064a\u062d\u062f\u062f \u0630\u0643\u0627\u0624\u0646\u0627 \u0627\u0644\u0627\u0635\u0637\u0646\u0627\u0639\u064a \u0627\u0644\u0623\u0635\u0644 \u0627\u0644\u0641\u0627\u062e\u0631 \u2014 \u0645\u0639 \u0628\u062f\u0627\u0626\u0644 \u0645\u0639\u0642\u0648\u0644\u0629.',
       'search.tab.link': '\u0644\u0635\u0642 \u0631\u0627\u0628\u0637', 'search.tab.upload': '\u0631\u0641\u0639 \u0635\u0648\u0631\u0629', 'search.tab.text': '\u0627\u0628\u062d\u062b \u0639\u0646 \u0628\u062f\u0627\u0626\u0644', 'search.tab.camera': '\u0627\u0644\u062a\u0642\u0637 \u0635\u0648\u0631\u0629',
       'search.placeholder.link': '\u0627\u0644\u0635\u0642 \u0631\u0627\u0628\u0637 \u0645\u0646\u062a\u062c \u0645\u0646 \u0623\u064a \u0645\u0648\u0642\u0639 \u0623\u0632\u064a\u0627\u0621...',
