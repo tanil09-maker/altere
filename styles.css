@@ -160,6 +160,12 @@
    RTL (Arabic) Overrides
    ============================================================ */
 
+/* Chinese font override */
+[lang="zh"] {
+  --font-body: 'Noto Sans SC', 'Inter', -apple-system, sans-serif;
+  --font-display: 'Noto Sans SC', Georgia, serif;
+}
+
 [dir="rtl"] {
   --font-body: 'Noto Kufi Arabic', 'Inter', -apple-system, sans-serif;
   --font-display: 'Noto Kufi Arabic', Georgia, serif;
