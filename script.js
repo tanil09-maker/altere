@@ -2463,9 +2463,9 @@ Rules:
     },
     {
       origBrand: 'TOTÊME', origName: 'Signature Wool Cashmere Scarf', origPrice: 420,
-      origImg: 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=500&h=625&fit=crop&crop=center&q=80',
+      origImg: 'https://images.unsplash.com/photo-1601924638867-3a6de6b7a500?w=500&h=625&fit=crop&crop=center&q=80',
       dupeBrand: 'ZARA', dupeName: 'Soft Wool Blend Scarf', dupePrice: 35.99,
-      dupeImg: 'https://images.unsplash.com/photo-1520903920243-00d872a2d1c9?w=500&h=625&fit=crop&crop=center&q=80',
+      dupeImg: 'https://images.unsplash.com/photo-1559563458-527698bf5295?w=500&h=625&fit=crop&crop=center&q=80',
       query: 'Toteme signature wool scarf'
     },
     {
@@ -2477,9 +2477,9 @@ Rules:
     },
     {
       origBrand: 'JACQUEMUS', origName: 'Le Chiquito Long Bag', origPrice: 680,
-      origImg: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=500&h=625&fit=crop&crop=center&q=80',
+      origImg: 'https://images.unsplash.com/photo-1612817159949-195b6eb9e31a?w=500&h=625&fit=crop&crop=center&q=80',
       dupeBrand: '& OTHER STORIES', dupeName: 'Mini Structured Handbag', dupePrice: 69,
-      dupeImg: 'https://images.unsplash.com/photo-1564422167509-4f8763ff046e?w=500&h=625&fit=crop&crop=center&q=80',
+      dupeImg: 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=500&h=625&fit=crop&crop=center&q=80',
       query: 'Jacquemus Le Chiquito long bag'
     },
     {
