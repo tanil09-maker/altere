@@ -172,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'toast.saved': 'Saved to your collection', 'toast.removed': 'Removed from saved', 'toast.cleared': 'All saved items cleared',
       'search.searching': 'Searching...', 'search.joining': 'Joining...',
       'results.ai.eyebrow': 'AI Results', 'results.ai.title': 'Your dupes are ready', 'results.demo.eyebrow': 'Demo Results', 'results.demo.hint': 'Add your API key in settings for real AI results', 'results.bestDupe': 'Best Dupe', 'results.moreAlts': 'More alternatives',
-      'free.remaining': 'free AI searches left today', 'free.exhausted': 'Free searches used \u2014 showing demo results', 'free.pro': 'Unlimited AI searches (Pro)',
+      'free.remaining': 'free AI searches left today', 'free.totalRemaining': 'free AI searches remaining', 'free.exhausted': 'Free searches used \u2014 showing demo results', 'free.unregExhausted': 'Free searches used \u2014 sign in for 3 daily searches', 'free.pro': 'Unlimited AI searches (Pro)',
       'auth.title': 'Sign in to ALTERE', 'auth.subtitle': 'Create a free account to save dupes and share finds.', 'auth.email': 'Email', 'auth.name': 'Name', 'auth.create': 'Create free account', 'auth.tiers': 'Free: 3 AI searches/day. Add your API key for unlimited.', 'auth.signout': 'Sign out', 'auth.freeTier': 'Free', 'auth.freeDesc': '3 AI searches per day + unlimited demo', 'auth.proDesc': 'Unlimited AI searches with your API key', 'auth.welcome': 'Welcome!', 'auth.signedOut': 'Signed out', 'auth.invalidEmail': 'Please enter a valid email.', 'auth.invalidName': 'Please enter your name.',
       'results.loading.title': 'Our AI is analysing your item\u2026', 'results.loading.sub': 'Finding the best alternatives across 6 stores',
       'share.whatsapp': 'WhatsApp', 'share.copy': 'Copy link', 'share.copied': 'Copied!',
@@ -2120,14 +2120,28 @@ Rules:
   function updateFreeCounter(remaining) {
     freeRemaining = remaining;
     const el = document.getElementById('freeCounter');
-    if (el) {
-      if (remaining > 0) {
-        el.textContent = `${remaining}/${FREE_LIMIT} ${t('free.remaining') || 'free AI searches left today'}`;
-        el.style.display = '';
-      } else {
-        el.textContent = t('free.exhausted') || 'Free searches used \u2014 showing demo results';
-        el.style.display = '';
-      }
+    if (!el) return;
+
+    const tier = getUserTier();
+    if (tier === 'pro') {
+      el.textContent = t('free.pro') || 'Unlimited AI searches (Pro)';
+      el.style.display = '';
+      return;
+    }
+
+    if (remaining > 0) {
+      const total = tier === 'unregistered' ? UNREG_LIMIT : FREE_LIMIT;
+      const suffix = tier === 'unregistered'
+        ? (t('free.totalRemaining') || 'free AI searches remaining')
+        : (t('free.remaining') || 'free AI searches left today');
+      el.textContent = `${remaining}/${total} ${suffix}`;
+      el.style.display = '';
+    } else {
+      const msg = tier === 'unregistered'
+        ? (t('free.unregExhausted') || 'Free searches used \u2014 sign in for 3 daily searches')
+        : (t('free.exhausted') || 'Free searches used \u2014 showing demo results');
+      el.textContent = msg;
+      el.style.display = '';
     }
   }
 
@@ -2148,11 +2162,27 @@ Rules:
 
   /* ---- API call with freemium model ---- */
 
+  /* ---- Unregistered lifetime search tracker ---- */
+
+  const UNREG_COUNT_KEY = 'altere_unreg_searches';
+  const UNREG_LIMIT     = 3;
+
+  function getUnregCount() {
+    return parseInt(localStorage.getItem(UNREG_COUNT_KEY) || '0', 10);
+  }
+
+  function incrementUnregCount() {
+    const c = getUnregCount() + 1;
+    localStorage.setItem(UNREG_COUNT_KEY, String(c));
+    return c;
+  }
+
   async function callClaude(userContent, rawQuery) {
     const apiKey = getApiKey();
+    const tier   = getUserTier();
 
-    // --- User has own API key → unlimited, direct to Anthropic ---
-    if (apiKey) {
+    // --- Pro: own API key → unlimited, direct to Anthropic ---
+    if (tier === 'pro') {
       const messages = [{ role: 'user', content: userContent }];
       const body = { model: MODEL, max_tokens: 1024, system: SYSTEM_PROMPT, messages };
 
@@ -2177,7 +2207,47 @@ Rules:
       return parseClaudeResponse(await res.json());
     }
 
-    // --- Free user → try proxy (3/day), fall back to demo ---
+    // --- Unregistered: 3 total (lifetime), then demo only ---
+    if (tier === 'unregistered') {
+      const used = getUnregCount();
+      if (used >= UNREG_LIMIT) {
+        updateFreeCounter(0);
+        await new Promise(r => setTimeout(r, 1200 + Math.random() * 800));
+        lastResultWasDemo = true;
+        return generateDemoResults(rawQuery || 'fashion item');
+      }
+
+      // Try proxy
+      try {
+        const messages = [{ role: 'user', content: userContent }];
+        const body = { model: MODEL, max_tokens: 1024, system: SYSTEM_PROMPT, messages };
+
+        const res = await fetch(PROXY_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body)
+        });
+
+        if (res.status === 429 || !res.ok) {
+          await new Promise(r => setTimeout(r, 800));
+          lastResultWasDemo = true;
+          return generateDemoResults(rawQuery || 'fashion item');
+        }
+
+        const data = await res.json();
+        const newCount = incrementUnregCount();
+        updateFreeCounter(UNREG_LIMIT - newCount);
+
+        lastResultWasDemo = false;
+        return parseClaudeResponse(data);
+      } catch {
+        await new Promise(r => setTimeout(r, 1200 + Math.random() * 800));
+        lastResultWasDemo = true;
+        return generateDemoResults(rawQuery || 'fashion item');
+      }
+    }
+
+    // --- Registered: 3/day via proxy, then demo ---
     try {
       const messages = [{ role: 'user', content: userContent }];
       const body = { model: MODEL, max_tokens: 1024, system: SYSTEM_PROMPT, messages };
@@ -2198,7 +2268,7 @@ Rules:
         return generateDemoResults(rawQuery || 'fashion item');
       }
 
-      // Proxy not configured (no env var, or local dev) → demo
+      // Proxy not configured → demo
       if (!res.ok) {
         await new Promise(r => setTimeout(r, 1200 + Math.random() * 800));
         lastResultWasDemo = true;
@@ -2216,6 +2286,7 @@ Rules:
     } catch {
       // Network error / proxy unavailable → demo fallback
       await new Promise(r => setTimeout(r, 1200 + Math.random() * 800));
+      lastResultWasDemo = true;
       return generateDemoResults(rawQuery || 'fashion item');
     }
   }
