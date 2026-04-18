@@ -108,12 +108,12 @@ document.addEventListener('DOMContentLoaded', () => {
       'search.tab.link': 'Paste link', 'search.tab.upload': 'Upload photo', 'search.tab.text': 'Spot & Source',
       'search.placeholder.link': 'Paste a product URL from any fashion site...',
       'search.placeholder.text': 'Describe the item, e.g. "cream satin midi skirt"...',
-      'search.btn': 'Find dupes',
+      'search.btn': 'Spot Alternatives',
       'search.upload.hint': 'Drag & drop or <strong>browse</strong>',
       'search.upload.formats': 'JPG, PNG or WEBP up to 10 MB',
       'search.upload.ready': 'Ready to search',
       'search.status': 'AI is finding your dupes',
-      'search.tab.camera': 'Take photo', 'camera.start': 'Tap to open camera', 'camera.hint': 'Point at any fashion item to find dupes', 'camera.retake': 'Retake', 'camera.use': 'Find dupes', 'camera.error': 'Could not access camera. Please check permissions.',
+      'search.tab.camera': 'Take photo', 'camera.start': 'Tap to open camera', 'camera.hint': 'Point at any fashion item to find dupes', 'camera.retake': 'Retake', 'camera.use': 'Spot Alternatives', 'camera.error': 'Could not access camera. Please check permissions.',
       'recent.label': 'Recent', 'recent.clear': 'Clear',
       'trending.label': 'Trending now',
       'hero.searching': 'Searching across', 'hero.scroll': 'Scroll to explore',
@@ -174,7 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'results.ai.eyebrow': 'AI Results', 'results.ai.title': 'Your dupes are ready', 'results.demo.eyebrow': 'Demo Results', 'results.demo.hint': 'Add your API key in settings for real AI results', 'results.bestDupe': 'Best Dupe', 'results.moreAlts': 'More alternatives',
       'free.remaining': 'free AI searches left today', 'free.totalRemaining': 'free AI searches remaining', 'free.exhausted': 'Free searches used \u2014 showing demo results', 'free.unregExhausted': 'Free searches used \u2014 sign in for 3 daily searches', 'free.pro': 'Unlimited AI searches (Pro)',
       'auth.title': 'Sign in to ALTERE', 'auth.subtitle': 'Create a free account to save dupes and share finds.', 'auth.email': 'Email', 'auth.name': 'Name', 'auth.create': 'Create free account', 'auth.tiers': 'Free: 3 AI searches/day. Add your API key for unlimited.', 'auth.signout': 'Sign out', 'auth.freeTier': 'Free', 'auth.freeDesc': '3 AI searches per day + unlimited demo', 'auth.proDesc': 'Unlimited AI searches with your API key', 'auth.welcome': 'Welcome!', 'auth.signedOut': 'Signed out', 'auth.invalidEmail': 'Please enter a valid email.', 'auth.invalidName': 'Please enter your name.',
-      'search.tab.reverse': 'Source it', 'search.placeholder.reverse': 'Describe your high-street item, e.g. "Zara quilted chain bag"...', 'search.btnReverse': 'Source it',
+      'search.tab.reverse': 'Source it', 'search.placeholder.reverse': 'Describe your high-street item, e.g. "Zara quilted chain bag"...', 'search.btnReverse': 'Source This',
       'reverse.loading': 'Identifying the luxury original\u2026', 'reverse.loadingSub': 'Matching your item to designer collections', 'reverse.eyebrow': 'Original Found', 'reverse.title': 'We found the original', 'reverse.for': 'Original identified for', 'reverse.originalLabel': 'The Original', 'reverse.identifiedAs': 'Identified as', 'reverse.dupeBelow': 'Affordable alternatives below',
       'results.loading.title': 'Our AI is analysing your item\u2026', 'results.loading.sub': 'Finding the best alternatives across 6 stores',
       'share.whatsapp': 'WhatsApp', 'share.copy': 'Copy link', 'share.copied': 'Copied!',
@@ -196,7 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'search.upload.formats': 'JPG, PNG of WEBP tot 10 MB',
       'search.upload.ready': 'Klaar om te zoeken',
       'search.status': 'AI zoekt je dupes',
-      'search.tab.camera': 'Maak foto', 'camera.start': 'Tik om camera te openen', 'camera.hint': 'Richt op een mode-item om dupes te vinden', 'camera.retake': 'Opnieuw', 'camera.use': 'Vind dupes', 'camera.error': 'Kan camera niet openen. Controleer de machtigingen.',
+      'search.tab.camera': 'Maak foto', 'camera.start': 'Tik om camera te openen', 'camera.hint': 'Richt op een mode-item om dupes te vinden', 'camera.retake': 'Opnieuw', 'camera.use': 'Spot Alternatives', 'camera.error': 'Kan camera niet openen. Controleer de machtigingen.',
       'recent.label': 'Recent', 'recent.clear': 'Wissen',
       'trending.label': 'Trending nu',
       'hero.searching': 'Zoeken bij', 'hero.scroll': 'Scroll om te ontdekken',
@@ -275,7 +275,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'search.upload.formats': 'JPG, PNG ou WEBP jusqu\u2019\u00e0 10 Mo',
       'search.upload.ready': 'Pr\u00eat \u00e0 rechercher',
       'search.status': 'L\u2019IA recherche vos dupes',
-      'search.tab.camera': 'Prendre photo', 'camera.start': 'Appuyez pour ouvrir la cam\u00e9ra', 'camera.hint': 'Pointez vers un article de mode pour trouver des dupes', 'camera.retake': 'Reprendre', 'camera.use': 'Trouver des dupes', 'camera.error': 'Impossible d\u2019acc\u00e9der \u00e0 la cam\u00e9ra. V\u00e9rifiez les permissions.',
+      'search.tab.camera': 'Prendre photo', 'camera.start': 'Appuyez pour ouvrir la cam\u00e9ra', 'camera.hint': 'Pointez vers un article de mode pour trouver des dupes', 'camera.retake': 'Reprendre', 'camera.use': 'Spot Alternatives', 'camera.error': 'Impossible d\u2019acc\u00e9der \u00e0 la cam\u00e9ra. V\u00e9rifiez les permissions.',
       'recent.label': 'R\u00e9cents', 'recent.clear': 'Effacer',
       'trending.label': 'Tendances',
       'hero.searching': 'Recherche sur', 'hero.scroll': 'D\u00e9filez pour explorer',
@@ -354,7 +354,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'search.upload.formats': 'JPG, PNG oder WEBP bis 10 MB',
       'search.upload.ready': 'Bereit zum Suchen',
       'search.status': 'KI sucht deine Dupes',
-      'search.tab.camera': 'Foto machen', 'camera.start': 'Tippen um Kamera zu \u00f6ffnen', 'camera.hint': 'Auf ein Mode-Item richten, um Dupes zu finden', 'camera.retake': 'Nochmal', 'camera.use': 'Dupes finden', 'camera.error': 'Kamera konnte nicht ge\u00f6ffnet werden. Bitte Berechtigungen pr\u00fcfen.',
+      'search.tab.camera': 'Foto machen', 'camera.start': 'Tippen um Kamera zu \u00f6ffnen', 'camera.hint': 'Auf ein Mode-Item richten, um Dupes zu finden', 'camera.retake': 'Nochmal', 'camera.use': 'Spot Alternatives', 'camera.error': 'Kamera konnte nicht ge\u00f6ffnet werden. Bitte Berechtigungen pr\u00fcfen.',
       'recent.label': 'K\u00fcrzlich', 'recent.clear': 'L\u00f6schen',
       'trending.label': 'Jetzt im Trend',
       'hero.searching': 'Suche bei', 'hero.scroll': 'Scrollen zum Entdecken',
@@ -433,7 +433,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'search.upload.formats': 'JPG, PNG o WEBP hasta 10 MB',
       'search.upload.ready': 'Listo para buscar',
       'search.status': 'La IA busca tus dupes',
-      'search.tab.camera': 'Tomar foto', 'camera.start': 'Toca para abrir la c\u00e1mara', 'camera.hint': 'Apunta a cualquier art\u00edculo de moda para encontrar dupes', 'camera.retake': 'Repetir', 'camera.use': 'Buscar dupes', 'camera.error': 'No se pudo acceder a la c\u00e1mara. Verifica los permisos.',
+      'search.tab.camera': 'Tomar foto', 'camera.start': 'Toca para abrir la c\u00e1mara', 'camera.hint': 'Apunta a cualquier art\u00edculo de moda para encontrar dupes', 'camera.retake': 'Repetir', 'camera.use': 'Spot Alternatives', 'camera.error': 'No se pudo acceder a la c\u00e1mara. Verifica los permisos.',
       'recent.label': 'Recientes', 'recent.clear': 'Borrar',
       'trending.label': 'Tendencia ahora',
       'hero.searching': 'Buscando en', 'hero.scroll': 'Despl\u00e1zate para explorar',
@@ -512,7 +512,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'search.upload.formats': 'JPG, PNG o WEBP fino a 10 MB',
       'search.upload.ready': 'Pronto per cercare',
       'search.status': 'L\u2019IA sta cercando i tuoi dupes',
-      'search.tab.camera': 'Scatta foto', 'camera.start': 'Tocca per aprire la fotocamera', 'camera.hint': 'Inquadra un articolo di moda per trovare dupes', 'camera.retake': 'Riprova', 'camera.use': 'Trova dupes', 'camera.error': 'Impossibile accedere alla fotocamera. Controlla i permessi.',
+      'search.tab.camera': 'Scatta foto', 'camera.start': 'Tocca per aprire la fotocamera', 'camera.hint': 'Inquadra un articolo di moda per trovare dupes', 'camera.retake': 'Riprova', 'camera.use': 'Spot Alternatives', 'camera.error': 'Impossibile accedere alla fotocamera. Controlla i permessi.',
       'recent.label': 'Recenti', 'recent.clear': 'Cancella',
       'trending.label': 'Di tendenza',
       'hero.searching': 'Ricerca su', 'hero.scroll': 'Scorri per esplorare',
@@ -591,7 +591,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'search.upload.formats': 'JPG \u0623\u0648 PNG \u0623\u0648 WEBP \u062d\u062a\u0649 10 \u0645\u064a\u063a\u0627',
       'search.upload.ready': '\u062c\u0627\u0647\u0632 \u0644\u0644\u0628\u062d\u062b',
       'search.status': '\u0627\u0644\u0630\u0643\u0627\u0621 \u0627\u0644\u0627\u0635\u0637\u0646\u0627\u0639\u064a \u064a\u0628\u062d\u062b \u0639\u0646 \u0628\u062f\u0627\u0626\u0644\u0643',
-      'search.tab.camera': '\u0627\u0644\u062a\u0642\u0637 \u0635\u0648\u0631\u0629', 'camera.start': '\u0627\u0646\u0642\u0631 \u0644\u0641\u062a\u062d \u0627\u0644\u0643\u0627\u0645\u064a\u0631\u0627', 'camera.hint': '\u0648\u062c\u0651\u0647 \u0627\u0644\u0643\u0627\u0645\u064a\u0631\u0627 \u0646\u062d\u0648 \u0623\u064a \u0642\u0637\u0639\u0629 \u0623\u0632\u064a\u0627\u0621', 'camera.retake': '\u0625\u0639\u0627\u062f\u0629', 'camera.use': '\u0627\u0628\u062d\u062b \u0639\u0646 \u0628\u062f\u0627\u0626\u0644', 'camera.error': '\u062a\u0639\u0630\u0651\u0631 \u0627\u0644\u0648\u0635\u0648\u0644 \u0644\u0644\u0643\u0627\u0645\u064a\u0631\u0627. \u062a\u062d\u0642\u0642 \u0645\u0646 \u0627\u0644\u0623\u0630\u0648\u0646\u0627\u062a.',
+      'search.tab.camera': '\u0627\u0644\u062a\u0642\u0637 \u0635\u0648\u0631\u0629', 'camera.start': '\u0627\u0646\u0642\u0631 \u0644\u0641\u062a\u062d \u0627\u0644\u0643\u0627\u0645\u064a\u0631\u0627', 'camera.hint': '\u0648\u062c\u0651\u0647 \u0627\u0644\u0643\u0627\u0645\u064a\u0631\u0627 \u0646\u062d\u0648 \u0623\u064a \u0642\u0637\u0639\u0629 \u0623\u0632\u064a\u0627\u0621', 'camera.retake': '\u0625\u0639\u0627\u062f\u0629', 'camera.use': 'Spot Alternatives', 'camera.error': '\u062a\u0639\u0630\u0651\u0631 \u0627\u0644\u0648\u0635\u0648\u0644 \u0644\u0644\u0643\u0627\u0645\u064a\u0631\u0627. \u062a\u062d\u0642\u0642 \u0645\u0646 \u0627\u0644\u0623\u0630\u0648\u0646\u0627\u062a.',
       'recent.label': '\u0627\u0644\u0623\u062e\u064a\u0631\u0629', 'recent.clear': '\u0645\u0633\u062d',
       'trending.label': '\u0631\u0627\u0626\u062c \u0627\u0644\u0622\u0646',
       'hero.searching': '\u0628\u062d\u062b \u0641\u064a', 'hero.scroll': '\u0645\u0631\u0631 \u0644\u0644\u0623\u0633\u0641\u0644 \u0644\u0644\u0627\u0633\u062a\u0643\u0634\u0627\u0641',
@@ -1013,7 +1013,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Reset after search starts
     setTimeout(() => {
-      cameraUse.textContent = t('camera.use') || 'Find dupes';
+      cameraUse.textContent = t('camera.use') || 'Spot Alternatives';
       cameraUse.style.background = '';
     }, 2000);
   });
@@ -2546,7 +2546,7 @@ Rules:
     } finally {
       isSearching = false;
       hideSearchStatus();
-      reverseBtn.textContent = t('search.btnReverse') || 'Source it';
+      reverseBtn.textContent = t('search.btnReverse') || 'Source This';
       reverseBtn.disabled = false;
     }
   }
