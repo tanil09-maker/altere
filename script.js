@@ -174,6 +174,8 @@ document.addEventListener('DOMContentLoaded', () => {
       'results.ai.eyebrow': 'AI Results', 'results.ai.title': 'Your dupes are ready', 'results.demo.eyebrow': 'Demo Results', 'results.demo.hint': 'Add your API key in settings for real AI results', 'results.bestDupe': 'Best Dupe', 'results.moreAlts': 'More alternatives',
       'free.remaining': 'free AI searches left today', 'free.totalRemaining': 'free AI searches remaining', 'free.exhausted': 'Free searches used \u2014 showing demo results', 'free.unregExhausted': 'Free searches used \u2014 sign in for 3 daily searches', 'free.pro': 'Unlimited AI searches (Pro)',
       'auth.title': 'Sign in to ALTERE', 'auth.subtitle': 'Create a free account to save dupes and share finds.', 'auth.email': 'Email', 'auth.name': 'Name', 'auth.create': 'Create free account', 'auth.tiers': 'Free: 3 AI searches/day. Add your API key for unlimited.', 'auth.signout': 'Sign out', 'auth.freeTier': 'Free', 'auth.freeDesc': '3 AI searches per day + unlimited demo', 'auth.proDesc': 'Unlimited AI searches with your API key', 'auth.welcome': 'Welcome!', 'auth.signedOut': 'Signed out', 'auth.invalidEmail': 'Please enter a valid email.', 'auth.invalidName': 'Please enter your name.',
+      'search.tab.reverse': 'Find original', 'search.placeholder.reverse': 'Describe your high-street item, e.g. "Zara quilted chain bag"...', 'search.btnReverse': 'Find original',
+      'reverse.loading': 'Identifying the luxury original\u2026', 'reverse.loadingSub': 'Matching your item to designer collections', 'reverse.eyebrow': 'Original Found', 'reverse.title': 'We found the original', 'reverse.for': 'Original identified for', 'reverse.originalLabel': 'The Original', 'reverse.identifiedAs': 'Identified as', 'reverse.dupeBelow': 'Affordable alternatives below',
       'results.loading.title': 'Our AI is analysing your item\u2026', 'results.loading.sub': 'Finding the best alternatives across 6 stores',
       'share.whatsapp': 'WhatsApp', 'share.copy': 'Copy link', 'share.copied': 'Copied!',
       'share.text': 'Check out this dupe: {name} from {store} for just {price} \u2014 found on ALTERE',
@@ -2016,6 +2018,81 @@ Rules:
 - original_price should be the same across all 6 (the price of the luxury item)
 - Vary the dupe_price realistically per store`;
 
+  const REVERSE_PROMPT = `You are ALTERE, a reverse fashion dupe finder. The user describes a high-street/affordable fashion item. Your job is to identify which luxury designer original it's a dupe of, then also suggest 5 more affordable alternatives.
+
+Respond with ONLY a JSON object. No markdown, no explanation, no code fences — just the raw JSON object.
+
+The object must have:
+- "original": an object with fields: "brand" (luxury brand name), "product_name" (the original item name), "price" (estimated USD price, number), "description" (1-2 sentence description of the original), "category" (one of "bags", "shoes", "clothing", "jewellery", "accessories")
+- "dupes": an array of 5 objects, each with: "store", "product_name", "category", "original_price" (same as original.price), "dupe_price", "match_percentage"
+
+Rules:
+- The original should be a real, recognizable luxury item that the described item is clearly inspired by
+- "store" must be one of: "ZARA", "H&M", "MANGO", "ASOS", "COS" (use each once)
+- Prices should be realistic
+- match_percentage range: 78-96`;
+
+  /* ---- Demo reverse results ---- */
+
+  const DEMO_REVERSE = {
+    bags: {
+      original: { brand: 'BOTTEGA VENETA', product_name: 'Cassette Padded Leather Bag', price: 3200, description: 'The iconic intrecciato-woven padded cassette bag. A modern classic with oversized weaving and a chunky chain strap.', category: 'bags' },
+      dupes: [
+        { store: 'ZARA', product_name: 'Quilted Chain Crossbody', category: 'bags', original_price: 3200, dupe_price: 45.99, match_percentage: 94 },
+        { store: 'H&M', product_name: 'Padded Shoulder Bag', category: 'bags', original_price: 3200, dupe_price: 34.99, match_percentage: 91 },
+        { store: 'MANGO', product_name: 'Woven Effect Bag', category: 'bags', original_price: 3200, dupe_price: 55.99, match_percentage: 88 },
+        { store: 'ASOS', product_name: 'Chunky Chain Bag', category: 'bags', original_price: 3200, dupe_price: 42.00, match_percentage: 85 },
+        { store: 'COS', product_name: 'Leather Crossbody Bag', category: 'bags', original_price: 3200, dupe_price: 89.00, match_percentage: 82 }
+      ]
+    },
+    clothing: {
+      original: { brand: 'MAX MARA', product_name: 'Madame Double-Breasted Wool Coat', price: 2590, description: 'The signature camel coat. Timeless double-breasted silhouette in luxurious wool-cashmere with a belted waist.', category: 'clothing' },
+      dupes: [
+        { store: 'ZARA', product_name: 'Wool Blend Belted Coat', category: 'clothing', original_price: 2590, dupe_price: 89.99, match_percentage: 93 },
+        { store: 'H&M', product_name: 'Double-Breasted Coat', category: 'clothing', original_price: 2590, dupe_price: 79.99, match_percentage: 90 },
+        { store: 'MANGO', product_name: 'Tailored Wool Coat', category: 'clothing', original_price: 2590, dupe_price: 119.99, match_percentage: 88 },
+        { store: 'ASOS', product_name: 'Oversized Camel Coat', category: 'clothing', original_price: 2590, dupe_price: 95.00, match_percentage: 85 },
+        { store: 'COS', product_name: 'Belted Wool Coat', category: 'clothing', original_price: 2590, dupe_price: 135.00, match_percentage: 83 }
+      ]
+    },
+    shoes: {
+      original: { brand: 'JIMMY CHOO', product_name: 'Bing 100 Crystal Mules', price: 1195, description: 'Show-stopping crystal-embellished pointed-toe mules. The ultimate evening shoe with all-over crystal mesh.', category: 'shoes' },
+      dupes: [
+        { store: 'ZARA', product_name: 'Crystal Strap Heeled Mules', category: 'shoes', original_price: 1195, dupe_price: 59.90, match_percentage: 92 },
+        { store: 'H&M', product_name: 'Rhinestone Mules', category: 'shoes', original_price: 1195, dupe_price: 34.99, match_percentage: 89 },
+        { store: 'MANGO', product_name: 'Crystal Embellished Heels', category: 'shoes', original_price: 1195, dupe_price: 69.99, match_percentage: 86 },
+        { store: 'ASOS', product_name: 'Gem Detail Pointed Mules', category: 'shoes', original_price: 1195, dupe_price: 48.00, match_percentage: 84 },
+        { store: 'COS', product_name: 'Pointed Heeled Mules', category: 'shoes', original_price: 1195, dupe_price: 89.00, match_percentage: 80 }
+      ]
+    },
+    jewellery: {
+      original: { brand: 'TIFFANY & CO.', product_name: 'T Wire Bracelet in 18k Gold', price: 1350, description: 'The modern icon. Clean lines in 18k gold with the signature T motif at each end. Effortless everyday luxury.', category: 'jewellery' },
+      dupes: [
+        { store: 'ZARA', product_name: 'Gold Wire Cuff Bracelet', category: 'jewellery', original_price: 1350, dupe_price: 19.90, match_percentage: 93 },
+        { store: 'H&M', product_name: 'Open Gold Bangle', category: 'jewellery', original_price: 1350, dupe_price: 12.99, match_percentage: 90 },
+        { store: 'MANGO', product_name: 'Minimalist Cuff Bracelet', category: 'jewellery', original_price: 1350, dupe_price: 25.99, match_percentage: 87 },
+        { store: 'ASOS', product_name: 'Wire T-Bar Bracelet', category: 'jewellery', original_price: 1350, dupe_price: 15.00, match_percentage: 84 },
+        { store: 'COS', product_name: 'Sculptural Wire Bangle', category: 'jewellery', original_price: 1350, dupe_price: 35.00, match_percentage: 81 }
+      ]
+    },
+    accessories: {
+      original: { brand: 'HERMÈS', product_name: 'Carré 90 Silk Scarf', price: 480, description: 'The ultimate silk scarf. Hand-rolled edges, vibrant prints and the iconic 90cm square format worn a hundred ways.', category: 'accessories' },
+      dupes: [
+        { store: 'ZARA', product_name: 'Printed Silk Square Scarf', category: 'accessories', original_price: 480, dupe_price: 29.90, match_percentage: 91 },
+        { store: 'H&M', product_name: 'Patterned Satin Scarf', category: 'accessories', original_price: 480, dupe_price: 17.99, match_percentage: 88 },
+        { store: 'MANGO', product_name: 'Printed Twill Scarf', category: 'accessories', original_price: 480, dupe_price: 25.99, match_percentage: 85 },
+        { store: 'ASOS', product_name: 'Square Print Scarf', category: 'accessories', original_price: 480, dupe_price: 18.00, match_percentage: 83 },
+        { store: 'COS', product_name: 'Silk Blend Square Scarf', category: 'accessories', original_price: 480, dupe_price: 45.00, match_percentage: 80 }
+      ]
+    }
+  };
+
+  function generateDemoReverse(query) {
+    const cat = detectCategory(query);
+    const key = cat === 'mixed' ? 'bags' : cat;
+    return JSON.parse(JSON.stringify(DEMO_REVERSE[key]));
+  }
+
   /* ---- Demo results generator ---- */
 
   const U = (id) => `https://images.unsplash.com/${id}?w=600&h=800&fit=crop&crop=center&q=80`;
@@ -2398,6 +2475,180 @@ Rules:
   });
 
   /* ============================================================
+     Reverse search (Find Original)
+     ============================================================ */
+
+  const reverseInput = document.getElementById('reverseInput');
+  const reverseBtn   = document.getElementById('reverseBtn');
+
+  reverseBtn.addEventListener('click', () => {
+    const value = reverseInput.value.trim();
+    if (!value) {
+      reverseInput.style.borderColor = '#C9A96E';
+      setTimeout(() => { reverseInput.style.borderColor = ''; }, 2000);
+      return;
+    }
+    reverseBtn.textContent = t('search.searching');
+    reverseBtn.disabled = true;
+    performReverseSearch(value);
+  });
+
+  reverseInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') reverseBtn.click();
+  });
+
+  async function performReverseSearch(query) {
+    if (isSearching) return;
+    isSearching = true;
+
+    showSearchStatus();
+    renderSkeletons();
+    document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+
+    const eyebrow = resultsHeader.querySelector('.results__eyebrow');
+    const title   = resultsHeader.querySelector('.results__title');
+    const sub     = resultsHeader.querySelector('.results__subtitle');
+    eyebrow.textContent = t('search.searching').replace('...', '');
+    title.textContent   = t('reverse.loading') || 'Identifying the luxury original\u2026';
+    sub.textContent     = t('reverse.loadingSub') || 'Matching your item to designer collections';
+
+    try {
+      let result;
+      const apiKey = getApiKey();
+      const tier   = getUserTier();
+
+      if (tier === 'pro') {
+        // Direct API
+        const res = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
+          body: JSON.stringify({ model: MODEL, max_tokens: 1024, system: REVERSE_PROMPT, messages: [{ role: 'user', content: `The user has this affordable item: ${query}. Identify the luxury original and suggest 5 similar affordable alternatives.` }] })
+        });
+        if (!res.ok) throw new Error('API error');
+        const data = await res.json();
+        let text = data.content?.[0]?.text || '';
+        if (text.startsWith('```')) text = text.replace(/^```(?:json)?\s*/, '').replace(/\s*```$/, '');
+        result = JSON.parse(text.trim());
+      } else {
+        // Demo fallback
+        await new Promise(r => setTimeout(r, 1500 + Math.random() * 800));
+        result = generateDemoReverse(query);
+      }
+
+      renderReverseResults(result, query, tier !== 'pro');
+      saveRecentSearch(query, 'reverse');
+    } catch (err) {
+      showToast(err.message || 'Search failed', true);
+      eyebrow.textContent = t('results.eyebrow');
+      title.textContent   = t('results.title');
+      sub.textContent     = t('results.subtitle');
+      restoreDefaultCards();
+    } finally {
+      isSearching = false;
+      hideSearchStatus();
+      reverseBtn.textContent = t('search.btnReverse') || 'Find original';
+      reverseBtn.disabled = false;
+    }
+  }
+
+  function renderReverseResults(result, query, isDemo) {
+    resultsGrid.innerHTML = '';
+    resetFilters();
+
+    const originalFoundEl = document.getElementById('originalFound');
+    const bestDupeEl = document.getElementById('bestDupe');
+    const moreAltsEl = document.getElementById('moreAlts');
+
+    // Hide normal best dupe
+    bestDupeEl.innerHTML = '';
+    bestDupeEl.classList.remove('visible');
+
+    // Update header
+    const eyebrow = resultsHeader.querySelector('.results__eyebrow');
+    const title   = resultsHeader.querySelector('.results__title');
+    const sub     = resultsHeader.querySelector('.results__subtitle');
+    eyebrow.textContent = isDemo ? (t('results.demo.eyebrow') || 'Demo Results') : (t('reverse.eyebrow') || 'Original Found');
+    title.textContent   = t('reverse.title') || 'We found the original';
+    const demoHint = isDemo ? (' \u2014 ' + (t('results.demo.hint') || 'Add your API key for real AI results')) : '';
+    sub.textContent = `${t('reverse.for') || 'Original identified for'} \u201c${query}\u201d${demoHint}`;
+
+    // Render original card
+    const orig = result.original;
+    originalFoundEl.innerHTML = `
+      <article class="original-found__card">
+        <div class="original-found__image">
+          <div class="dupe-card__color-placeholder" style="background:#D5C6B0">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </div>
+          <span class="original-found__ribbon">${t('reverse.originalLabel') || 'The Original'}</span>
+        </div>
+        <div class="original-found__body">
+          <span class="original-found__label">${t('reverse.identifiedAs') || 'Identified as'}</span>
+          <span class="original-found__brand">${escapeHtml(orig.brand)}</span>
+          <h3 class="original-found__name">${escapeHtml(orig.product_name)}</h3>
+          <span class="original-found__price">$${orig.price.toLocaleString()}</span>
+          <p class="original-found__desc">${escapeHtml(orig.description)}</p>
+          <span class="original-found__arrow">
+            ${t('reverse.dupeBelow') || 'Affordable alternatives below'}
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </span>
+        </div>
+      </article>`;
+    originalFoundEl.classList.add('visible');
+
+    // Show more alts label
+    moreAltsEl.classList.add('visible');
+
+    // Render dupes in grid
+    const dupes = result.dupes || [];
+    const hasUnsplash = !!getUnsplashKey();
+
+    dupes.forEach((dupe, i) => {
+      const savings = Math.round(((dupe.original_price - dupe.dupe_price) / dupe.original_price) * 100);
+      const card = document.createElement('article');
+      card.className = 'dupe-card reveal';
+      card.dataset.price = dupe.dupe_price.toFixed(2);
+      card.dataset.store = dupe.store;
+      card.dataset.category = dupe.category || 'clothing';
+      card.style.transitionDelay = `${i * 0.08}s`;
+
+      const imgHTML = `<div class="dupe-card__color-placeholder" style="background:${CARD_COLORS[i % CARD_COLORS.length]}"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>`;
+
+      card.innerHTML = `
+        <div class="dupe-card__image">
+          ${imgHTML}
+          <span class="dupe-card__save" aria-label="Save"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></span>
+          <span class="dupe-card__share" aria-label="Share"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg><div class="share-dropdown"><button class="share-dropdown__item share-dropdown__whatsapp" type="button"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>WhatsApp</button><button class="share-dropdown__item share-dropdown__copy" type="button"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copy link</button></div></span>
+          <span class="dupe-card__badge">&minus;${savings}%</span>
+        </div>
+        <div class="dupe-card__info">
+          <span class="dupe-card__store">${escapeHtml(dupe.store)}</span>
+          <h3 class="dupe-card__name">${escapeHtml(dupe.product_name)}</h3>
+          <div class="dupe-card__price-row">
+            <span class="dupe-card__price">$${dupe.dupe_price.toFixed(2)}</span>
+            <span class="dupe-card__original">$${dupe.original_price.toFixed(2)}</span>
+          </div>
+          <div class="dupe-card__match">
+            <div class="dupe-card__match-bar"><div class="dupe-card__match-fill" style="width:0%"></div></div>
+            <span>${dupe.match_percentage}% match</span>
+          </div>
+        </div>`;
+
+      resultsGrid.appendChild(card);
+
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        card.classList.add('visible');
+        const fill = card.querySelector('.dupe-card__match-fill');
+        if (fill) fill.style.width = `${dupe.match_percentage}%`;
+      }));
+    });
+
+    bindSaveButtons(resultsGrid);
+    bindShareButtons(resultsGrid);
+    syncSaveStates(resultsGrid);
+  }
+
+  /* ============================================================
      Social Proof Counter Animation
      ============================================================ */
 
@@ -2625,6 +2876,8 @@ Rules:
     // Hide best dupe and more alts
     document.getElementById('bestDupe').innerHTML = '';
     document.getElementById('bestDupe').classList.remove('visible');
+    document.getElementById('originalFound').innerHTML = '';
+    document.getElementById('originalFound').classList.remove('visible');
     document.getElementById('moreAlts').classList.remove('visible');
     bindSaveButtons(resultsGrid);
     bindShareButtons(resultsGrid);

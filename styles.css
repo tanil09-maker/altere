@@ -1554,6 +1554,139 @@ img, video {
    Results Section
    ============================================================ */
 
+/* Reverse search button accent */
+.search-box__btn--reverse {
+  background: linear-gradient(135deg, var(--gold), var(--gold-dark)) !important;
+}
+
+/* Original Found card */
+.original-found {
+  display: none;
+  margin-bottom: 32px;
+}
+
+.original-found.visible {
+  display: block;
+}
+
+.original-found__card {
+  display: flex;
+  background: var(--white);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.06);
+  animation: fadeUp 0.6s var(--ease-out) both;
+  border: 2px solid var(--gold);
+}
+
+.original-found__image {
+  flex: 0 0 40%;
+  position: relative;
+  aspect-ratio: 3 / 4;
+  background: var(--cream-dark);
+  overflow: hidden;
+}
+
+.original-found__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.original-found__ribbon {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 10;
+  padding: 6px 16px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #1A1A1A;
+  background: linear-gradient(135deg, var(--gold-light), var(--gold));
+  border-radius: 100px;
+}
+
+.original-found__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 40px;
+}
+
+.original-found__label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 4px;
+}
+
+.original-found__brand {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--grey-500);
+}
+
+.original-found__name {
+  font-family: var(--font-display);
+  font-size: clamp(22px, 2.5vw, 30px);
+  font-weight: 400;
+  color: var(--black);
+  margin: 8px 0 16px;
+  line-height: 1.3;
+}
+
+.original-found__price {
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--black);
+  margin-bottom: 12px;
+}
+
+.original-found__desc {
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--grey-500);
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.original-found__arrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.original-found__arrow svg {
+  transition: transform 0.2s;
+}
+
+.original-found__card:hover .original-found__arrow svg {
+  transform: translateX(4px);
+}
+
+/* Dark mode */
+[data-theme="dark"] .original-found__card { background: #252525; box-shadow: 0 8px 40px rgba(0,0,0,0.15); }
+[data-theme="dark"] .original-found__image { background: #2A2A2A; }
+
+@media (max-width: 768px) {
+  .original-found__card { flex-direction: column; border-width: 2px; }
+  .original-found__image { flex: none; aspect-ratio: 4 / 3; }
+  .original-found__body { padding: 24px 20px; }
+  .original-found__price { font-size: 22px; }
+}
+
 /* Best Dupe hero card */
 .best-dupe {
   display: none;
