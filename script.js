@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'hero.eyebrow': 'AI-Powered Fashion Discovery',
       'hero.headline': 'Spot it.<br>We\u2019ll source it.',
       'hero.sub': 'Describe any high-street item and our AI identifies the luxury original it was inspired by \u2014 plus more affordable alternatives.',
-      'search.tab.link': 'Paste link', 'search.tab.upload': 'Upload photo', 'search.tab.text': 'Find dupes',
+      'search.tab.link': 'Paste link', 'search.tab.upload': 'Upload photo', 'search.tab.text': 'Spot & Source',
       'search.placeholder.link': 'Paste a product URL from any fashion site...',
       'search.placeholder.text': 'Describe the item, e.g. "cream satin midi skirt"...',
       'search.btn': 'Find dupes',
@@ -174,7 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'results.ai.eyebrow': 'AI Results', 'results.ai.title': 'Your dupes are ready', 'results.demo.eyebrow': 'Demo Results', 'results.demo.hint': 'Add your API key in settings for real AI results', 'results.bestDupe': 'Best Dupe', 'results.moreAlts': 'More alternatives',
       'free.remaining': 'free AI searches left today', 'free.totalRemaining': 'free AI searches remaining', 'free.exhausted': 'Free searches used \u2014 showing demo results', 'free.unregExhausted': 'Free searches used \u2014 sign in for 3 daily searches', 'free.pro': 'Unlimited AI searches (Pro)',
       'auth.title': 'Sign in to ALTERE', 'auth.subtitle': 'Create a free account to save dupes and share finds.', 'auth.email': 'Email', 'auth.name': 'Name', 'auth.create': 'Create free account', 'auth.tiers': 'Free: 3 AI searches/day. Add your API key for unlimited.', 'auth.signout': 'Sign out', 'auth.freeTier': 'Free', 'auth.freeDesc': '3 AI searches per day + unlimited demo', 'auth.proDesc': 'Unlimited AI searches with your API key', 'auth.welcome': 'Welcome!', 'auth.signedOut': 'Signed out', 'auth.invalidEmail': 'Please enter a valid email.', 'auth.invalidName': 'Please enter your name.',
-      'search.tab.reverse': 'Find original', 'search.placeholder.reverse': 'Describe your high-street item, e.g. "Zara quilted chain bag"...', 'search.btnReverse': 'Find original',
+      'search.tab.reverse': 'Source it', 'search.placeholder.reverse': 'Describe your high-street item, e.g. "Zara quilted chain bag"...', 'search.btnReverse': 'Source it',
       'reverse.loading': 'Identifying the luxury original\u2026', 'reverse.loadingSub': 'Matching your item to designer collections', 'reverse.eyebrow': 'Original Found', 'reverse.title': 'We found the original', 'reverse.for': 'Original identified for', 'reverse.originalLabel': 'The Original', 'reverse.identifiedAs': 'Identified as', 'reverse.dupeBelow': 'Affordable alternatives below',
       'results.loading.title': 'Our AI is analysing your item\u2026', 'results.loading.sub': 'Finding the best alternatives across 6 stores',
       'share.whatsapp': 'WhatsApp', 'share.copy': 'Copy link', 'share.copied': 'Copied!',
@@ -188,7 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'hero.eyebrow': 'AI-Gestuurde Mode Ontdekking',
       'hero.headline': 'Spot het.<br>Wij vinden het.',
       'hero.sub': 'Beschrijf een winkelstraat-item en onze AI identificeert het luxe origineel \u2014 plus betaalbare alternatieven.',
-      'search.tab.link': 'Link plakken', 'search.tab.upload': 'Foto uploaden', 'search.tab.text': 'Vind dupes',
+      'search.tab.link': 'Link plakken', 'search.tab.upload': 'Foto uploaden', 'search.tab.text': 'Spot & Source',
       'search.placeholder.link': 'Plak een product-URL van een modesite...',
       'search.placeholder.text': 'Beschrijf het item, bijv. "cr\u00e8me satijnen midi rok"...',
       'search.btn': 'Vind dupes',
@@ -267,7 +267,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'hero.eyebrow': 'D\u00e9couverte Mode par IA',
       'hero.headline': 'Rep\u00e9rez-le.<br>On le trouve.',
       'hero.sub': 'D\u00e9crivez un article de fast-fashion et notre IA identifie l\u2019original de luxe \u2014 plus des alternatives abordables.',
-      'search.tab.link': 'Coller un lien', 'search.tab.upload': 'Uploader une photo', 'search.tab.text': 'Trouver dupes',
+      'search.tab.link': 'Coller un lien', 'search.tab.upload': 'Uploader une photo', 'search.tab.text': 'Spot & Source',
       'search.placeholder.link': 'Collez l\u2019URL d\u2019un produit de mode...',
       'search.placeholder.text': 'D\u00e9crivez l\u2019article, ex. "jupe midi en satin cr\u00e8me"...',
       'search.btn': 'Trouver des dupes',
@@ -346,7 +346,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'hero.eyebrow': 'KI-gest\u00fctzte Mode-Entdeckung',
       'hero.headline': 'Entdeckt.<br>Wir finden es.',
       'hero.sub': 'Beschreibe ein High-Street-Item und unsere KI identifiziert das Luxus-Original \u2014 plus bezahlbare Alternativen.',
-      'search.tab.link': 'Link einf\u00fcgen', 'search.tab.upload': 'Foto hochladen', 'search.tab.text': 'Dupes finden',
+      'search.tab.link': 'Link einf\u00fcgen', 'search.tab.upload': 'Foto hochladen', 'search.tab.text': 'Spot & Source',
       'search.placeholder.link': 'Produkt-URL von einer Modeseite einf\u00fcgen...',
       'search.placeholder.text': 'Artikel beschreiben, z.B. "cremefarbener Satin-Midirock"...',
       'search.btn': 'Dupes finden',
@@ -425,7 +425,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'hero.eyebrow': 'Descubrimiento de Moda con IA',
       'hero.headline': 'Lo viste.<br>Nosotros lo encontramos.',
       'hero.sub': 'Describe cualquier art\u00edculo de moda accesible y nuestra IA identifica el original de lujo \u2014 m\u00e1s alternativas asequibles.',
-      'search.tab.link': 'Pegar enlace', 'search.tab.upload': 'Subir foto', 'search.tab.text': 'Buscar dupes',
+      'search.tab.link': 'Pegar enlace', 'search.tab.upload': 'Subir foto', 'search.tab.text': 'Spot & Source',
       'search.placeholder.link': 'Pega la URL de un producto de cualquier tienda de moda...',
       'search.placeholder.text': 'Describe el art\u00edculo, ej. "falda midi de sat\u00e9n crema"...',
       'search.btn': 'Buscar dupes',
@@ -504,7 +504,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'hero.eyebrow': 'Scoperta Moda con IA',
       'hero.headline': 'L\u2019hai visto.<br>Noi lo troviamo.',
       'hero.sub': 'Descrivi un capo high-street e la nostra IA identifica l\u2019originale di lusso \u2014 pi\u00f9 alternative accessibili.',
-      'search.tab.link': 'Incolla link', 'search.tab.upload': 'Carica foto', 'search.tab.text': 'Trova dupes',
+      'search.tab.link': 'Incolla link', 'search.tab.upload': 'Carica foto', 'search.tab.text': 'Spot & Source',
       'search.placeholder.link': 'Incolla l\u2019URL di un prodotto da un sito di moda...',
       'search.placeholder.text': 'Descrivi l\u2019articolo, es. "gonna midi in raso panna"...',
       'search.btn': 'Trova dupes',
@@ -583,7 +583,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'hero.eyebrow': '\u0627\u0643\u062a\u0634\u0627\u0641 \u0627\u0644\u0645\u0648\u0636\u0629 \u0628\u0627\u0644\u0630\u0643\u0627\u0621 \u0627\u0644\u0627\u0635\u0637\u0646\u0627\u0639\u064a',
       'hero.headline': '\u0634\u0641\u062a\u0647.<br>\u0646\u062d\u0646 \u0646\u062c\u062f\u0647.',
       'hero.sub': '\u0635\u0641 \u0623\u064a \u0642\u0637\u0639\u0629 \u0645\u0646 \u0627\u0644\u0634\u0627\u0631\u0639 \u0648\u0633\u064a\u062d\u062f\u062f \u0630\u0643\u0627\u0624\u0646\u0627 \u0627\u0644\u0627\u0635\u0637\u0646\u0627\u0639\u064a \u0627\u0644\u0623\u0635\u0644 \u0627\u0644\u0641\u0627\u062e\u0631 \u2014 \u0645\u0639 \u0628\u062f\u0627\u0626\u0644 \u0645\u0639\u0642\u0648\u0644\u0629.',
-      'search.tab.link': '\u0644\u0635\u0642 \u0631\u0627\u0628\u0637', 'search.tab.upload': '\u0631\u0641\u0639 \u0635\u0648\u0631\u0629', 'search.tab.text': '\u0627\u0628\u062d\u062b \u0639\u0646 \u0628\u062f\u0627\u0626\u0644', 'search.tab.camera': '\u0627\u0644\u062a\u0642\u0637 \u0635\u0648\u0631\u0629',
+      'search.tab.link': '\u0644\u0635\u0642 \u0631\u0627\u0628\u0637', 'search.tab.upload': '\u0631\u0641\u0639 \u0635\u0648\u0631\u0629', 'search.tab.text': 'Spot & Source', 'search.tab.camera': '\u0627\u0644\u062a\u0642\u0637 \u0635\u0648\u0631\u0629',
       'search.placeholder.link': '\u0627\u0644\u0635\u0642 \u0631\u0627\u0628\u0637 \u0645\u0646\u062a\u062c \u0645\u0646 \u0623\u064a \u0645\u0648\u0642\u0639 \u0623\u0632\u064a\u0627\u0621...',
       'search.placeholder.text': '\u0635\u0641 \u0627\u0644\u0642\u0637\u0639\u0629\u060c \u0645\u062b\u0644 "\u062a\u0646\u0648\u0631\u0629 \u0633\u0627\u062a\u0627\u0646 \u0643\u0631\u064a\u0645\u064a"...',
       'search.btn': '\u0627\u0628\u062d\u062b \u0639\u0646 \u0628\u062f\u0627\u0626\u0644',
@@ -2546,7 +2546,7 @@ Rules:
     } finally {
       isSearching = false;
       hideSearchStatus();
-      reverseBtn.textContent = t('search.btnReverse') || 'Find original';
+      reverseBtn.textContent = t('search.btnReverse') || 'Source it';
       reverseBtn.disabled = false;
     }
   }
