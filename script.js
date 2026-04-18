@@ -51,6 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const resultsGrid     = document.querySelector('.results__grid');
   const resultsHeader   = document.querySelector('.results__header');
   const categoryFilters = document.getElementById('categoryFilters');
+  const materialFilters = document.getElementById('materialFilters');
   const priceFilters    = document.getElementById('priceFilters');
   const storeFilters    = document.getElementById('storeFilters');
   const toast           = document.getElementById('toast');
@@ -65,6 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let activeMinPrice  = 0;
   let activeMaxPrice  = 0;
   let activeCategory  = 'all';
+  let activeMaterial  = 'all';
   let activeStores    = new Set(); // empty = show all
 
   /* ============================================================
@@ -153,6 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'results.title': 'Luxury looks, high\u2011street prices',
       'results.subtitle': 'Our AI scans thousands of products daily to surface the best alternatives.',
       'filter.category': 'Category', 'filter.bags': 'Bags', 'filter.shoes': 'Shoes', 'filter.clothing': 'Clothing', 'filter.jewellery': 'Jewellery', 'filter.accessories': 'Accessories',
+      'filter.material': 'Material', 'filter.natural': 'Natural fibres', 'filter.nopolyester': 'No polyester', 'filter.vegan': 'Vegan',
       'filter.price': 'Price', 'filter.all': 'All', 'filter.store': 'Store', 'filter.allStores': 'All Stores', 'filter.sortBy': 'Sort by',
       'sort.match': 'Best match', 'sort.priceAsc': 'Price: Low to High', 'sort.priceDesc': 'Price: High to Low', 'sort.saving': 'Biggest saving',
       'how.eyebrow': 'How it works', 'how.title': 'Three steps to your perfect dupe',
@@ -1058,6 +1061,17 @@ document.addEventListener('DOMContentLoaded', () => {
     applyFilters();
   });
 
+  // --- Material filter (single-select) ---
+  materialFilters.addEventListener('click', e => {
+    const btn = e.target.closest('.filter-btn--mat');
+    if (!btn) return;
+
+    materialFilters.querySelectorAll('.filter-btn--mat').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeMaterial = btn.dataset.material;
+    applyFilters();
+  });
+
   // --- Price filter (single-select) ---
   priceFilters.addEventListener('click', e => {
     const btn = e.target.closest('.filter-btn');
@@ -1118,6 +1132,10 @@ document.addEventListener('DOMContentLoaded', () => {
       // Category check
       const catPass = activeCategory === 'all' || category === activeCategory;
 
+      // Material check
+      const material = card.dataset.material || '';
+      const matPass = activeMaterial === 'all' || material === activeMaterial;
+
       // Price check
       const priceAll  = activeMinPrice === 0 && activeMaxPrice === 0;
       const aboveMin  = activeMinPrice === 0 || price >= activeMinPrice;
@@ -1127,7 +1145,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Store check
       const storePass = activeStores.size === 0 || activeStores.has(store);
 
-      const show = catPass && pricePass && storePass;
+      const show = catPass && matPass && pricePass && storePass;
       card.classList.toggle('filter-hidden', !show);
       if (show) visibleCount++;
     });
@@ -1150,10 +1168,14 @@ document.addEventListener('DOMContentLoaded', () => {
     activeMinPrice = 0;
     activeMaxPrice = 0;
     activeCategory = 'all';
+    activeMaterial = 'all';
     activeStores.clear();
     activeSort = 'match';
     categoryFilters.querySelectorAll('.filter-btn--cat').forEach(b => {
       b.classList.toggle('active', b.dataset.category === 'all');
+    });
+    materialFilters.querySelectorAll('.filter-btn--mat').forEach(b => {
+      b.classList.toggle('active', b.dataset.material === 'all');
     });
     priceFilters.querySelectorAll('.filter-btn').forEach(b => {
       b.classList.toggle('active', b.dataset.min === '0' && b.dataset.max === '0');
@@ -1868,6 +1890,7 @@ document.addEventListener('DOMContentLoaded', () => {
       card.dataset.price = dupe.dupe_price.toFixed(2);
       card.dataset.store = dupe.store;
       card.dataset.category = dupe.category || 'clothing';
+      card.dataset.material = dupe.material || 'natural';
       card.style.transitionDelay = `${i * 0.08}s`;
 
       // Image area: use embedded URL if available, else Unsplash API, else colour placeholder
@@ -2013,6 +2036,7 @@ Each object must have these fields:
 - "store": one of "ZARA", "H&M", "MANGO", "ASOS", "COS", "& OTHER STORIES" (use each store exactly once)
 - "product_name": a realistic product name that this store would actually use (max 6 words)
 - "category": one of "bags", "shoes", "clothing", "jewellery", "accessories" (pick the single best fit for the item type)
+- "material": one of "natural", "nopolyester", "vegan" (pick the best fit: "natural" for cotton/wool/silk/linen, "nopolyester" for items without polyester, "vegan" for no animal products)
 - "original_price": the estimated original luxury item price in USD (number)
 - "dupe_price": a realistic dupe price in USD for that store (number, must be lower than original_price)
 - "match_percentage": how closely it matches the original, 78-96 range (integer)
@@ -2616,6 +2640,7 @@ Rules:
       card.dataset.price = dupe.dupe_price.toFixed(2);
       card.dataset.store = dupe.store;
       card.dataset.category = dupe.category || 'clothing';
+      card.dataset.material = dupe.material || 'natural';
       card.style.transitionDelay = `${i * 0.08}s`;
 
       const imgHTML = `<div class="dupe-card__color-placeholder" style="background:${CARD_COLORS[i % CARD_COLORS.length]}"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>`;

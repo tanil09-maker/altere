@@ -1993,6 +1993,22 @@ img, video {
   opacity: 1;
 }
 
+.filter-btn--mat {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.filter-btn--mat svg {
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+
+.filter-btn--mat.active svg,
+.filter-btn--mat:hover svg {
+  opacity: 1;
+}
+
 /* Empty state when all cards filtered out */
 .results__empty {
   grid-column: 1 / -1;

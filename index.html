@@ -418,6 +418,13 @@
           <button class="filter-btn filter-btn--cat" data-category="jewellery"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg> <span data-i18n="filter.jewellery">Jewellery</span></button>
           <button class="filter-btn filter-btn--cat" data-category="accessories"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg> <span data-i18n="filter.accessories">Accessories</span></button>
         </div>
+        <div class="results__filters" id="materialFilters">
+          <span class="filter-label" data-i18n="filter.material">Material</span>
+          <button class="filter-btn filter-btn--mat active" data-material="all" data-i18n="filter.all">All</button>
+          <button class="filter-btn filter-btn--mat" data-material="natural"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8C8 10 5.9 16.17 3.82 21.34L5.71 22l1-2.3A4.49 4.49 0 008 17c0-2 0-4.5 2.5-7.5S17 5 17 5z"/><path d="M11 14c1.1 0 2 .9 2 2 0 1.1-.9 2-2 2"/></svg> <span data-i18n="filter.natural">Natural fibres</span></button>
+          <button class="filter-btn filter-btn--mat" data-material="nopolyester"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg> <span data-i18n="filter.nopolyester">No polyester</span></button>
+          <button class="filter-btn filter-btn--mat" data-material="vegan"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span data-i18n="filter.vegan">Vegan</span></button>
+        </div>
         <div class="results__filters" id="priceFilters">
           <span class="filter-label" data-i18n="filter.price">Price</span>
           <button class="filter-btn active" data-min="0" data-max="0" data-i18n="filter.all">All</button>
@@ -490,7 +497,7 @@
       <div class="results__grid">
 
         <!-- Card 1 -->
-        <article class="dupe-card" data-price="49.90" data-store="ZARA" data-category="clothing">
+        <article class="dupe-card" data-price="49.90" data-store="ZARA" data-category="clothing" data-material="natural">
           <div class="dupe-card__image">
             <img src="https://images.unsplash.com/photo-1682397125309-56077754235d?w=600&h=800&fit=crop&crop=center&q=80" alt="Satin Midi Skirt with Side Slit" loading="lazy">
             <span class="dupe-card__save" aria-label="Save">
@@ -526,7 +533,7 @@
         </article>
 
         <!-- Card 2 -->
-        <article class="dupe-card" data-price="89.99" data-store="H&amp;M" data-category="clothing">
+        <article class="dupe-card" data-price="89.99" data-store="H&amp;M" data-category="clothing" data-material="natural">
           <div class="dupe-card__image">
             <img src="https://images.unsplash.com/photo-1653660666869-2345adc51155?w=600&h=800&fit=crop&crop=center&q=80" alt="Oversized Wool-Blend Coat" loading="lazy">
             <span class="dupe-card__save" aria-label="Save">
@@ -562,7 +569,7 @@
         </article>
 
         <!-- Card 3 -->
-        <article class="dupe-card" data-price="59.99" data-store="MANGO" data-category="clothing">
+        <article class="dupe-card" data-price="59.99" data-store="MANGO" data-category="clothing" data-material="vegan">
           <div class="dupe-card__image">
             <img src="https://images.unsplash.com/photo-1618597724686-aee8bba9cf99?w=600&h=800&fit=crop&crop=center&q=80" alt="Leather Effect Straight Trousers" loading="lazy">
             <span class="dupe-card__save" aria-label="Save">
@@ -598,7 +605,7 @@
         </article>
 
         <!-- Card 4 -->
-        <article class="dupe-card" data-price="72.00" data-store="ASOS" data-category="clothing">
+        <article class="dupe-card" data-price="72.00" data-store="ASOS" data-category="clothing" data-material="nopolyester">
           <div class="dupe-card__image">
             <img src="https://images.unsplash.com/photo-1606776627650-454d6d7bd7bf?w=600&h=800&fit=crop&crop=center&q=80" alt="Structured Blazer with Gold Buttons" loading="lazy">
             <span class="dupe-card__save" aria-label="Save">
@@ -634,7 +641,7 @@
         </article>
 
         <!-- Card 5 -->
-        <article class="dupe-card" data-price="55.00" data-store="COS" data-category="clothing">
+        <article class="dupe-card" data-price="55.00" data-store="COS" data-category="clothing" data-material="natural">
           <div class="dupe-card__image">
             <img src="https://images.unsplash.com/photo-1759229874914-c1ffdb3ebd0c?w=600&h=800&fit=crop&crop=center&q=80" alt="Draped Asymmetric Knit Top" loading="lazy">
             <span class="dupe-card__save" aria-label="Save">
@@ -670,7 +677,7 @@
         </article>
 
         <!-- Card 6 -->
-        <article class="dupe-card" data-price="79.00" data-store="&amp; OTHER STORIES" data-category="clothing">
+        <article class="dupe-card" data-price="79.00" data-store="&amp; OTHER STORIES" data-category="clothing" data-material="natural">
           <div class="dupe-card__image">
             <img src="https://images.unsplash.com/photo-1765229279946-f265fa703385?w=600&h=800&fit=crop&crop=center&q=80" alt="Belted Linen-Blend Wrap Dress" loading="lazy">
             <span class="dupe-card__save" aria-label="Save">
