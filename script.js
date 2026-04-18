@@ -2462,11 +2462,11 @@ Rules:
       query: 'The Row Margaux leather tote'
     },
     {
-      origBrand: 'TOTÊME', origName: 'Signature Wool Cashmere Scarf', origPrice: 420,
-      origImg: 'https://images.unsplash.com/photo-1601924638867-3a6de6b7a500?w=500&h=625&fit=crop&crop=center&q=80',
-      dupeBrand: 'ZARA', dupeName: 'Soft Wool Blend Scarf', dupePrice: 35.99,
-      dupeImg: 'https://images.unsplash.com/photo-1559563458-527698bf5295?w=500&h=625&fit=crop&crop=center&q=80',
-      query: 'Toteme signature wool scarf'
+      origBrand: 'CELINE', origName: 'Triomphe Shoulder Bag', origPrice: 2850,
+      origImg: 'https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?w=500&h=625&fit=crop&crop=center&q=80',
+      dupeBrand: 'ZARA', dupeName: 'Chain Detail Shoulder Bag', dupePrice: 45.99,
+      dupeImg: 'https://images.unsplash.com/photo-1598532163257-ae3c6b2524b6?w=500&h=625&fit=crop&crop=center&q=80',
+      query: 'Celine Triomphe shoulder bag'
     },
     {
       origBrand: 'ACNE STUDIOS', origName: 'Musubi Mini Leather Bag', origPrice: 1150,
@@ -2477,9 +2477,9 @@ Rules:
     },
     {
       origBrand: 'JACQUEMUS', origName: 'Le Chiquito Long Bag', origPrice: 680,
-      origImg: 'https://images.unsplash.com/photo-1612817159949-195b6eb9e31a?w=500&h=625&fit=crop&crop=center&q=80',
+      origImg: 'https://images.unsplash.com/photo-1524672353063-4f66ee1f385e?w=500&h=625&fit=crop&crop=center&q=80',
       dupeBrand: '& OTHER STORIES', dupeName: 'Mini Structured Handbag', dupePrice: 69,
-      dupeImg: 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=500&h=625&fit=crop&crop=center&q=80',
+      dupeImg: 'https://images.unsplash.com/photo-1544511196-1646449a253b?w=500&h=625&fit=crop&crop=center&q=80',
       query: 'Jacquemus Le Chiquito long bag'
     },
     {
