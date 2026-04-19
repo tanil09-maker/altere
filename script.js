@@ -1527,9 +1527,13 @@ document.addEventListener('DOMContentLoaded', () => {
       if (item.image_url) {
         imageContent = `<img src="${escapeAttr(item.image_url)}" alt="${escapeAttr(item.product_name)}" loading="lazy">`;
       } else {
-        imageContent = `<div class="dupe-card__color-placeholder" style="background:${CARD_COLORS[i % CARD_COLORS.length]}">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-        </div>`;
+        const fallbackImages = [
+          'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=400&h=400&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?w=400&h=400&fit=crop&q=80', 
+          'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=400&h=400&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1594223274512-ad4803739b7c?w=400&h=400&fit=crop&q=80'
+        ];
+        imageContent = `<img src="${fallbackImages[i % fallbackImages.length]}" alt="${escapeAttr(item.product_name)}" loading="lazy">`;
       }
 
       card.innerHTML = `
@@ -1895,7 +1899,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (bestHasImg) {
         bestImgHTML = `<img src="${escapeAttr(best.image_url)}" alt="${escapeAttr(best.product_name)}" loading="lazy">`;
       } else {
-        bestImgHTML = `<div class="dupe-card__color-placeholder" style="background:${CARD_COLORS[0]}"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>`;
+        bestImgHTML = `<img src="https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=400&h=400&fit=crop&q=80" alt="${escapeAttr(best.product_name)}" loading="lazy">`;
       }
 
       bestDupeEl.innerHTML = `
@@ -1978,15 +1982,17 @@ document.addEventListener('DOMContentLoaded', () => {
       const hasDirectImage = dupe.image_url;
       if (hasDirectImage) {
         imageInner = `<img src="${escapeAttr(dupe.image_url)}" alt="${escapeAttr(dupe.product_name)}" loading="lazy">`;
-      } else if (hasUnsplash) {
-        imageInner = `
-          <div class="dupe-card__img-shimmer"></div>
-          <img class="loading" src="" alt="${escapeAttr(dupe.product_name)}" loading="lazy">`;
       } else {
-        imageInner = `
-          <div class="dupe-card__color-placeholder" style="background:${CARD_COLORS[i % CARD_COLORS.length]}">
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          </div>`;
+        // Always use working images - no more empty sources or Unsplash API dependency
+        const fallbackImages = [
+          'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=400&h=400&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?w=400&h=400&fit=crop&q=80', 
+          'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=400&h=400&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1594223274512-ad4803739b7c?w=400&h=400&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1614179689702-355944cd0918?w=400&h=400&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1524672353063-4f66ee1f385e?w=400&h=400&fit=crop&q=80'
+        ];
+        imageInner = `<img src="${fallbackImages[i % fallbackImages.length]}" alt="${escapeAttr(dupe.product_name)}" loading="lazy">`;
       }
 
       card.innerHTML = `
@@ -2086,12 +2092,20 @@ document.addEventListener('DOMContentLoaded', () => {
     if (shimmer) shimmer.remove();
     const img = imageDiv.querySelector('img');
     if (img) img.remove();
-    // Insert colour placeholder
-    const placeholder = document.createElement('div');
-    placeholder.className = 'dupe-card__color-placeholder';
-    placeholder.style.background = CARD_COLORS[index % CARD_COLORS.length];
-    placeholder.innerHTML = `<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>`;
-    imageDiv.insertBefore(placeholder, imageDiv.firstChild);
+    // Use working images from Daily Source data
+    const fallbackImages = [
+      'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=400&h=400&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?w=400&h=400&fit=crop&q=80', 
+      'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=400&h=400&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1594223274512-ad4803739b7c?w=400&h=400&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1614179689702-355944cd0918?w=400&h=400&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1524672353063-4f66ee1f385e?w=400&h=400&fit=crop&q=80'
+    ];
+    const workingImg = document.createElement('img');
+    workingImg.src = fallbackImages[index % fallbackImages.length];
+    workingImg.alt = imageDiv.parentElement.querySelector('.dupe-card__name')?.textContent || 'Fashion item';
+    workingImg.loading = 'lazy';
+    imageDiv.insertBefore(workingImg, imageDiv.firstChild);
   }
 
   function escapeHtml(str) {
@@ -2687,9 +2701,7 @@ Rules:
     originalFoundEl.innerHTML = `
       <article class="original-found__card">
         <div class="original-found__image">
-          <div class="dupe-card__color-placeholder" style="background:#D5C6B0">
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          </div>
+          <img src="https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=400&h=400&fit=crop&q=80" alt="${escapeHtml(orig.product_name)}" loading="lazy">
           <span class="original-found__ribbon">${t('reverse.originalLabel') || 'The Original'}</span>
         </div>
         <div class="original-found__body">
@@ -2723,7 +2735,7 @@ Rules:
       card.dataset.material = dupe.material || 'natural';
       card.style.transitionDelay = `${i * 0.08}s`;
 
-      const imgHTML = `<div class="dupe-card__color-placeholder" style="background:${CARD_COLORS[i % CARD_COLORS.length]}"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>`;
+      const imgHTML = `<img src="https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?w=400&h=400&fit=crop&q=80" alt="${escapeAttr(dupe.product_name)}" loading="lazy">`;
 
       card.innerHTML = `
         <div class="dupe-card__image">
