@@ -5018,3 +5018,81 @@ img, video {
     font-size: 16px;
   }
 }
+
+
+/* ========================================
+   REVERSE SUB-TABS (Find Original → Describe/Photo/Link)
+   ======================================== */
+
+.reverse-subtabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 14px;
+  padding: 4px;
+  background: var(--grey-100, rgba(0,0,0,0.04));
+  border-radius: 10px;
+  width: fit-content;
+}
+
+.reverse-subtab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  background: transparent;
+  border: none;
+  border-radius: 7px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--grey-600, #6b6b6b);
+  cursor: pointer;
+  transition: all .2s ease;
+  letter-spacing: .02em;
+}
+
+.reverse-subtab:hover {
+  color: var(--grey-900, #1a1a1a);
+}
+
+.reverse-subtab.active {
+  background: var(--bg, #fff);
+  color: var(--grey-900, #1a1a1a);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.reverse-subtab svg {
+  flex-shrink: 0;
+  opacity: .7;
+}
+
+.reverse-subtab.active svg {
+  opacity: 1;
+}
+
+.reverse-subpanel {
+  display: none;
+}
+
+.reverse-subpanel.active {
+  display: block;
+}
+
+/* Dark mode */
+[data-theme="dark"] .reverse-subtabs {
+  background: rgba(255,255,255,0.06);
+}
+
+[data-theme="dark"] .reverse-subtab {
+  color: rgba(255,255,255,0.6);
+}
+
+[data-theme="dark"] .reverse-subtab:hover {
+  color: rgba(255,255,255,0.9);
+}
+
+[data-theme="dark"] .reverse-subtab.active {
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
