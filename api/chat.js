@@ -2,7 +2,7 @@
 // The API key is stored as an environment variable (ANTHROPIC_API_KEY)
 // Free users get 3 searches per day tracked by IP
 
-const DAILY_LIMIT = 3;
+const DAILY_LIMIT = 10;
 const rateLimitStore = new Map(); // IP -> { count, resetAt }
 
 function getRateLimit(ip) {
