@@ -1880,7 +1880,7 @@ JSON schema:
     "product_name": "Official product name from brand website",
     "estimated_price": "€2500",
     "category": "bags | shoes | clothing | jewellery | accessories",
-    "image_search_query": "exact query to find official product photo, e.g. Bottega Veneta Cassette bag green official"
+    "image_search_query": "brand + full product name + 'official product photo' + site:brand-domain, e.g. Chanel Boy Bag Small Quilted Caviar official product photo site:chanel.com"
   },
   "dupes": [
     {
@@ -1888,7 +1888,7 @@ JSON schema:
       "product_name": "Real product name from store website",
       "estimated_price": "€49.95",
       "match_percentage": 92,
-      "image_search_query": "exact query to find this product photo on the store website, e.g. Zara quilted crossbody bag green",
+      "image_search_query": "store + full product name + 'product photo' + site:store-domain, e.g. Zara quilted shoulder bag chain product photo site:zara.com",
       "product_url_query": "search query to find product page, e.g. Zara quilted crossbody bag"
     }
   ]
@@ -1902,7 +1902,8 @@ Rules:
 - Realistic price ranges: H&M €10-50, Zara €20-100, Mango €30-120, ASOS €20-80, COS €60-200, & Other Stories €50-150
 - match_percentage range: 0-96 (0 only for "No match found")
 - The first dupe should have the highest match_percentage, descending order
-- image_search_query should be specific enough to find the exact product photo (include store name, product name, color)
+- image_search_query for original MUST include: brand name, full product name, color, and "site:" restricted to the brand's official domain (e.g. site:chanel.com, site:bottegaveneta.com)
+- image_search_query for dupes MUST include: store name, full product name, and "site:" restricted to the store domain (site:zara.com, site:mango.com, site:cos.com, site:hm.com, site:asos.com, site:stories.com)
 - product_url_query should help find the product page on the store's website`;
 
   /* ---- Free searches remaining tracker ---- */
@@ -1966,14 +1967,19 @@ Rules:
     try {
       const body = {
         model: MODEL,
-        max_tokens: 512,
-        tools: [{ type: 'web_search_20250305', name: 'web_search', max_uses: 1 }],
+        max_tokens: 2048,
+        tools: [{ type: 'web_search_20250305', name: 'web_search', max_uses: 3 }],
         messages: [{
           role: 'user',
-          content: `Search for this product image: ${searchQuery}
+          content: `Search the web for this exact product: ${searchQuery}
 
-Return ONLY the direct image URL (must end in .jpg, .png, or .webp, or be from a CDN like images.unsplash.com, static.zara.net, lp2.hm.com, st.mngbcn.com, images.asos-media.com, etc).
-If you cannot find a real product image, return exactly: NOT_FOUND
+Find the product image from the OFFICIAL brand or retailer website only.
+Return ONLY the direct image URL. The URL must:
+- End in .jpg, .jpeg, .png, .webp, or .avif
+- OR be from an official retail CDN (static.zara.net, lp2.hm.com, st.mngbcn.com, images.asos-media.com, cos.com, stories.com, chanel.com, etc.)
+
+Do NOT return: placeholder images, stock photos, editorial/runway photos, or images from third-party resellers.
+If you cannot find the exact product image from the official source, return exactly: NOT_FOUND
 No explanation, no markdown — just the URL or NOT_FOUND.`
         }]
       };
@@ -2002,8 +2008,12 @@ No explanation, no markdown — just the URL or NOT_FOUND.`
       }
 
       // Extract URL if wrapped in text
-      const urlMatch = text.match(/https?:\/\/[^\s"'<>]+/);
-      const url = urlMatch ? urlMatch[0] : null;
+      const urlMatch = text.match(/https?:\/\/[^\s"'<>]+\.(jpe?g|png|webp|avif)([?#][^\s"'<>]*)?/i)
+                    || text.match(/https?:\/\/[^\s"'<>]+(static\.zara\.net|lp2\.hm\.com|st\.mngbcn\.com|images\.asos-media\.com|cos\.com|stories\.com)[^\s"'<>]*/i)
+                    || text.match(/https?:\/\/[^\s"'<>]+/);
+      let url = urlMatch ? urlMatch[0] : null;
+      // Strip trailing punctuation that may have been captured
+      if (url) url = url.replace(/[)\].,;:!]+$/, '');
       imageCache.set(searchQuery, url);
       return url;
     } catch {
