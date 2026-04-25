@@ -2379,39 +2379,118 @@ Rules:
   }
 
   async function callClaude(userContent, rawQuery) {
-    // All searches go through the proxy. Backend handles rate limiting (10/day per IP).
-    const messages = [{ role: 'user', content: userContent }];
-    const body     = { model: MODEL, max_tokens: 1024, system: SYSTEM_PROMPT, messages };
+    const apiKey = getApiKey();
+    const tier   = getUserTier();
 
-    const res = await fetch(PROXY_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
-    });
+    // --- Pro: own API key → unlimited, direct to Anthropic ---
+    if (tier === 'pro') {
+      const messages = [{ role: 'user', content: userContent }];
+      const body = { model: MODEL, max_tokens: 1024, system: SYSTEM_PROMPT, messages };
 
-    if (res.status === 429) {
-      // Daily limit reached
-      updateFreeCounter(0);
-      const err = new Error('Daily limit reached');
-      err.code = 'rate_limited';
-      throw err;
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': apiKey,
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-direct-browser-access': 'true'
+        },
+        body: JSON.stringify(body)
+      });
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        if (res.status === 401) throw new Error('Invalid API key. Check your key in settings.');
+        throw new Error(err.error?.message || `API error ${res.status}`);
+      }
+
+      lastResultWasDemo = false;
+      return parseClaudeResponse(await res.json());
     }
 
-    if (!res.ok) {
-      const errData = await res.json().catch(() => ({}));
-      throw new Error(errData.error || `API error ${res.status}`);
+    // --- Unregistered: 3 total (lifetime), then demo only ---
+    if (tier === 'unregistered') {
+      const used = getUnregCount();
+      if (used >= UNREG_LIMIT) {
+        updateFreeCounter(0);
+        await new Promise(r => setTimeout(r, 1200 + Math.random() * 800));
+        lastResultWasDemo = true;
+        return generateDemoResults(rawQuery || 'fashion item');
+      }
+
+      // Try proxy
+      try {
+        const messages = [{ role: 'user', content: userContent }];
+        const body = { model: MODEL, max_tokens: 1024, system: SYSTEM_PROMPT, messages };
+
+        const res = await fetch(PROXY_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body)
+        });
+
+        if (res.status === 429 || !res.ok) {
+          await new Promise(r => setTimeout(r, 800));
+          lastResultWasDemo = true;
+          return generateDemoResults(rawQuery || 'fashion item');
+        }
+
+        const data = await res.json();
+        const newCount = incrementUnregCount();
+        updateFreeCounter(UNREG_LIMIT - newCount);
+
+        lastResultWasDemo = false;
+        return parseClaudeResponse(data);
+      } catch {
+        await new Promise(r => setTimeout(r, 1200 + Math.random() * 800));
+        lastResultWasDemo = true;
+        return generateDemoResults(rawQuery || 'fashion item');
+      }
     }
 
-    const data = await res.json();
+    // --- Registered: 3/day via proxy, then demo ---
+    try {
+      const messages = [{ role: 'user', content: userContent }];
+      const body = { model: MODEL, max_tokens: 1024, system: SYSTEM_PROMPT, messages };
 
-    // Update remaining counter if backend provides it
-    if (data._rateLimit) {
-      updateFreeCounter(data._rateLimit.remaining);
+      const res = await fetch(PROXY_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+
+      const data = await res.json();
+
+      // Rate limited → fall back to demo
+      if (res.status === 429) {
+        updateFreeCounter(0);
+        await new Promise(r => setTimeout(r, 800));
+        lastResultWasDemo = true;
+        return generateDemoResults(rawQuery || 'fashion item');
+      }
+
+      // Proxy not configured → demo
+      if (!res.ok) {
+        await new Promise(r => setTimeout(r, 1200 + Math.random() * 800));
+        lastResultWasDemo = true;
+        return generateDemoResults(rawQuery || 'fashion item');
+      }
+
+      // Success — update counter
+      if (data._rateLimit) {
+        updateFreeCounter(data._rateLimit.remaining);
+      }
+
+      lastResultWasDemo = false;
+      return parseClaudeResponse(data);
+
+    } catch {
+      // Network error / proxy unavailable → demo fallback
+      await new Promise(r => setTimeout(r, 1200 + Math.random() * 800));
+      lastResultWasDemo = true;
+      return generateDemoResults(rawQuery || 'fashion item');
     }
-
-    lastResultWasDemo = false;
-    return parseClaudeResponse(data);
-  }}
+  }
 
   /* ============================================================
      File → base64 helper
