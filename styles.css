@@ -564,6 +564,7 @@ img, video {
 
 .search-box__input {
   flex: 1;
+  min-width: 0;
   padding: 14px 18px;
   font-family: var(--font-body);
   font-size: 14px;
@@ -584,6 +585,7 @@ img, video {
 }
 
 .search-box__btn {
+  flex-shrink: 0;
   padding: 14px 28px;
   font-family: var(--font-body);
   font-size: 13px;
