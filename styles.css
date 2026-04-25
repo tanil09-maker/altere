@@ -492,13 +492,14 @@ img, video {
 
 .search-box__tab {
   flex: 1;
+  min-width: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 16px 12px;
+  gap: 5px;
+  padding: 14px 6px;
   font-family: var(--font-body);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 400;
   color: var(--grey-500);
   background: none;
@@ -506,6 +507,7 @@ img, video {
   cursor: pointer;
   transition: all 0.3s;
   position: relative;
+  white-space: nowrap;
 }
 
 .search-box__tab::after {

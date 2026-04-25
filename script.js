@@ -25,6 +25,45 @@ document.addEventListener('DOMContentLoaded', () => {
     '#D5C6B0', '#B8A99A', '#C4B7A6', '#A89F91', '#CABFB1', '#BDB1A0'
   ];
 
+  // Category-based fallback images (when AI doesn't return image_url)
+  const CATEGORY_FALLBACKS = {
+    bags: [
+      'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=400&h=400&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=400&h=400&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1594223274512-ad4803739b7c?w=400&h=400&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1598532163257-ae3c6b2524b6?w=400&h=400&fit=crop&q=80'
+    ],
+    shoes: [
+      'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=400&h=400&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1460353581641-37baddab0fa2?w=400&h=400&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1603808033192-082d6919d3e1?w=400&h=400&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=400&h=400&fit=crop&q=80'
+    ],
+    clothing: [
+      'https://images.unsplash.com/photo-1558171813-4c088753af8f?w=400&h=400&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1653660666869-2345adc51155?w=400&h=400&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1618597724686-aee8bba9cf99?w=400&h=400&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&h=400&fit=crop&q=80'
+    ],
+    jewellery: [
+      'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400&h=400&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=400&h=400&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1611085583191-a3b181a88401?w=400&h=400&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1612817159949-195b6eb9e31a?w=400&h=400&fit=crop&q=80'
+    ],
+    accessories: [
+      'https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=400&h=400&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1509319117193-57bab727e09d?w=400&h=400&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1617038220319-276d3cfab638?w=400&h=400&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1521223890158-f9f7c3d5d504?w=400&h=400&fit=crop&q=80'
+    ]
+  };
+
+  function getCategoryFallback(category) {
+    const imgs = CATEGORY_FALLBACKS[category] || CATEGORY_FALLBACKS.clothing;
+    return imgs[Math.floor(Math.random() * imgs.length)];
+  }
+
   /* ============================================================
      DOM refs
      ============================================================ */
@@ -1778,7 +1817,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (bestHasImg) {
         bestImgHTML = `<img src="${escapeAttr(best.image_url)}" alt="${escapeAttr(best.product_name)}" loading="lazy">`;
       } else {
-        bestImgHTML = `<img src="https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=400&h=400&fit=crop&q=80" alt="${escapeAttr(best.product_name)}" loading="lazy">`;
+        bestImgHTML = `<img src="${getCategoryFallback(best.category || 'clothing')}" alt="${escapeAttr(best.product_name)}" loading="lazy">`;
       }
 
       bestDupeEl.innerHTML = `
@@ -1856,22 +1895,13 @@ document.addEventListener('DOMContentLoaded', () => {
       card.dataset.material = dupe.material || 'natural';
       card.style.transitionDelay = `${i * 0.08}s`;
 
-      // Image area: use embedded URL if available, else Unsplash API, else colour placeholder
+      // Image area: use embedded URL if available, else category-based fallback
       let imageInner;
       const hasDirectImage = dupe.image_url;
       if (hasDirectImage) {
         imageInner = `<img src="${escapeAttr(dupe.image_url)}" alt="${escapeAttr(dupe.product_name)}" loading="lazy">`;
       } else {
-        // Always use working images - no more empty sources or Unsplash API dependency
-        const fallbackImages = [
-          'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=400&h=400&fit=crop&q=80',
-          'https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?w=400&h=400&fit=crop&q=80', 
-          'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=400&h=400&fit=crop&q=80',
-          'https://images.unsplash.com/photo-1594223274512-ad4803739b7c?w=400&h=400&fit=crop&q=80',
-          'https://images.unsplash.com/photo-1614179689702-355944cd0918?w=400&h=400&fit=crop&q=80',
-          'https://images.unsplash.com/photo-1524672353063-4f66ee1f385e?w=400&h=400&fit=crop&q=80'
-        ];
-        imageInner = `<img src="${fallbackImages[i % fallbackImages.length]}" alt="${escapeAttr(dupe.product_name)}" loading="lazy">`;
+        imageInner = `<img src="${getCategoryFallback(dupe.category || 'clothing')}" alt="${escapeAttr(dupe.product_name)}" loading="lazy">`;
       }
 
       card.innerHTML = `
@@ -2016,10 +2046,11 @@ Each object must have these fields:
 
 Rules:
 - Make product names feel authentic to each brand's naming style
-- Prices should be realistic for each store's actual price range
-- The first result should have the highest match percentage, descending from there
+- original_price must be REALISTIC for the actual luxury item — typically $500-$5000. Different items have very different prices: a Chanel bag ~$5000, a Max Mara coat ~$2500, designer shoes ~$800, a silk scarf ~$400. Do NOT use a generic placeholder like $8800 for everything.
 - original_price should be the same across all 6 (the price of the luxury item)
-- Vary the dupe_price realistically per store`;
+- dupe_price MUST be at least $5 less than original_price
+- Each store should have realistic dupe prices for their actual price range: H&M $15-50, Zara $30-100, Mango $40-120, ASOS $25-80, COS $80-200, & Other Stories $60-150
+- The first result should have the highest match percentage, descending from there`;
 
   const REVERSE_PROMPT = `You are ALTERE, a reverse fashion dupe finder. The user describes a high-street/affordable fashion item. Your job is to identify which luxury designer original it's a dupe of, then also suggest 5 more affordable alternatives.
 
@@ -2031,8 +2062,10 @@ The object must have:
 
 Rules:
 - The original should be a real, recognizable luxury item that the described item is clearly inspired by
+- original.price must be REALISTIC for that specific luxury item ($500-$5000 typically). Do NOT use a generic placeholder.
 - "store" must be one of: "ZARA", "H&M", "MANGO", "ASOS", "COS" (use each once)
-- Prices should be realistic
+- dupe_price MUST be at least $5 less than original_price
+- Each store should have realistic dupe prices: H&M $15-50, Zara $30-100, Mango $40-120, ASOS $25-80, COS $80-200
 - match_percentage range: 78-96`;
 
   /* ---- Free searches remaining tracker ---- */
@@ -2343,7 +2376,7 @@ Rules:
     originalFoundEl.innerHTML = `
       <article class="original-found__card">
         <div class="original-found__image">
-          <img src="https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=400&h=400&fit=crop&q=80" alt="${escapeHtml(orig.product_name)}" loading="lazy">
+          <img src="${getCategoryFallback(orig.category || 'clothing')}" alt="${escapeHtml(orig.product_name)}" loading="lazy">
           <span class="original-found__ribbon">${t('reverse.originalLabel') || 'The Original'}</span>
         </div>
         <div class="original-found__body">
@@ -2377,7 +2410,7 @@ Rules:
       card.dataset.material = dupe.material || 'natural';
       card.style.transitionDelay = `${i * 0.08}s`;
 
-      const imgHTML = `<img src="https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?w=400&h=400&fit=crop&q=80" alt="${escapeAttr(dupe.product_name)}" loading="lazy">`;
+      const imgHTML = `<img src="${getCategoryFallback(dupe.category || 'clothing')}" alt="${escapeAttr(dupe.product_name)}" loading="lazy">`;
 
       card.innerHTML = `
         <div class="dupe-card__image">
