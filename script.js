@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const UNSPLASH_KEY = 'altere_unsplash_key';
   const UNSPLASH_API = 'https://api.unsplash.com/search/photos';
   const SAVED_KEY    = 'altere_saved_items';
-  const FREE_LIMIT   = 3;
+  const FREE_LIMIT   = 10;
 
   let currentFile = null;
   let isSearching = false;
@@ -1651,131 +1651,11 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   /* ============================================================
-     Auth / Tier System
+     Auth button — hidden (tier system removed)
      ============================================================ */
 
-  const AUTH_KEY      = 'altere_user';
-  const authBtn       = document.getElementById('authBtn');
-  const authModal     = document.getElementById('authModal');
-  const authModalClose = document.getElementById('authModalClose');
-  const authFormView  = document.getElementById('authFormView');
-  const authProfileView = document.getElementById('authProfileView');
-  const authEmail     = document.getElementById('authEmail');
-  const authName      = document.getElementById('authName');
-  const authStatus    = document.getElementById('authStatus');
-  const authSubmitBtn = document.getElementById('authSubmitBtn');
-  const authSignOut   = document.getElementById('authSignOut');
-
-  function getUser() {
-    try { return JSON.parse(localStorage.getItem(AUTH_KEY)); }
-    catch { return null; }
-  }
-
-  function setUser(user) {
-    if (user) localStorage.setItem(AUTH_KEY, JSON.stringify(user));
-    else localStorage.removeItem(AUTH_KEY);
-    updateAuthUI();
-  }
-
-  function getUserTier() {
-    if (getApiKey()) return 'pro';
-    if (getUser()) return 'registered';
-    return 'unregistered';
-  }
-
-  function updateAuthUI() {
-    const user = getUser();
-    const tier = getUserTier();
-
-    if (user) {
-      authBtn.textContent = user.name.split(' ')[0];
-      authBtn.classList.add('signed-in');
-      // Preserve the data-i18n so language switcher doesn't overwrite
-      authBtn.removeAttribute('data-i18n');
-    } else {
-      authBtn.textContent = t('nav.signin');
-      authBtn.setAttribute('data-i18n', 'nav.signin');
-      authBtn.classList.remove('signed-in');
-    }
-
-    // Update free counter text based on tier
-    const el = document.getElementById('freeCounter');
-    if (el && tier === 'pro') {
-      el.textContent = t('free.pro') || 'Unlimited AI searches (Pro)';
-      el.style.display = '';
-    }
-  }
-
-  // Open modal
-  authBtn.addEventListener('click', e => {
-    e.preventDefault();
-    hamburger.classList.remove('active');
-    navLinks.classList.remove('open');
-
-    const user = getUser();
-    if (user) {
-      // Show profile view
-      authFormView.style.display = 'none';
-      authProfileView.style.display = '';
-      document.getElementById('authAvatar').textContent = user.name.charAt(0).toUpperCase();
-      document.getElementById('authProfileName').textContent = user.name;
-      document.getElementById('authProfileEmail').textContent = user.email;
-
-      const tier = getUserTier();
-      const tierLabel = document.getElementById('authTierLabel');
-      const tierDesc  = document.getElementById('authTierDesc');
-      if (tier === 'pro') {
-        tierLabel.textContent = 'Pro';
-        tierDesc.textContent  = t('auth.proDesc') || 'Unlimited AI searches with your API key';
-      } else {
-        tierLabel.textContent = t('auth.freeTier') || 'Free';
-        tierDesc.textContent  = t('auth.freeDesc') || '3 AI searches per day + unlimited demo';
-      }
-    } else {
-      // Show sign in form
-      authFormView.style.display = '';
-      authProfileView.style.display = 'none';
-      authStatus.textContent = '';
-    }
-
-    authModal.classList.add('open');
-  });
-
-  // Close
-  authModalClose.addEventListener('click', () => authModal.classList.remove('open'));
-  authModal.addEventListener('click', e => { if (e.target === authModal) authModal.classList.remove('open'); });
-
-  // Submit
-  authSubmitBtn.addEventListener('click', () => {
-    const email = authEmail.value.trim();
-    const name  = authName.value.trim();
-
-    if (!email || !email.includes('@')) {
-      authStatus.textContent = t('auth.invalidEmail') || 'Please enter a valid email.';
-      authStatus.className = 'modal__status error';
-      return;
-    }
-    if (!name) {
-      authStatus.textContent = t('auth.invalidName') || 'Please enter your name.';
-      authStatus.className = 'modal__status error';
-      return;
-    }
-
-    setUser({ email, name, created: Date.now() });
-    authStatus.textContent = '';
-    authModal.classList.remove('open');
-    showToast(t('auth.welcome') || `Welcome, ${name}!`);
-  });
-
-  // Sign out
-  authSignOut.addEventListener('click', () => {
-    setUser(null);
-    authModal.classList.remove('open');
-    showToast(t('auth.signedOut') || 'Signed out');
-  });
-
-  // Init
-  updateAuthUI();
+  const authBtn = document.getElementById('authBtn');
+  if (authBtn) authBtn.style.display = 'none';
 
   /* ============================================================
      Toast notifications
@@ -1872,7 +1752,7 @@ document.addEventListener('DOMContentLoaded', () => {
      Render real result cards
      ============================================================ */
 
-  function renderResults(dupes, query, isDemo) {
+  function renderResults(dupes, query) {
     resultsGrid.innerHTML = '';
     resetFilters();
 
@@ -1883,10 +1763,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const eyebrow = resultsHeader.querySelector('.results__eyebrow');
     const title   = resultsHeader.querySelector('.results__title');
     const sub     = resultsHeader.querySelector('.results__subtitle');
-    eyebrow.textContent = isDemo ? (t('results.demo.eyebrow') || 'Demo Results') : t('results.ai.eyebrow');
+    eyebrow.textContent = t('results.ai.eyebrow');
     title.textContent   = t('results.ai.title');
-    const demoHint = isDemo ? (' \u2014 ' + (t('results.demo.hint') || 'Add your API key in settings for real AI results')) : '';
-    sub.textContent     = `${dupes.length} alternatives for \u201c${query}\u201d${demoHint}`;
+    sub.textContent     = `${dupes.length} alternatives for \u201c${query}\u201d`;
 
     const hasUnsplash = !!getUnsplashKey();
 
@@ -2156,192 +2035,20 @@ Rules:
 - Prices should be realistic
 - match_percentage range: 78-96`;
 
-  /* ---- Demo reverse results ---- */
-
-  const DEMO_REVERSE = {
-    bags: {
-      original: { brand: 'BOTTEGA VENETA', product_name: 'Cassette Padded Leather Bag', price: 3200, description: 'The iconic intrecciato-woven padded cassette bag. A modern classic with oversized weaving and a chunky chain strap.', category: 'bags' },
-      dupes: [
-        { store: 'ZARA', product_name: 'Quilted Chain Crossbody', category: 'bags', original_price: 3200, dupe_price: 45.99, match_percentage: 94 },
-        { store: 'H&M', product_name: 'Padded Shoulder Bag', category: 'bags', original_price: 3200, dupe_price: 34.99, match_percentage: 91 },
-        { store: 'MANGO', product_name: 'Woven Effect Bag', category: 'bags', original_price: 3200, dupe_price: 55.99, match_percentage: 88 },
-        { store: 'ASOS', product_name: 'Chunky Chain Bag', category: 'bags', original_price: 3200, dupe_price: 42.00, match_percentage: 85 },
-        { store: 'COS', product_name: 'Leather Crossbody Bag', category: 'bags', original_price: 3200, dupe_price: 89.00, match_percentage: 82 }
-      ]
-    },
-    clothing: {
-      original: { brand: 'MAX MARA', product_name: 'Madame Double-Breasted Wool Coat', price: 2590, description: 'The signature camel coat. Timeless double-breasted silhouette in luxurious wool-cashmere with a belted waist.', category: 'clothing' },
-      dupes: [
-        { store: 'ZARA', product_name: 'Wool Blend Belted Coat', category: 'clothing', original_price: 2590, dupe_price: 89.99, match_percentage: 93 },
-        { store: 'H&M', product_name: 'Double-Breasted Coat', category: 'clothing', original_price: 2590, dupe_price: 79.99, match_percentage: 90 },
-        { store: 'MANGO', product_name: 'Tailored Wool Coat', category: 'clothing', original_price: 2590, dupe_price: 119.99, match_percentage: 88 },
-        { store: 'ASOS', product_name: 'Oversized Camel Coat', category: 'clothing', original_price: 2590, dupe_price: 95.00, match_percentage: 85 },
-        { store: 'COS', product_name: 'Belted Wool Coat', category: 'clothing', original_price: 2590, dupe_price: 135.00, match_percentage: 83 }
-      ]
-    },
-    shoes: {
-      original: { brand: 'JIMMY CHOO', product_name: 'Bing 100 Crystal Mules', price: 1195, description: 'Show-stopping crystal-embellished pointed-toe mules. The ultimate evening shoe with all-over crystal mesh.', category: 'shoes' },
-      dupes: [
-        { store: 'ZARA', product_name: 'Crystal Strap Heeled Mules', category: 'shoes', original_price: 1195, dupe_price: 59.90, match_percentage: 92 },
-        { store: 'H&M', product_name: 'Rhinestone Mules', category: 'shoes', original_price: 1195, dupe_price: 34.99, match_percentage: 89 },
-        { store: 'MANGO', product_name: 'Crystal Embellished Heels', category: 'shoes', original_price: 1195, dupe_price: 69.99, match_percentage: 86 },
-        { store: 'ASOS', product_name: 'Gem Detail Pointed Mules', category: 'shoes', original_price: 1195, dupe_price: 48.00, match_percentage: 84 },
-        { store: 'COS', product_name: 'Pointed Heeled Mules', category: 'shoes', original_price: 1195, dupe_price: 89.00, match_percentage: 80 }
-      ]
-    },
-    jewellery: {
-      original: { brand: 'TIFFANY & CO.', product_name: 'T Wire Bracelet in 18k Gold', price: 1350, description: 'The modern icon. Clean lines in 18k gold with the signature T motif at each end. Effortless everyday luxury.', category: 'jewellery' },
-      dupes: [
-        { store: 'ZARA', product_name: 'Gold Wire Cuff Bracelet', category: 'jewellery', original_price: 1350, dupe_price: 19.90, match_percentage: 93 },
-        { store: 'H&M', product_name: 'Open Gold Bangle', category: 'jewellery', original_price: 1350, dupe_price: 12.99, match_percentage: 90 },
-        { store: 'MANGO', product_name: 'Minimalist Cuff Bracelet', category: 'jewellery', original_price: 1350, dupe_price: 25.99, match_percentage: 87 },
-        { store: 'ASOS', product_name: 'Wire T-Bar Bracelet', category: 'jewellery', original_price: 1350, dupe_price: 15.00, match_percentage: 84 },
-        { store: 'COS', product_name: 'Sculptural Wire Bangle', category: 'jewellery', original_price: 1350, dupe_price: 35.00, match_percentage: 81 }
-      ]
-    },
-    accessories: {
-      original: { brand: 'HERMÈS', product_name: 'Carré 90 Silk Scarf', price: 480, description: 'The ultimate silk scarf. Hand-rolled edges, vibrant prints and the iconic 90cm square format worn a hundred ways.', category: 'accessories' },
-      dupes: [
-        { store: 'ZARA', product_name: 'Printed Silk Square Scarf', category: 'accessories', original_price: 480, dupe_price: 29.90, match_percentage: 91 },
-        { store: 'H&M', product_name: 'Patterned Satin Scarf', category: 'accessories', original_price: 480, dupe_price: 17.99, match_percentage: 88 },
-        { store: 'MANGO', product_name: 'Printed Twill Scarf', category: 'accessories', original_price: 480, dupe_price: 25.99, match_percentage: 85 },
-        { store: 'ASOS', product_name: 'Square Print Scarf', category: 'accessories', original_price: 480, dupe_price: 18.00, match_percentage: 83 },
-        { store: 'COS', product_name: 'Silk Blend Square Scarf', category: 'accessories', original_price: 480, dupe_price: 45.00, match_percentage: 80 }
-      ]
-    }
-  };
-
-  function generateDemoReverse(query) {
-    const cat = detectCategory(query);
-    const key = cat === 'mixed' ? 'bags' : cat;
-    return JSON.parse(JSON.stringify(DEMO_REVERSE[key]));
-  }
-
-  /* ---- Demo results generator ---- */
-
-  const U = (id) => `https://images.unsplash.com/${id}?w=600&h=800&fit=crop&crop=center&q=80`;
-
-  const DEMO_PRODUCTS = {
-    bags: [
-      { store: 'ZARA', product_name: 'Quilted Chain Crossbody Bag', category: 'bags', dupe_price: 45.99, original_price: 2200, match_percentage: 94, image_url: U('photo-1584917865442-de89df76afd3') },
-      { store: 'H&M', product_name: 'Padded Shoulder Bag', category: 'bags', dupe_price: 34.99, original_price: 2200, match_percentage: 91, image_url: U('photo-1566150905458-1bf1fc113f0d') },
-      { store: 'MANGO', product_name: 'Leather Effect Flap Bag', category: 'bags', dupe_price: 55.99, original_price: 2200, match_percentage: 89, image_url: U('photo-1590874103328-eac38a683ce7') },
-      { store: 'ASOS', product_name: 'Structured Mini Tote', category: 'bags', dupe_price: 42.00, original_price: 2200, match_percentage: 87, image_url: U('photo-1594223274512-ad4803739b7c') },
-      { store: 'COS', product_name: 'Minimalist Leather Bag', category: 'bags', dupe_price: 89.00, original_price: 2200, match_percentage: 85, image_url: U('photo-1598532163257-ae3c6b2524b6') },
-      { store: '& OTHER STORIES', product_name: 'Woven Chain Strap Bag', category: 'bags', dupe_price: 79.00, original_price: 2200, match_percentage: 82, image_url: U('photo-1591561954557-26941169b49e') }
-    ],
-    clothing: [
-      { store: 'ZARA', product_name: 'Satin Midi Skirt with Slit', category: 'clothing', dupe_price: 49.90, original_price: 890, match_percentage: 95, image_url: U('photo-1682397125309-56077754235d') },
-      { store: 'H&M', product_name: 'Oversized Wool-Blend Blazer', category: 'clothing', dupe_price: 79.99, original_price: 890, match_percentage: 92, image_url: U('photo-1653660666869-2345adc51155') },
-      { store: 'MANGO', product_name: 'Flowing Printed Midi Dress', category: 'clothing', dupe_price: 59.99, original_price: 890, match_percentage: 90, image_url: U('photo-1618597724686-aee8bba9cf99') },
-      { store: 'ASOS', product_name: 'Tailored Wide Leg Trousers', category: 'clothing', dupe_price: 65.00, original_price: 890, match_percentage: 88, image_url: U('photo-1509631179647-0177331693ae') },
-      { store: 'COS', product_name: 'Draped Jersey Top', category: 'clothing', dupe_price: 45.00, original_price: 890, match_percentage: 85, image_url: U('photo-1515886657613-9f3515b0c78f') },
-      { store: '& OTHER STORIES', product_name: 'Belted Wrap Coat', category: 'clothing', dupe_price: 129.00, original_price: 890, match_percentage: 83, image_url: U('photo-1606776627650-454d6d7bd7bf') }
-    ],
-    shoes: [
-      { store: 'ZARA', product_name: 'Leather Slingback Heels', category: 'shoes', dupe_price: 59.90, original_price: 750, match_percentage: 93, image_url: U('photo-1543163521-1bf539c55dd2') },
-      { store: 'H&M', product_name: 'Pointed Ballet Flats', category: 'shoes', dupe_price: 29.99, original_price: 750, match_percentage: 90, image_url: U('photo-1460353581641-37baddab0fa2') },
-      { store: 'MANGO', product_name: 'Leather Ankle Boots', category: 'shoes', dupe_price: 79.99, original_price: 750, match_percentage: 88, image_url: U('photo-1603808033192-082d6919d3e1') },
-      { store: 'ASOS', product_name: 'Chunky Platform Loafers', category: 'shoes', dupe_price: 55.00, original_price: 750, match_percentage: 86, image_url: U('photo-1606107557195-0e29a4b5b4aa') },
-      { store: 'COS', product_name: 'Leather Mule Sandals', category: 'shoes', dupe_price: 89.00, original_price: 750, match_percentage: 84, image_url: U('photo-1611652022419-a9419f74343d') },
-      { store: '& OTHER STORIES', product_name: 'Suede Knee-High Boots', category: 'shoes', dupe_price: 119.00, original_price: 750, match_percentage: 81, image_url: U('photo-1548036328-c9fa89d128fa') }
-    ],
-    jewellery: [
-      { store: 'ZARA', product_name: 'Layered Gold Chain Necklace', category: 'jewellery', dupe_price: 25.90, original_price: 480, match_percentage: 94, image_url: U('photo-1599643478518-a784e5dc4c8f') },
-      { store: 'H&M', product_name: 'Chunky Hoop Earrings', category: 'jewellery', dupe_price: 14.99, original_price: 480, match_percentage: 91, image_url: U('photo-1573408301185-9146fe634ad0') },
-      { store: 'MANGO', product_name: 'Crystal Pendant Necklace', category: 'jewellery', dupe_price: 29.99, original_price: 480, match_percentage: 89, image_url: U('photo-1611085583191-a3b181a88401') },
-      { store: 'ASOS', product_name: 'Pearl Drop Earrings Set', category: 'jewellery', dupe_price: 18.00, original_price: 480, match_percentage: 86, image_url: U('photo-1612817159949-195b6eb9e31a') },
-      { store: 'COS', product_name: 'Sculptural Cuff Bracelet', category: 'jewellery', dupe_price: 35.00, original_price: 480, match_percentage: 84, image_url: U('photo-1611591437281-460bfbe1220a') },
-      { store: '& OTHER STORIES', product_name: 'Twisted Ring Set', category: 'jewellery', dupe_price: 29.00, original_price: 480, match_percentage: 82, image_url: U('photo-1622434641406-a158123450f9') }
-    ],
-    accessories: [
-      { store: 'ZARA', product_name: 'Silk Square Scarf', category: 'accessories', dupe_price: 29.90, original_price: 450, match_percentage: 93, image_url: U('photo-1576566588028-4147f3842f27') },
-      { store: 'H&M', product_name: 'Wide Leather Belt', category: 'accessories', dupe_price: 24.99, original_price: 450, match_percentage: 90, image_url: U('photo-1617038220319-276d3cfab638') },
-      { store: 'MANGO', product_name: 'Oversized Sunglasses', category: 'accessories', dupe_price: 25.99, original_price: 450, match_percentage: 88, image_url: U('photo-1509319117193-57bab727e09d') },
-      { store: 'ASOS', product_name: 'Logo Bucket Hat', category: 'accessories', dupe_price: 22.00, original_price: 450, match_percentage: 86, image_url: U('photo-1521223890158-f9f7c3d5d504') },
-      { store: 'COS', product_name: 'Cashmere Wool Scarf', category: 'accessories', dupe_price: 69.00, original_price: 450, match_percentage: 84, image_url: U('photo-1576566588028-4147f3842f27') },
-      { store: '& OTHER STORIES', product_name: 'Leather Gloves', category: 'accessories', dupe_price: 49.00, original_price: 450, match_percentage: 81, image_url: U('photo-1509631179647-0177331693ae') }
-    ]
-  };
-
-  function detectCategory(query) {
-    const q = (typeof query === 'string' ? query : '').toLowerCase();
-    if (/\b(bag|bags|tote|clutch|purse|handbag|pochette|backpack|satchel|crossbody|shoulder bag|bucket bag|hobo)\b/.test(q)) return 'bags';
-    if (/\b(shoe|shoes|boot|boots|heel|heels|sneaker|sneakers|loafer|loafers|sandal|sandals|flats|ballet|mule|mules|pump|pumps|trainer|trainers|espadrille)\b/.test(q)) return 'shoes';
-    if (/\b(jewel|jewelry|jewellery|necklace|earring|earrings|ring|rings|bracelet|pendant|chain|pearl|pearls|brooch|cuff|bangle|choker)\b/.test(q)) return 'jewellery';
-    if (/\b(scarf|scarves|belt|belts|hat|hats|cap|glove|gloves|sunglasses|watch|watches|wallet|headband|hairclip|tie|bow tie|beanie)\b/.test(q)) return 'accessories';
-    if (/\b(dress|skirt|coat|blazer|jacket|trouser|trousers|pants|top|blouse|shirt|sweater|knit|cardigan|hoodie|jeans|denim|jumpsuit|romper|kimono|cape|vest|corset)\b/.test(q)) return 'clothing';
-    return 'mixed';
-  }
-
-  function generateDemoResults(query) {
-    const cat = detectCategory(query);
-
-    let items;
-    if (cat === 'mixed') {
-      // Pick one product from each category for variety
-      const cats = Object.keys(DEMO_PRODUCTS);
-      const pool = [];
-      cats.forEach(c => pool.push(...DEMO_PRODUCTS[c]));
-      // Shuffle and take 6
-      for (let i = pool.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [pool[i], pool[j]] = [pool[j], pool[i]];
-      }
-      items = pool.slice(0, 6);
-      // Ensure unique stores
-      const seen = new Set();
-      items = items.filter(item => {
-        if (seen.has(item.store)) return false;
-        seen.add(item.store);
-        return true;
-      });
-      // Fill if needed
-      while (items.length < 6) {
-        const fill = pool.find(p => !seen.has(p.store));
-        if (fill) { items.push(fill); seen.add(fill.store); }
-        else break;
-      }
-    } else {
-      items = DEMO_PRODUCTS[cat];
-    }
-
-    // Deep clone and add slight randomness
-    return items.map(item => ({
-      ...item,
-      match_percentage: item.match_percentage + Math.floor(Math.random() * 3) - 1
-    }));
-  }
-
   /* ---- Free searches remaining tracker ---- */
 
   let freeRemaining = FREE_LIMIT;
-  let lastResultWasDemo = false;
 
   function updateFreeCounter(remaining) {
     freeRemaining = remaining;
     const el = document.getElementById('freeCounter');
     if (!el) return;
 
-    const tier = getUserTier();
-    if (tier === 'pro') {
-      el.textContent = t('free.pro') || 'Unlimited AI searches (Pro)';
-      el.style.display = '';
-      return;
-    }
-
     if (remaining > 0) {
-      const total = tier === 'unregistered' ? UNREG_LIMIT : FREE_LIMIT;
-      const suffix = tier === 'unregistered'
-        ? (t('free.totalRemaining') || 'free AI searches remaining')
-        : (t('free.remaining') || 'free AI searches left today');
-      el.textContent = `${remaining}/${total} ${suffix}`;
+      el.textContent = `${remaining} ${t('free.remaining') || 'searches left today'}`;
       el.style.display = '';
     } else {
-      const msg = tier === 'unregistered'
-        ? (t('free.unregExhausted') || 'Free searches used \u2014 sign in for 3 daily searches')
-        : (t('free.exhausted') || 'Free searches used \u2014 showing demo results');
-      el.textContent = msg;
+      el.textContent = t('free.exhausted') || 'Daily limit reached';
       el.style.display = '';
     }
   }
@@ -2361,29 +2068,13 @@ Rules:
     return dupes;
   }
 
-  /* ---- API call with freemium model ---- */
+  /* ---- API call via backend proxy ---- */
 
-  /* ---- Unregistered lifetime search tracker ---- */
-
-  const UNREG_COUNT_KEY = 'altere_unreg_searches';
-  const UNREG_LIMIT     = 3;
-
-  function getUnregCount() {
-    return parseInt(localStorage.getItem(UNREG_COUNT_KEY) || '0', 10);
-  }
-
-  function incrementUnregCount() {
-    const c = getUnregCount() + 1;
-    localStorage.setItem(UNREG_COUNT_KEY, String(c));
-    return c;
-  }
-
-  async function callClaude(userContent, rawQuery) {
+  async function callClaude(userContent) {
     const apiKey = getApiKey();
-    const tier   = getUserTier();
 
-    // --- Pro: own API key → unlimited, direct to Anthropic ---
-    if (tier === 'pro') {
+    // Own API key → unlimited, direct to Anthropic
+    if (apiKey) {
       const messages = [{ role: 'user', content: userContent }];
       const body = { model: MODEL, max_tokens: 1024, system: SYSTEM_PROMPT, messages };
 
@@ -2404,92 +2095,35 @@ Rules:
         throw new Error(err.error?.message || `API error ${res.status}`);
       }
 
-      lastResultWasDemo = false;
       return parseClaudeResponse(await res.json());
     }
 
-    // --- Unregistered: 3 total (lifetime), then demo only ---
-    if (tier === 'unregistered') {
-      const used = getUnregCount();
-      if (used >= UNREG_LIMIT) {
-        updateFreeCounter(0);
-        await new Promise(r => setTimeout(r, 1200 + Math.random() * 800));
-        lastResultWasDemo = true;
-        return generateDemoResults(rawQuery || 'fashion item');
-      }
+    // No API key → use backend proxy with rate limiting
+    const messages = [{ role: 'user', content: userContent }];
+    const body = { model: MODEL, max_tokens: 1024, system: SYSTEM_PROMPT, messages };
 
-      // Try proxy
-      try {
-        const messages = [{ role: 'user', content: userContent }];
-        const body = { model: MODEL, max_tokens: 1024, system: SYSTEM_PROMPT, messages };
+    const res = await fetch(PROXY_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
 
-        const res = await fetch(PROXY_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(body)
-        });
-
-        if (res.status === 429 || !res.ok) {
-          await new Promise(r => setTimeout(r, 800));
-          lastResultWasDemo = true;
-          return generateDemoResults(rawQuery || 'fashion item');
-        }
-
-        const data = await res.json();
-        const newCount = incrementUnregCount();
-        updateFreeCounter(UNREG_LIMIT - newCount);
-
-        lastResultWasDemo = false;
-        return parseClaudeResponse(data);
-      } catch {
-        await new Promise(r => setTimeout(r, 1200 + Math.random() * 800));
-        lastResultWasDemo = true;
-        return generateDemoResults(rawQuery || 'fashion item');
-      }
+    if (res.status === 429) {
+      updateFreeCounter(0);
+      throw new Error('Daily limit reached. Try again tomorrow.');
     }
 
-    // --- Registered: 3/day via proxy, then demo ---
-    try {
-      const messages = [{ role: 'user', content: userContent }];
-      const body = { model: MODEL, max_tokens: 1024, system: SYSTEM_PROMPT, messages };
-
-      const res = await fetch(PROXY_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
-      });
-
-      const data = await res.json();
-
-      // Rate limited → fall back to demo
-      if (res.status === 429) {
-        updateFreeCounter(0);
-        await new Promise(r => setTimeout(r, 800));
-        lastResultWasDemo = true;
-        return generateDemoResults(rawQuery || 'fashion item');
-      }
-
-      // Proxy not configured → demo
-      if (!res.ok) {
-        await new Promise(r => setTimeout(r, 1200 + Math.random() * 800));
-        lastResultWasDemo = true;
-        return generateDemoResults(rawQuery || 'fashion item');
-      }
-
-      // Success — update counter
-      if (data._rateLimit) {
-        updateFreeCounter(data._rateLimit.remaining);
-      }
-
-      lastResultWasDemo = false;
-      return parseClaudeResponse(data);
-
-    } catch {
-      // Network error / proxy unavailable → demo fallback
-      await new Promise(r => setTimeout(r, 1200 + Math.random() * 800));
-      lastResultWasDemo = true;
-      return generateDemoResults(rawQuery || 'fashion item');
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error?.message || `API error ${res.status}`);
     }
+
+    const data = await res.json();
+    if (data._rateLimit) {
+      updateFreeCounter(data._rateLimit.remaining);
+    }
+
+    return parseClaudeResponse(data);
   }
 
   /* ============================================================
@@ -2637,29 +2271,38 @@ Rules:
     sub.textContent     = t('reverse.loadingSub') || 'Matching your item to designer collections';
 
     try {
-      let result;
       const apiKey = getApiKey();
-      const tier   = getUserTier();
+      const userMsg = `The user has this affordable item: ${query}. Identify the luxury original and suggest 5 similar affordable alternatives.`;
 
-      if (tier === 'pro') {
-        // Direct API
-        const res = await fetch(API_URL, {
+      let res;
+      if (apiKey) {
+        res = await fetch(API_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
-          body: JSON.stringify({ model: MODEL, max_tokens: 1024, system: REVERSE_PROMPT, messages: [{ role: 'user', content: `The user has this affordable item: ${query}. Identify the luxury original and suggest 5 similar affordable alternatives.` }] })
+          body: JSON.stringify({ model: MODEL, max_tokens: 1024, system: REVERSE_PROMPT, messages: [{ role: 'user', content: userMsg }] })
         });
-        if (!res.ok) throw new Error('API error');
-        const data = await res.json();
-        let text = data.content?.[0]?.text || '';
-        if (text.startsWith('```')) text = text.replace(/^```(?:json)?\s*/, '').replace(/\s*```$/, '');
-        result = JSON.parse(text.trim());
       } else {
-        // Demo fallback
-        await new Promise(r => setTimeout(r, 1500 + Math.random() * 800));
-        result = generateDemoReverse(query);
+        res = await fetch(PROXY_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ model: MODEL, max_tokens: 1024, system: REVERSE_PROMPT, messages: [{ role: 'user', content: userMsg }] })
+        });
       }
 
-      renderReverseResults(result, query, tier !== 'pro');
+      if (res.status === 429) {
+        updateFreeCounter(0);
+        throw new Error('Daily limit reached. Try again tomorrow.');
+      }
+      if (!res.ok) throw new Error('API error');
+
+      const data = await res.json();
+      if (data._rateLimit) updateFreeCounter(data._rateLimit.remaining);
+
+      let text = data.content?.[0]?.text || '';
+      if (text.startsWith('```')) text = text.replace(/^```(?:json)?\s*/, '').replace(/\s*```$/, '');
+      const result = JSON.parse(text.trim());
+
+      renderReverseResults(result, query);
       saveRecentSearch(query, 'reverse');
     } catch (err) {
       showToast(err.message || 'Search failed', true);
@@ -2675,7 +2318,7 @@ Rules:
     }
   }
 
-  function renderReverseResults(result, query, isDemo) {
+  function renderReverseResults(result, query) {
     resultsGrid.innerHTML = '';
     resetFilters();
 
@@ -2691,10 +2334,9 @@ Rules:
     const eyebrow = resultsHeader.querySelector('.results__eyebrow');
     const title   = resultsHeader.querySelector('.results__title');
     const sub     = resultsHeader.querySelector('.results__subtitle');
-    eyebrow.textContent = isDemo ? (t('results.demo.eyebrow') || 'Demo Results') : (t('reverse.eyebrow') || 'Original Found');
+    eyebrow.textContent = t('reverse.eyebrow') || 'Original Found';
     title.textContent   = t('reverse.title') || 'We found the original';
-    const demoHint = isDemo ? (' \u2014 ' + (t('results.demo.hint') || 'Add your API key for real AI results')) : '';
-    sub.textContent = `${t('reverse.for') || 'Original identified for'} \u201c${query}\u201d${demoHint}`;
+    sub.textContent = `${t('reverse.for') || 'Original identified for'} \u201c${query}\u201d`;
 
     // Render original card
     const orig = result.original;
@@ -2965,9 +2607,9 @@ Rules:
         userContent = `Find 6 high-street dupes for this fashion item: ${query}`;
       }
 
-      const dupes = await callClaude(userContent, query);
+      const dupes = await callClaude(userContent);
       if (dupes) {
-        renderResults(dupes, displayQuery, lastResultWasDemo);
+        renderResults(dupes, displayQuery);
         saveRecentSearch(query, type);
       }
     } catch (err) {
