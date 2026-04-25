@@ -558,6 +558,10 @@ img, video {
   align-items: stretch;
 }
 
+.search-box__panel[data-panel="reverse"].active {
+  flex-direction: column;
+}
+
 .search-box__panel[data-panel="upload"].active {
   display: block;
 }
