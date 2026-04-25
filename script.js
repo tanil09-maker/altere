@@ -2022,30 +2022,47 @@ No explanation, no markdown — just the URL or NOT_FOUND.`
     }
   }
 
-  async function fetchAllImages(result) {
-    const queries = [];
+  const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
+  function updateImageInDOM(selector, url) {
+    if (!url) return;
+    const img = document.querySelector(selector);
+    if (!img) return;
+    const preload = new Image();
+    preload.onload = () => { img.src = url; img.style.opacity = '1'; };
+    preload.src = url;
+  }
+
+  async function fetchAllImagesSequentially(result) {
     // Original image
     if (result.original?.found && result.original.image_search_query) {
-      queries.push({ key: 'original', query: result.original.image_search_query });
+      try {
+        const url = await fetchProductImage(result.original.image_search_query);
+        updateImageInDOM('#originalFound .original-found__image img', url);
+        await sleep(300);
+      } catch { /* keep fallback */ }
     }
 
-    // Dupe images
-    (result.dupes || []).forEach((dupe, i) => {
-      if (dupe.match_percentage > 0 && dupe.image_search_query) {
-        queries.push({ key: `dupe_${i}`, query: dupe.image_search_query });
+    // Dupe images — one by one
+    const dupes = result.dupes || [];
+    for (let i = 0; i < dupes.length; i++) {
+      if (dupes[i].match_percentage > 0 && dupes[i].image_search_query) {
+        try {
+          const url = await fetchProductImage(dupes[i].image_search_query);
+          // Cards are in .results__grid in DOM order
+          const card = resultsGrid.querySelectorAll('.dupe-card')[i];
+          if (card && url) {
+            const img = card.querySelector('.dupe-card__image img');
+            if (img) {
+              const preload = new Image();
+              preload.onload = () => { img.src = url; };
+              preload.src = url;
+            }
+          }
+          await sleep(300);
+        } catch { /* keep fallback for this card */ }
       }
-    });
-
-    const promises = queries.map(async (q) => {
-      const url = await fetchProductImage(q.query);
-      return { key: q.key, url };
-    });
-
-    const results = await Promise.all(promises);
-    const imageMap = {};
-    results.forEach(r => { imageMap[r.key] = r.url; });
-    return imageMap;
+    }
   }
 
   /* ---- API call via backend proxy ---- */
@@ -2561,12 +2578,8 @@ No explanation, no markdown — just the URL or NOT_FOUND.`
         renderFullResults(result, displayQuery, {});
         saveRecentSearch(query, type);
 
-        // Fetch real product images in background, then re-render
-        fetchAllImages(result).then(imageMap => {
-          if (Object.keys(imageMap).length > 0) {
-            renderFullResults(result, displayQuery, imageMap);
-          }
-        }).catch(() => {}); // silently fail image fetch
+        // Fetch real product images sequentially in background, updating DOM progressively
+        fetchAllImagesSequentially(result).catch(() => {});
       }
     } catch (err) {
       showToast(err.message, true);
