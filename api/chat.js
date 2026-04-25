@@ -70,6 +70,12 @@ export default async function handler(req, res) {
   try {
     const body = req.body;
 
+    // Inject web_search tool if frontend didn't provide tools
+    if (!body.tools || body.tools.length === 0) {
+      body.tools = [{ type: 'web_search_20250305', name: 'web_search', max_uses: 8 }];
+      console.log('[chat] web_search tool enabled');
+    }
+
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {

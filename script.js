@@ -2031,42 +2031,46 @@ document.addEventListener('DOMContentLoaded', () => {
      Claude API call
      ============================================================ */
 
-  const SYSTEM_PROMPT = `You are ALTERE, an AI fashion dupe finder. The user will describe a fashion item, paste a product URL, or provide an image. Your job is to suggest 6 realistic cheaper alternatives ("dupes") from high-street brands.
+  const UNIFIED_PROMPT = `You are ALTERE, an AI fashion dupe finder. The user will describe a fashion item, paste a product URL, or provide an image.
 
-For each dupe, respond with ONLY a JSON array of 6 objects. No markdown, no explanation, no code fences — just the raw JSON array.
+Your job:
+1. Use web_search to identify the luxury original (if any) — find the real brand, product name, and current retail price.
+2. Use web_search to find 6 affordable alternatives ("dupes") — one from each store: Zara, Mango, COS, H&M, ASOS, & Other Stories. Search each store's website for the closest match and get real product names and prices.
 
-Each object must have these fields:
-- "store": one of "ZARA", "H&M", "MANGO", "ASOS", "COS", "& OTHER STORIES" (use each store exactly once)
-- "product_name": a realistic product name that this store would actually use (max 6 words)
-- "category": one of "bags", "shoes", "clothing", "jewellery", "accessories" (pick the single best fit for the item type)
-- "material": one of "natural", "nopolyester", "vegan" (pick the best fit: "natural" for cotton/wool/silk/linen, "nopolyester" for items without polyester, "vegan" for no animal products)
-- "original_price": the estimated original luxury item price in USD (number)
-- "dupe_price": a realistic dupe price in USD for that store (number, must be lower than original_price)
-- "match_percentage": how closely it matches the original, 78-96 range (integer)
+After searching, respond with ONLY a JSON object. No markdown, no explanation, no code fences — just raw JSON.
+
+JSON schema:
+{
+  "original": {
+    "found": true,
+    "brand": "Designer brand name",
+    "product_name": "Official product name from brand website",
+    "estimated_price": "€2500",
+    "category": "bags | shoes | clothing | jewellery | accessories",
+    "image_search_query": "exact query to find official product photo, e.g. Bottega Veneta Cassette bag green official"
+  },
+  "dupes": [
+    {
+      "store": "Zara",
+      "product_name": "Real product name from store website",
+      "estimated_price": "€49.95",
+      "match_percentage": 92,
+      "image_search_query": "exact query to find this product photo on the store website, e.g. Zara quilted crossbody bag green",
+      "product_url_query": "search query to find product page, e.g. Zara quilted crossbody bag"
+    }
+  ]
+}
 
 Rules:
-- Make product names feel authentic to each brand's naming style
-- original_price must be REALISTIC for the actual luxury item — typically $500-$5000. Different items have very different prices: a Chanel bag ~$5000, a Max Mara coat ~$2500, designer shoes ~$800, a silk scarf ~$400. Do NOT use a generic placeholder like $8800 for everything.
-- original_price should be the same across all 6 (the price of the luxury item)
-- dupe_price MUST be at least $5 less than original_price
-- Each store should have realistic dupe prices for their actual price range: H&M $15-50, Zara $30-100, Mango $40-120, ASOS $25-80, COS $80-200, & Other Stories $60-150
-- The first result should have the highest match percentage, descending from there`;
-
-  const REVERSE_PROMPT = `You are ALTERE, a reverse fashion dupe finder. The user describes a high-street/affordable fashion item. Your job is to identify which luxury designer original it's a dupe of, then also suggest 5 more affordable alternatives.
-
-Respond with ONLY a JSON object. No markdown, no explanation, no code fences — just the raw JSON object.
-
-The object must have:
-- "original": an object with fields: "brand" (luxury brand name), "product_name" (the original item name), "price" (estimated USD price, number), "description" (1-2 sentence description of the original), "category" (one of "bags", "shoes", "clothing", "jewellery", "accessories")
-- "dupes": an array of 5 objects, each with: "store", "product_name", "category", "original_price" (same as original.price), "dupe_price", "match_percentage"
-
-Rules:
-- The original should be a real, recognizable luxury item that the described item is clearly inspired by
-- original.price must be REALISTIC for that specific luxury item ($500-$5000 typically). Do NOT use a generic placeholder.
-- "store" must be one of: "ZARA", "H&M", "MANGO", "ASOS", "COS" (use each once)
-- dupe_price MUST be at least $5 less than original_price
-- Each store should have realistic dupe prices: H&M $15-50, Zara $30-100, Mango $40-120, ASOS $25-80, COS $80-200
-- match_percentage range: 78-96`;
+- If no luxury original can be confidently identified: set original.found to false, leave other original fields as empty strings, still return 6 dupes
+- ALWAYS return exactly 6 dupes, one per store: Zara, Mango, COS, H&M, ASOS, & Other Stories
+- If a store has no suitable dupe: return the object with match_percentage: 0 and product_name: "No match found"
+- Use web_search to find REAL current prices — do not guess. Prices in EUR.
+- Realistic price ranges: H&M €10-50, Zara €20-100, Mango €30-120, ASOS €20-80, COS €60-200, & Other Stories €50-150
+- match_percentage range: 0-96 (0 only for "No match found")
+- The first dupe should have the highest match_percentage, descending order
+- image_search_query should be specific enough to find the exact product photo (include store name, product name, color)
+- product_url_query should help find the product page on the store's website`;
 
   /* ---- Free searches remaining tracker ---- */
 
@@ -2089,16 +2093,116 @@ Rules:
   /* ---- Parse Claude response JSON ---- */
 
   function parseClaudeResponse(data) {
-    const text = data.content?.[0]?.text || '';
-    let cleaned = text.trim();
+    // With web_search, response has multiple content blocks. Find the last text block.
+    const blocks = data.content || [];
+    let text = '';
+    for (let i = blocks.length - 1; i >= 0; i--) {
+      if (blocks[i].type === 'text' && blocks[i].text.trim()) {
+        text = blocks[i].text.trim();
+        break;
+      }
+    }
+    if (!text) throw new Error('No text in AI response.');
+
+    let cleaned = text;
     if (cleaned.startsWith('```')) {
       cleaned = cleaned.replace(/^```(?:json)?\s*/, '').replace(/\s*```$/, '');
     }
-    const dupes = JSON.parse(cleaned);
-    if (!Array.isArray(dupes) || dupes.length === 0) {
-      throw new Error('Unexpected AI response format.');
+
+    const result = JSON.parse(cleaned);
+
+    // Support both old array format (legacy) and new unified object format
+    if (Array.isArray(result)) {
+      // Legacy: array of dupes — wrap in unified format
+      return { original: { found: false }, dupes: result };
     }
-    return dupes;
+    if (result.original && result.dupes) {
+      return result;
+    }
+    throw new Error('Unexpected AI response format.');
+  }
+
+  /* ---- Image fetching via web search ---- */
+
+  const imageCache = new Map();
+
+  async function fetchProductImage(searchQuery) {
+    if (!searchQuery || searchQuery === '') return null;
+    if (imageCache.has(searchQuery)) return imageCache.get(searchQuery);
+
+    try {
+      const body = {
+        model: MODEL,
+        max_tokens: 512,
+        tools: [{ type: 'web_search_20250305', name: 'web_search', max_uses: 1 }],
+        messages: [{
+          role: 'user',
+          content: `Search for this product image: ${searchQuery}
+
+Return ONLY the direct image URL (must end in .jpg, .png, or .webp, or be from a CDN like images.unsplash.com, static.zara.net, lp2.hm.com, st.mngbcn.com, images.asos-media.com, etc).
+If you cannot find a real product image, return exactly: NOT_FOUND
+No explanation, no markdown — just the URL or NOT_FOUND.`
+        }]
+      };
+
+      const res = await fetch(PROXY_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+
+      if (!res.ok) { imageCache.set(searchQuery, null); return null; }
+
+      const data = await res.json();
+      const blocks = data.content || [];
+      let text = '';
+      for (let i = blocks.length - 1; i >= 0; i--) {
+        if (blocks[i].type === 'text' && blocks[i].text.trim()) {
+          text = blocks[i].text.trim();
+          break;
+        }
+      }
+
+      if (!text || text === 'NOT_FOUND' || text.length > 500) {
+        imageCache.set(searchQuery, null);
+        return null;
+      }
+
+      // Extract URL if wrapped in text
+      const urlMatch = text.match(/https?:\/\/[^\s"'<>]+/);
+      const url = urlMatch ? urlMatch[0] : null;
+      imageCache.set(searchQuery, url);
+      return url;
+    } catch {
+      imageCache.set(searchQuery, null);
+      return null;
+    }
+  }
+
+  async function fetchAllImages(result) {
+    const queries = [];
+
+    // Original image
+    if (result.original?.found && result.original.image_search_query) {
+      queries.push({ key: 'original', query: result.original.image_search_query });
+    }
+
+    // Dupe images
+    (result.dupes || []).forEach((dupe, i) => {
+      if (dupe.match_percentage > 0 && dupe.image_search_query) {
+        queries.push({ key: `dupe_${i}`, query: dupe.image_search_query });
+      }
+    });
+
+    const promises = queries.map(async (q) => {
+      const url = await fetchProductImage(q.query);
+      return { key: q.key, url };
+    });
+
+    const results = await Promise.all(promises);
+    const imageMap = {};
+    results.forEach(r => { imageMap[r.key] = r.url; });
+    return imageMap;
   }
 
   /* ---- API call via backend proxy ---- */
@@ -2109,7 +2213,13 @@ Rules:
     // Own API key → unlimited, direct to Anthropic
     if (apiKey) {
       const messages = [{ role: 'user', content: userContent }];
-      const body = { model: MODEL, max_tokens: 1024, system: SYSTEM_PROMPT, messages };
+      const body = {
+        model: MODEL,
+        max_tokens: 4096,
+        system: UNIFIED_PROMPT,
+        messages,
+        tools: [{ type: 'web_search_20250305', name: 'web_search', max_uses: 8 }]
+      };
 
       const res = await fetch(API_URL, {
         method: 'POST',
@@ -2133,7 +2243,7 @@ Rules:
 
     // No API key → use backend proxy with rate limiting
     const messages = [{ role: 'user', content: userContent }];
-    const body = { model: MODEL, max_tokens: 1024, system: SYSTEM_PROMPT, messages };
+    const body = { model: MODEL, max_tokens: 4096, system: UNIFIED_PROMPT, messages };
 
     const res = await fetch(PROXY_URL, {
       method: 'POST',
@@ -2289,66 +2399,8 @@ Rules:
   });
 
   async function performReverseSearch(query) {
-    if (isSearching) return;
-    isSearching = true;
-
-    showSearchStatus();
-    renderSkeletons();
-    document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
-
-    const eyebrow = resultsHeader.querySelector('.results__eyebrow');
-    const title   = resultsHeader.querySelector('.results__title');
-    const sub     = resultsHeader.querySelector('.results__subtitle');
-    eyebrow.textContent = t('search.searching').replace('...', '');
-    title.textContent   = t('reverse.loading') || 'Identifying the luxury original\u2026';
-    sub.textContent     = t('reverse.loadingSub') || 'Matching your item to designer collections';
-
-    try {
-      const apiKey = getApiKey();
-      const userMsg = `The user has this affordable item: ${query}. Identify the luxury original and suggest 5 similar affordable alternatives.`;
-
-      let res;
-      if (apiKey) {
-        res = await fetch(API_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
-          body: JSON.stringify({ model: MODEL, max_tokens: 1024, system: REVERSE_PROMPT, messages: [{ role: 'user', content: userMsg }] })
-        });
-      } else {
-        res = await fetch(PROXY_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ model: MODEL, max_tokens: 1024, system: REVERSE_PROMPT, messages: [{ role: 'user', content: userMsg }] })
-        });
-      }
-
-      if (res.status === 429) {
-        updateFreeCounter(0);
-        throw new Error('Daily limit reached. Try again tomorrow.');
-      }
-      if (!res.ok) throw new Error('API error');
-
-      const data = await res.json();
-      if (data._rateLimit) updateFreeCounter(data._rateLimit.remaining);
-
-      let text = data.content?.[0]?.text || '';
-      if (text.startsWith('```')) text = text.replace(/^```(?:json)?\s*/, '').replace(/\s*```$/, '');
-      const result = JSON.parse(text.trim());
-
-      renderReverseResults(result, query);
-      saveRecentSearch(query, 'reverse');
-    } catch (err) {
-      showToast(err.message || 'Search failed', true);
-      eyebrow.textContent = t('results.eyebrow');
-      title.textContent   = t('results.title');
-      sub.textContent     = t('results.subtitle');
-      restoreDefaultCards();
-    } finally {
-      isSearching = false;
-      hideSearchStatus();
-      reverseBtn.textContent = t('search.btnReverse') || 'Find original';
-      reverseBtn.disabled = false;
-    }
+    const userContent = `The user has this item: ${query}. Identify the luxury original it's inspired by and find 6 affordable alternatives.`;
+    performSearch(query, 'text', null, userContent);
   }
 
   function renderReverseResults(result, query) {
@@ -2425,6 +2477,119 @@ Rules:
           <div class="dupe-card__price-row">
             <span class="dupe-card__price">$${dupe.dupe_price.toFixed(2)}</span>
             <span class="dupe-card__original">$${dupe.original_price.toFixed(2)}</span>
+          </div>
+          <div class="dupe-card__match">
+            <div class="dupe-card__match-bar"><div class="dupe-card__match-fill" style="width:0%"></div></div>
+            <span>${dupe.match_percentage}% match</span>
+          </div>
+        </div>`;
+
+      resultsGrid.appendChild(card);
+
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        card.classList.add('visible');
+        const fill = card.querySelector('.dupe-card__match-fill');
+        if (fill) fill.style.width = `${dupe.match_percentage}%`;
+      }));
+    });
+
+    bindSaveButtons(resultsGrid);
+    bindShareButtons(resultsGrid);
+    syncSaveStates(resultsGrid);
+  }
+
+  /* ============================================================
+     Unified Results Renderer
+     ============================================================ */
+
+  function renderFullResults(result, query, imageMap) {
+    resultsGrid.innerHTML = '';
+    resetFilters();
+
+    const originalFoundEl = document.getElementById('originalFound');
+    const bestDupeEl = document.getElementById('bestDupe');
+    const moreAltsEl = document.getElementById('moreAlts');
+
+    // Clear previous
+    bestDupeEl.innerHTML = '';
+    bestDupeEl.classList.remove('visible');
+    originalFoundEl.innerHTML = '';
+    originalFoundEl.classList.remove('visible');
+    moreAltsEl.classList.remove('visible');
+
+    // Update header
+    const eyebrow = resultsHeader.querySelector('.results__eyebrow');
+    const title   = resultsHeader.querySelector('.results__title');
+    const sub     = resultsHeader.querySelector('.results__subtitle');
+
+    const orig = result.original || {};
+    const dupes = (result.dupes || []).filter(d => d.match_percentage > 0);
+
+    // --- Original card ---
+    if (orig.found) {
+      eyebrow.textContent = t('reverse.eyebrow') || 'Original Found';
+      title.textContent   = t('reverse.title') || 'We found the original';
+      sub.textContent     = `${t('reverse.for') || 'Original identified for'} \u201c${query}\u201d`;
+
+      const origImg = (imageMap && imageMap.original)
+        ? imageMap.original
+        : getCategoryFallback(orig.category || 'clothing');
+
+      originalFoundEl.innerHTML = `
+        <article class="original-found__card">
+          <div class="original-found__image">
+            <img src="${escapeAttr(origImg)}" alt="${escapeHtml(orig.product_name || '')}" loading="lazy">
+            <span class="original-found__ribbon">${t('reverse.originalLabel') || 'The Original'}</span>
+          </div>
+          <div class="original-found__body">
+            <span class="original-found__label">${t('reverse.identifiedAs') || 'Identified as'}</span>
+            <span class="original-found__brand">${escapeHtml(orig.brand || '')}</span>
+            <h3 class="original-found__name">${escapeHtml(orig.product_name || '')}</h3>
+            <span class="original-found__price">${escapeHtml(orig.estimated_price || '')}</span>
+            <span class="original-found__arrow">
+              ${t('reverse.dupeBelow') || 'Affordable alternatives below'}
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </span>
+          </div>
+        </article>`;
+      originalFoundEl.classList.add('visible');
+    } else {
+      eyebrow.textContent = t('results.ai.eyebrow') || 'AI Results';
+      title.textContent   = t('results.ai.title') || 'Your dupes are ready';
+      sub.textContent     = `${dupes.length} alternatives for \u201c${query}\u201d`;
+    }
+
+    // --- Dupes in grid ---
+    if (dupes.length > 0) {
+      moreAltsEl.classList.add('visible');
+    }
+
+    dupes.forEach((dupe, i) => {
+      const dupeImg = (imageMap && imageMap[`dupe_${i}`])
+        ? imageMap[`dupe_${i}`]
+        : getCategoryFallback(orig.category || dupe.category || 'clothing');
+
+      const card = document.createElement('article');
+      card.className = 'dupe-card reveal';
+      card.dataset.store = dupe.store || '';
+      card.dataset.category = dupe.category || orig.category || 'clothing';
+      card.dataset.material = dupe.material || 'natural';
+      card.dataset.price = '0';
+      card.style.transitionDelay = `${i * 0.08}s`;
+
+      card.innerHTML = `
+        <div class="dupe-card__image">
+          <img src="${escapeAttr(dupeImg)}" alt="${escapeAttr(dupe.product_name || '')}" loading="lazy">
+          <span class="dupe-card__save" aria-label="Save">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </span>
+          <span class="dupe-card__badge">${dupe.match_percentage}%</span>
+        </div>
+        <div class="dupe-card__info">
+          <span class="dupe-card__store">${escapeHtml(dupe.store || '')}</span>
+          <h3 class="dupe-card__name">${escapeHtml(dupe.product_name || '')}</h3>
+          <div class="dupe-card__price-row">
+            <span class="dupe-card__price">${escapeHtml(dupe.estimated_price || '')}</span>
           </div>
           <div class="dupe-card__match">
             <div class="dupe-card__match-bar"><div class="dupe-card__match-fill" style="width:0%"></div></div>
@@ -2604,7 +2769,7 @@ Rules:
      Main search handler
      ============================================================ */
 
-  async function performSearch(query, type, imageFile) {
+  async function performSearch(query, type, imageFile, overrideContent) {
     if (isSearching) return;
     isSearching = true;
 
@@ -2624,7 +2789,9 @@ Rules:
       let userContent;
       let displayQuery = query;
 
-      if (type === 'image' && imageFile) {
+      if (overrideContent) {
+        userContent = overrideContent;
+      } else if (type === 'image' && imageFile) {
         const base64 = await fileToBase64(imageFile);
         displayQuery = imageFile.name;
         userContent = [
@@ -2632,18 +2799,26 @@ Rules:
             type: 'image',
             source: { type: 'base64', media_type: getMediaType(imageFile), data: base64 }
           },
-          { type: 'text', text: 'Identify this fashion item and find 6 high-street dupes for it.' }
+          { type: 'text', text: 'Identify this fashion item. Find the luxury original and 6 high-street dupes.' }
         ];
       } else if (type === 'link') {
-        userContent = `The user pasted this product link: ${query}\n\nIdentify what fashion item this is (infer from the URL structure, brand, and path) and find 6 high-street dupes for it.`;
+        userContent = `The user pasted this product link: ${query}\n\nIdentify what fashion item this is, find the luxury original, and suggest 6 high-street dupes.`;
       } else {
-        userContent = `Find 6 high-street dupes for this fashion item: ${query}`;
+        userContent = `Find the luxury original and 6 high-street dupes for this fashion item: ${query}`;
       }
 
-      const dupes = await callClaude(userContent);
-      if (dupes) {
-        renderResults(dupes, displayQuery);
+      const result = await callClaude(userContent);
+      if (result) {
+        // Render immediately with fallback images
+        renderFullResults(result, displayQuery, {});
         saveRecentSearch(query, type);
+
+        // Fetch real product images in background, then re-render
+        fetchAllImages(result).then(imageMap => {
+          if (Object.keys(imageMap).length > 0) {
+            renderFullResults(result, displayQuery, imageMap);
+          }
+        }).catch(() => {}); // silently fail image fetch
       }
     } catch (err) {
       showToast(err.message, true);
@@ -2655,9 +2830,18 @@ Rules:
       isSearching = false;
       hideSearchStatus();
       document.querySelectorAll('.search-box__btn').forEach(b => {
-        b.textContent = t('search.btn');
+        if (b.classList.contains('search-box__btn--reverse')) {
+          b.textContent = t('search.btnReverse') || 'Find original';
+        } else {
+          b.textContent = t('search.btn') || 'Find dupes';
+        }
         b.style.background = '';
-        b.disabled = false;
+        // Keep upload button disabled if no file selected
+        if (b.classList.contains('search-box__btn--upload')) {
+          b.disabled = !currentFile;
+        } else {
+          b.disabled = false;
+        }
       });
     }
   }
