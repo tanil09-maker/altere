@@ -71,6 +71,7 @@ export default async function handler(req, res) {
     const imageData = body.image || null;     // base64 string
     const mediaType = body.media_type || 'image/jpeg';
     const url = body.url || '';
+    const intent = body.intent || 'identify_and_dupes'; // 'identify_and_dupes' | 'dupes_only'
 
     // --- Cache check ---
     const cacheKey = hashQuery(query || url || (imageData || '').substring(0, 100), { type: inputType });
@@ -91,28 +92,44 @@ export default async function handler(req, res) {
 
     // --- Step 1: Identify the product ---
     let productInfo;
-    try {
-      if (inputType === 'image' && imageData) {
-        productInfo = await identifyFromImage(imageData, mediaType);
-      } else if (inputType === 'url' && url) {
-        productInfo = await identifyFromUrl(url);
-      } else {
-        productInfo = await identifyFromText(query);
+
+    if (intent === 'dupes_only') {
+      // Skip identification, use raw input as dupe search basis
+      productInfo = {
+        brand: 'Unknown',
+        product_name: query || url || 'fashion item',
+        category: 'clothing',
+        color: '',
+        material: '',
+        key_features: (query || '').split(' ').filter(w => w.length > 3),
+        search_query: query || '',
+        dupe_search_hints: [(query || '').toLowerCase()],
+        confidence: 50,
+      };
+    } else {
+      try {
+        if (inputType === 'image' && imageData) {
+          productInfo = await identifyFromImage(imageData, mediaType);
+        } else if (inputType === 'url' && url) {
+          productInfo = await identifyFromUrl(url);
+        } else {
+          productInfo = await identifyFromText(query);
+        }
+      } catch (err) {
+        console.error('[chat] Identification failed:', err.message);
+        return res.status(200).json({
+          original: { found: false, description: query || 'Unknown item' },
+          dupes: [],
+          not_found: true,
+          message: 'We could not identify this product. Try a different description or a clearer photo.',
+          ...(await buildRateMeta(userId, user, isAdmin, ip)),
+        });
       }
-    } catch (err) {
-      console.error('[chat] Identification failed:', err.message);
-      return res.status(200).json({
-        original: { found: false, description: query || 'Unknown item' },
-        dupes: [],
-        not_found: true,
-        message: 'We could not identify this product. Try a different description or a clearer photo.',
-        ...(await buildRateMeta(userId, user, isAdmin, ip)),
-      });
     }
 
     // --- Step 2: Verify original via SerpAPI Shopping ---
     let originalVerified = null;
-    if (productInfo.confidence >= 70 && productInfo.search_query) {
+    if (intent !== 'dupes_only' && productInfo.confidence >= 70 && productInfo.search_query) {
       try {
         const shopResults = await searchGoogleShopping(productInfo.search_query, { num: 5 });
         if (shopResults.length > 0) {

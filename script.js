@@ -214,7 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'results.ai.eyebrow': 'AI Results', 'results.ai.title': 'Your dupes are ready', 'results.demo.eyebrow': 'Demo Results', 'results.demo.hint': 'Add your API key in settings for real AI results', 'results.bestDupe': 'Best Dupe', 'results.moreAlts': 'Spotted Alternatives',
       'free.remaining': 'free AI searches left today', 'free.totalRemaining': 'free AI searches remaining', 'free.exhausted': 'Free searches used \u2014 showing demo results', 'free.unregExhausted': 'Free searches used \u2014 sign in for 3 daily searches', 'free.pro': 'Unlimited AI searches (Pro)',
       'auth.title': 'Sign in to ALTERE', 'auth.subtitle': 'Create a free account to save dupes and share finds.', 'auth.email': 'Email', 'auth.name': 'Name', 'auth.create': 'Create free account', 'auth.tiers': 'Free: 3 AI searches/day. Add your API key for unlimited.', 'auth.signout': 'Sign out', 'auth.freeTier': 'Free', 'auth.freeDesc': '3 AI searches per day + unlimited demo', 'auth.proDesc': 'Unlimited AI searches with your API key', 'auth.welcome': 'Welcome!', 'auth.signedOut': 'Signed out', 'auth.invalidEmail': 'Please enter a valid email.', 'auth.invalidName': 'Please enter your name.',
-      'search.tab.reverse': 'Find original', 'search.placeholder.reverse': 'Describe your high-street item, e.g. "Zara quilted chain bag"...', 'search.btnReverse': 'Find original', 'search.btnSource': 'Source it',
+      'search.tab.reverse': 'Find original', 'search.placeholder.reverse': 'Describe your high-street item, e.g. "Zara quilted chain bag"...', 'search.btnReverse': 'Find original', 'search.btnSource': 'Source it', 'search.subtab.describe': 'Describe', 'search.subtab.photo': 'Photo', 'search.subtab.link': 'Link',
       'reverse.loading': 'Identifying the luxury original\u2026', 'reverse.loadingSub': 'Matching your item to designer collections', 'reverse.eyebrow': 'Sourced Original', 'reverse.title': 'We found the original', 'reverse.for': 'Original identified for', 'reverse.originalLabel': 'The Original', 'reverse.identifiedAs': 'Identified as', 'reverse.dupeBelow': 'Spotted Alternatives',
       'results.loading.title': 'Our AI is analysing your item\u2026', 'results.loading.sub': 'Finding the best alternatives across 6 stores',
       'share.whatsapp': 'WhatsApp', 'share.copy': 'Copy link', 'share.copied': 'Copied!',
@@ -232,7 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'search.placeholder.link': 'Plak een product-URL van een modesite...',
       'search.placeholder.text': 'Beschrijf het item, bijv. "cr\u00e8me satijnen midi rok"...',
       'search.btn': 'Vind dupes',
-      'search.tab.reverse': 'Vind origineel', 'search.btnReverse': 'Vind origineel', 'search.btnSource': 'Source it', 'search.placeholder.reverse': 'Beschrijf je winkelstraat-item, bijv. "Zara gewatteerde ketting tas"...',
+      'search.tab.reverse': 'Vind origineel', 'search.btnReverse': 'Vind origineel', 'search.btnSource': 'Source it', 'search.subtab.describe': 'Beschrijf', 'search.subtab.photo': 'Foto', 'search.subtab.link': 'Link', 'search.placeholder.reverse': 'Beschrijf je winkelstraat-item, bijv. "Zara gewatteerde ketting tas"...',
       'search.upload.hint': 'Sleep of <strong>blader</strong>',
       'search.upload.formats': 'JPG, PNG of WEBP tot 10 MB',
       'search.upload.ready': 'Klaar om te zoeken',
@@ -312,7 +312,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'search.placeholder.link': 'Collez l\u2019URL d\u2019un produit de mode...',
       'search.placeholder.text': 'D\u00e9crivez l\u2019article, ex. "jupe midi en satin cr\u00e8me"...',
       'search.btn': 'Trouver dupes',
-      'search.tab.reverse': 'Trouver l\u2019original', 'search.btnReverse': 'Trouver l\u2019original', 'search.btnSource': 'Sourcer', 'search.placeholder.reverse': 'D\u00e9crivez votre article, ex. "sac matelass\u00e9 Zara"...',
+      'search.tab.reverse': 'Trouver l\u2019original', 'search.btnReverse': 'Trouver l\u2019original', 'search.btnSource': 'Sourcer', 'search.subtab.describe': 'D\u00e9crire', 'search.subtab.photo': 'Photo', 'search.subtab.link': 'Lien', 'search.placeholder.reverse': 'D\u00e9crivez votre article, ex. "sac matelass\u00e9 Zara"...',
       'search.upload.hint': 'Glisser-d\u00e9poser ou <strong>parcourir</strong>',
       'search.upload.formats': 'JPG, PNG ou WEBP jusqu\u2019\u00e0 10 Mo',
       'search.upload.ready': 'Pr\u00eat \u00e0 rechercher',
@@ -392,7 +392,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'search.placeholder.link': 'Produkt-URL von einer Modeseite einf\u00fcgen...',
       'search.placeholder.text': 'Artikel beschreiben, z.B. "cremefarbener Satin-Midirock"...',
       'search.btn': 'Dupes finden',
-      'search.tab.reverse': 'Original finden', 'search.btnReverse': 'Original finden', 'search.btnSource': 'Finden', 'search.placeholder.reverse': 'Beschreibe dein Item, z.B. "Zara gesteppte Kettentasche"...',
+      'search.tab.reverse': 'Original finden', 'search.btnReverse': 'Original finden', 'search.btnSource': 'Finden', 'search.subtab.describe': 'Beschreiben', 'search.subtab.photo': 'Foto', 'search.subtab.link': 'Link', 'search.placeholder.reverse': 'Beschreibe dein Item, z.B. "Zara gesteppte Kettentasche"...',
       'search.upload.hint': 'Ziehen & ablegen oder <strong>durchsuchen</strong>',
       'search.upload.formats': 'JPG, PNG oder WEBP bis 10 MB',
       'search.upload.ready': 'Bereit zum Suchen',
@@ -472,7 +472,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'search.placeholder.link': 'Pega la URL de un producto de cualquier tienda de moda...',
       'search.placeholder.text': 'Describe el art\u00edculo, ej. "falda midi de sat\u00e9n crema"...',
       'search.btn': 'Buscar dupes',
-      'search.tab.reverse': 'Buscar original', 'search.btnReverse': 'Buscar original', 'search.btnSource': 'Buscar', 'search.placeholder.reverse': 'Describe tu art\u00edculo, ej. "bolso acolchado Zara"...',
+      'search.tab.reverse': 'Buscar original', 'search.btnReverse': 'Buscar original', 'search.btnSource': 'Buscar', 'search.subtab.describe': 'Describir', 'search.subtab.photo': 'Foto', 'search.subtab.link': 'Enlace', 'search.placeholder.reverse': 'Describe tu art\u00edculo, ej. "bolso acolchado Zara"...',
       'search.upload.hint': 'Arrastra o <strong>explora</strong>',
       'search.upload.formats': 'JPG, PNG o WEBP hasta 10 MB',
       'search.upload.ready': 'Listo para buscar',
@@ -552,7 +552,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'search.placeholder.link': 'Incolla l\u2019URL di un prodotto da un sito di moda...',
       'search.placeholder.text': 'Descrivi l\u2019articolo, es. "gonna midi in raso panna"...',
       'search.btn': 'Trova dupes',
-      'search.tab.reverse': 'Trova originale', 'search.btnReverse': 'Trova originale', 'search.btnSource': 'Trova', 'search.placeholder.reverse': 'Descrivi il tuo articolo, es. "borsa trapuntata Zara"...',
+      'search.tab.reverse': 'Trova originale', 'search.btnReverse': 'Trova originale', 'search.btnSource': 'Trova', 'search.subtab.describe': 'Descrivi', 'search.subtab.photo': 'Foto', 'search.subtab.link': 'Link', 'search.placeholder.reverse': 'Descrivi il tuo articolo, es. "borsa trapuntata Zara"...',
       'search.upload.hint': 'Trascina o <strong>sfoglia</strong>',
       'search.upload.formats': 'JPG, PNG o WEBP fino a 10 MB',
       'search.upload.ready': 'Pronto per cercare',
@@ -632,7 +632,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'search.placeholder.link': '\u0627\u0644\u0635\u0642 \u0631\u0627\u0628\u0637 \u0645\u0646\u062a\u062c \u0645\u0646 \u0623\u064a \u0645\u0648\u0642\u0639 \u0623\u0632\u064a\u0627\u0621...',
       'search.placeholder.text': '\u0635\u0641 \u0627\u0644\u0642\u0637\u0639\u0629\u060c \u0645\u062b\u0644 "\u062a\u0646\u0648\u0631\u0629 \u0633\u0627\u062a\u0627\u0646 \u0643\u0631\u064a\u0645\u064a"...',
       'search.btn': '\u0627\u0628\u062d\u062b \u0639\u0646 \u0628\u062f\u0627\u0626\u0644',
-      'search.tab.reverse': '\u0627\u0639\u062b\u0631 \u0639\u0644\u0649 \u0627\u0644\u0623\u0635\u0644\u064a', 'search.btnReverse': '\u0627\u0639\u062b\u0631 \u0639\u0644\u0649 \u0627\u0644\u0623\u0635\u0644\u064a', 'search.btnSource': '\u0627\u0628\u062d\u062b', 'search.placeholder.reverse': '\u0635\u0641 \u0642\u0637\u0639\u062a\u0643\u060c \u0645\u062b\u0644 "\u062d\u0642\u064a\u0628\u0629 \u0632\u0627\u0631\u0627 \u0627\u0644\u0645\u0628\u0637\u0646\u0629"...',
+      'search.tab.reverse': '\u0627\u0639\u062b\u0631 \u0639\u0644\u0649 \u0627\u0644\u0623\u0635\u0644\u064a', 'search.btnReverse': '\u0627\u0639\u062b\u0631 \u0639\u0644\u0649 \u0627\u0644\u0623\u0635\u0644\u064a', 'search.btnSource': '\u0627\u0628\u062d\u062b', 'search.subtab.describe': '\u0648\u0635\u0641', 'search.subtab.photo': '\u0635\u0648\u0631\u0629', 'search.subtab.link': '\u0631\u0627\u0628\u0637', 'search.placeholder.reverse': '\u0635\u0641 \u0642\u0637\u0639\u062a\u0643\u060c \u0645\u062b\u0644 "\u062d\u0642\u064a\u0628\u0629 \u0632\u0627\u0631\u0627 \u0627\u0644\u0645\u0628\u0637\u0646\u0629"...',
       'search.upload.hint': '\u0627\u0633\u062d\u0628 \u0623\u0648 <strong>\u062a\u0635\u0641\u0651\u062d</strong>',
       'search.upload.formats': 'JPG \u0623\u0648 PNG \u0623\u0648 WEBP \u062d\u062a\u0649 10 \u0645\u064a\u063a\u0627',
       'search.upload.ready': '\u062c\u0627\u0647\u0632 \u0644\u0644\u0628\u062d\u062b',
@@ -709,7 +709,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'hero.headline': '\u53d1\u73b0\u5b83\u3002<br>\u6211\u4eec\u627e\u5230\u5b83\u3002',
       'hero.sub': '\u63cf\u8ff0\u4efb\u4f55\u5feb\u65f6\u5c1a\u5355\u54c1\uff0c\u6211\u4eec\u7684AI\u4f1a\u8bc6\u522b\u5b83\u7684\u5962\u4f88\u54c1\u539f\u578b \u2014 \u8fd8\u6709\u66f4\u591a\u5e73\u4ef7\u66ff\u4ee3\u3002',
       'search.tab.link': '\u7c98\u8d34\u94fe\u63a5', 'search.tab.upload': '\u4e0a\u4f20\u7167\u7247', 'search.tab.text': '\u627e\u66ff\u4ee3\u54c1', 'search.tab.camera': '\u62cd\u7167',
-      'search.tab.reverse': '\u627e\u539f\u578b', 'search.btnReverse': '\u627e\u539f\u578b', 'search.btnSource': '\u641c\u7d22', 'search.placeholder.reverse': '\u63cf\u8ff0\u4f60\u7684\u5355\u54c1\uff0c\u4f8b\u5982\u201cZara\u7ed7\u7f1d\u94fe\u6761\u5305\u201d...',
+      'search.tab.reverse': '\u627e\u539f\u578b', 'search.btnReverse': '\u627e\u539f\u578b', 'search.btnSource': '\u641c\u7d22', 'search.subtab.describe': '\u63cf\u8ff0', 'search.subtab.photo': '\u7167\u7247', 'search.subtab.link': '\u94fe\u63a5', 'search.placeholder.reverse': '\u63cf\u8ff0\u4f60\u7684\u5355\u54c1\uff0c\u4f8b\u5982\u201cZara\u7ed7\u7f1d\u94fe\u6761\u5305\u201d...',
       'search.placeholder.link': '\u7c98\u8d34\u4efb\u4f55\u65f6\u5c1a\u7f51\u7ad9\u7684\u4ea7\u54c1\u94fe\u63a5...',
       'search.placeholder.text': '\u63cf\u8ff0\u5355\u54c1\uff0c\u4f8b\u5982\u201c\u5976\u6cb9\u8272\u7f0e\u9762\u4e2d\u88d9\u201d...',
       'search.btn': '\u627e\u66ff\u4ee3\u54c1',
@@ -878,19 +878,74 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   /* ============================================================
-     Search box tabs
+     Search box tabs + sub-tabs
      ============================================================ */
 
-  const tabs   = document.querySelectorAll('.search-box__tab');
-  const panels = document.querySelectorAll('.search-box__panel');
+  const tabs      = document.querySelectorAll('.search-box__tab');
+  const panels    = document.querySelectorAll('.search-box__panel');
+  const subtabRow = document.getElementById('subtabRow');
+  const subtabs   = document.querySelectorAll('.search-box__subtab');
+  const subpanes  = document.querySelectorAll('.search-box__subpane');
 
+  let activeMainTab = 'reverse'; // 'reverse' | 'text' | 'camera'
+
+  function updateSubmitButtons() {
+    // Set button text based on active main tab
+    const isOriginal = activeMainTab === 'reverse';
+    const btnText = isOriginal
+      ? (t('search.btnReverse') || 'Find original')
+      : (t('search.btn') || 'Find dupes');
+    const btnClass = isOriginal ? 'search-box__btn--reverse' : '';
+
+    subpanes.forEach(pane => {
+      const btn = pane.querySelector('.search-box__btn');
+      if (!btn) return;
+      btn.textContent = btnText;
+      btn.classList.toggle('search-box__btn--reverse', isOriginal);
+    });
+  }
+
+  // Main tab click
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
       const target = tab.dataset.tab;
+      activeMainTab = target;
+
       tabs.forEach(t => t.classList.remove('active'));
-      panels.forEach(p => p.classList.remove('active'));
       tab.classList.add('active');
-      document.querySelector(`.search-box__panel[data-panel="${target}"]`).classList.add('active');
+
+      if (target === 'camera') {
+        // Hide sub-tabs, show camera panel
+        subtabRow.style.display = 'none';
+        subpanes.forEach(p => p.classList.remove('active'));
+        panels.forEach(p => p.classList.remove('active'));
+        document.querySelector('.search-box__panel[data-panel="camera"]').classList.add('active');
+      } else {
+        // Show sub-tabs, hide camera panel
+        subtabRow.style.display = '';
+        panels.forEach(p => p.classList.remove('active'));
+        // Restore active sub-pane
+        const activeSub = document.querySelector('.search-box__subtab.active');
+        if (activeSub) {
+          const subTarget = activeSub.dataset.subtab;
+          subpanes.forEach(p => p.classList.remove('active'));
+          const pane = document.querySelector(`.search-box__subpane[data-subpane="${subTarget}"]`);
+          if (pane) pane.classList.add('active');
+        }
+        updateSubmitButtons();
+      }
+    });
+  });
+
+  // Sub-tab click
+  subtabs.forEach(stab => {
+    stab.addEventListener('click', () => {
+      const target = stab.dataset.subtab;
+      subtabs.forEach(s => s.classList.remove('active'));
+      stab.classList.add('active');
+      subpanes.forEach(p => p.classList.remove('active'));
+      const pane = document.querySelector(`.search-box__subpane[data-subpane="${target}"]`);
+      if (pane) pane.classList.add('active');
     });
   });
 
@@ -2139,27 +2194,54 @@ document.addEventListener('DOMContentLoaded', () => {
      Reverse search (Find Original)
      ============================================================ */
 
-  const reverseInput = document.getElementById('reverseInput');
-  const reverseBtn   = document.getElementById('reverseBtn');
+  /* ---- Describe sub-pane handler ---- */
+  const describeInput = document.getElementById('describeInput');
+  const describeBtn   = document.getElementById('describeBtn');
 
-  reverseBtn.addEventListener('click', () => {
-    const value = reverseInput.value.trim();
-    if (!value) {
-      reverseInput.style.borderColor = '#C9A96E';
-      setTimeout(() => { reverseInput.style.borderColor = ''; }, 2000);
-      return;
-    }
-    reverseBtn.textContent = t('search.searching');
-    reverseBtn.disabled = true;
-    performReverseSearch(value);
-  });
+  if (describeBtn) {
+    describeBtn.addEventListener('click', () => {
+      const value = describeInput.value.trim();
+      if (!value) {
+        describeInput.style.borderColor = '#C9A96E';
+        setTimeout(() => { describeInput.style.borderColor = ''; }, 2000);
+        return;
+      }
+      describeBtn.textContent = t('search.searching');
+      describeBtn.disabled = true;
+      const intent = activeMainTab === 'text' ? 'dupes_only' : 'identify_and_dupes';
+      performSearch(value, 'text', null, intent);
+    });
+  }
 
-  reverseInput.addEventListener('keydown', e => {
-    if (e.key === 'Enter') reverseBtn.click();
-  });
+  if (describeInput) {
+    describeInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && describeBtn) describeBtn.click();
+    });
+  }
 
-  async function performReverseSearch(query) {
-    performSearch(query, 'text', null);
+  /* ---- Link sub-pane handler ---- */
+  const linkBtn = document.getElementById('linkBtn');
+  const linkInput = document.getElementById('linkInput');
+
+  if (linkBtn) {
+    linkBtn.addEventListener('click', () => {
+      const value = (linkInput?.value || '').trim();
+      if (!value) {
+        if (linkInput) linkInput.style.borderColor = '#C9A96E';
+        setTimeout(() => { if (linkInput) linkInput.style.borderColor = ''; }, 2000);
+        return;
+      }
+      linkBtn.textContent = t('search.searching');
+      linkBtn.disabled = true;
+      const intent = activeMainTab === 'text' ? 'dupes_only' : 'identify_and_dupes';
+      performSearch(value, 'link', null, intent);
+    });
+  }
+
+  if (linkInput) {
+    linkInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && linkBtn) linkBtn.click();
+    });
   }
 
   /* ============================================================
@@ -2451,7 +2533,7 @@ document.addEventListener('DOMContentLoaded', () => {
      Main search handler
      ============================================================ */
 
-  async function performSearch(query, type, imageFile) {
+  async function performSearch(query, type, imageFile, intent) {
     if (isSearching) return;
     isSearching = true;
 
@@ -2471,14 +2553,16 @@ document.addEventListener('DOMContentLoaded', () => {
       let searchBody;
       let displayQuery = query;
 
+      const searchIntent = intent || 'identify_and_dupes';
+
       if (type === 'image' && imageFile) {
         const base64 = await fileToBase64(imageFile);
         displayQuery = imageFile.name;
-        searchBody = { type: 'image', image: base64, media_type: getMediaType(imageFile) };
+        searchBody = { type: 'image', image: base64, media_type: getMediaType(imageFile), intent: searchIntent };
       } else if (type === 'link') {
-        searchBody = { type: 'url', url: query };
+        searchBody = { type: 'url', url: query, intent: searchIntent };
       } else {
-        searchBody = { type: 'text', query: query };
+        searchBody = { type: 'text', query: query, intent: searchIntent };
       }
 
       const result = await callSearch(searchBody);
@@ -2495,16 +2579,9 @@ document.addEventListener('DOMContentLoaded', () => {
     } finally {
       isSearching = false;
       hideSearchStatus();
+      updateSubmitButtons();
       document.querySelectorAll('.search-box__btn').forEach(b => {
-        if (b.classList.contains('search-box__btn--reverse')) {
-          b.textContent = t('search.btnReverse') || 'Find original';
-        } else if (b.dataset.i18n === 'search.btnSource' || b.getAttribute('data-i18n') === 'search.btnSource') {
-          b.textContent = t('search.btnSource') || 'Source it';
-        } else {
-          b.textContent = t('search.btn') || 'Find dupes';
-        }
         b.style.background = '';
-        // Keep upload button disabled if no file selected
         if (b.classList.contains('search-box__btn--upload')) {
           b.disabled = !currentFile;
         } else {
@@ -2538,47 +2615,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  /* ============================================================
-     "Find dupes" button handlers (link + text panels)
-     ============================================================ */
-
-  document.querySelectorAll('.search-box__panel[data-panel="link"] .search-box__btn, .search-box__panel[data-panel="text"] .search-box__btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const panel = btn.closest('.search-box__panel');
-      const input = panel.querySelector('.search-box__input');
-      const value = input.value.trim();
-
-      if (!value) {
-        input.style.borderColor = '#C9A96E';
-        input.setAttribute('placeholder', 'Please enter something first...');
-        setTimeout(() => {
-          input.style.borderColor = '';
-          input.setAttribute('placeholder',
-            panel.dataset.panel === 'link'
-              ? 'Paste a product URL from any fashion site...'
-              : 'Describe the item, e.g. "cream satin midi skirt"...'
-          );
-        }, 2000);
-        return;
-      }
-
-      btn.textContent = t('search.searching');
-      btn.style.background = '#C9A96E';
-      btn.disabled = true;
-
-      const type = panel.dataset.panel === 'link' ? 'link' : 'text';
-      performSearch(value, type, null);
-    });
-  });
-
-  document.querySelectorAll('.search-box__input').forEach(input => {
-    input.addEventListener('keydown', e => {
-      if (e.key === 'Enter') {
-        const btn = input.closest('.search-box__panel').querySelector('.search-box__btn');
-        if (btn) btn.click();
-      }
-    });
-  });
 
   /* ============================================================
      Upload panel search button
@@ -2589,7 +2625,8 @@ document.addEventListener('DOMContentLoaded', () => {
     uploadSearchBtn.textContent = t('search.searching');
     uploadSearchBtn.style.background = '#C9A96E';
     uploadSearchBtn.disabled = true;
-    performSearch(currentFile.name, 'image', currentFile);
+    const intent = activeMainTab === 'text' ? 'dupes_only' : 'identify_and_dupes';
+    performSearch(currentFile.name, 'image', currentFile, intent);
   });
 
   /* ============================================================

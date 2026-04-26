@@ -89,70 +89,47 @@
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
             <span data-i18n="search.tab.text">Find dupes</span>
           </button>
-          <button class="search-box__tab" data-tab="link">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-            <span data-i18n="search.tab.link">Paste link</span>
-          </button>
-          <button class="search-box__tab" data-tab="upload">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-            <span data-i18n="search.tab.upload">Upload photo</span>
-          </button>
           <button class="search-box__tab" data-tab="camera">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
             <span data-i18n="search.tab.camera">Take photo</span>
           </button>
         </div>
 
+        <!-- Sub-tabs (visible for Find original & Find dupes) -->
+        <div class="search-box__subtabs" id="subtabRow">
+          <button class="search-box__subtab active" data-subtab="describe" type="button">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+            <span data-i18n="search.subtab.describe">Describe</span>
+          </button>
+          <button class="search-box__subtab" data-subtab="photo" type="button">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            <span data-i18n="search.subtab.photo">Photo</span>
+          </button>
+          <button class="search-box__subtab" data-subtab="link" type="button">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+            <span data-i18n="search.subtab.link">Link</span>
+          </button>
+        </div>
+
         <div class="search-box__body">
-          <!-- Reverse / Find Original Panel (DEFAULT) -->
-          <div class="search-box__panel active" data-panel="reverse">
-            <input type="text" class="search-box__input" id="reverseInput" data-i18n-placeholder="search.placeholder.reverse" placeholder="Describe your high-street item, e.g. &quot;Zara quilted chain bag&quot;...">
-            <button class="search-box__btn search-box__btn--reverse" id="reverseBtn" data-i18n="search.btnReverse">Find original</button>
+          <!-- Describe sub-pane (shared by Find original & Find dupes) -->
+          <div class="search-box__subpane active" data-subpane="describe">
+            <input type="text" class="search-box__input" id="describeInput" data-i18n-placeholder="search.placeholder.reverse" placeholder="Describe your high-street item, e.g. &quot;Zara quilted chain bag&quot;...">
+            <button class="search-box__btn search-box__btn--reverse" id="describeBtn" data-i18n="search.btnReverse">Find original</button>
           </div>
-          <!-- Search Text Panel (Find Dupes) -->
-          <div class="search-box__panel" data-panel="text">
-            <input type="text" class="search-box__input" data-i18n-placeholder="search.placeholder.text" placeholder="Describe the item, e.g. &quot;cream satin midi skirt&quot;...">
-            <button class="search-box__btn" data-i18n="search.btn">Find dupes</button>
-          </div>
-          <!-- Paste Link Panel -->
-          <div class="search-box__panel" data-panel="link">
-            <input type="url" class="search-box__input" id="linkInput" data-i18n-placeholder="search.placeholder.link" placeholder="Paste a product URL from any fashion site...">
-            <button class="search-box__btn" data-i18n="search.btnSource">Source it</button>
-            <div class="link-preview" id="linkPreview">
-              <div class="link-preview__loading" id="linkPreviewLoading">
-                <div class="link-preview__spinner"></div>
-                <span data-i18n="link.fetching">Fetching preview...</span>
-              </div>
-              <div class="link-preview__card" id="linkPreviewCard">
-                <img class="link-preview__img" id="linkPreviewImg" src="" alt="">
-                <div class="link-preview__info">
-                  <span class="link-preview__domain" id="linkPreviewDomain"></span>
-                  <span class="link-preview__title" id="linkPreviewTitle"></span>
-                  <span class="link-preview__desc" id="linkPreviewDesc"></span>
-                </div>
-                <button class="link-preview__clear" id="linkPreviewClear" type="button" aria-label="Clear">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                </button>
-              </div>
-            </div>
-          </div>
-          <!-- Upload Photo Panel -->
-          <div class="search-box__panel" data-panel="upload">
+          <!-- Photo sub-pane -->
+          <div class="search-box__subpane" data-subpane="photo">
             <label class="search-box__upload-area" id="uploadArea">
               <input type="file" accept="image/*" hidden id="fileInput">
-              <!-- Default state -->
               <div class="upload__default" id="uploadDefault">
                 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                 <span data-i18n="search.upload.hint">Drag & drop or <strong>browse</strong></span>
                 <small data-i18n="search.upload.formats">JPG, PNG or WEBP up to 10 MB</small>
               </div>
-              <!-- Preview state (hidden until file selected) -->
               <div class="upload__preview" id="uploadPreview">
                 <div class="upload__thumb-wrap">
                   <img class="upload__thumb" id="uploadThumb" src="" alt="Preview">
-                  <span class="upload__check">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                  </span>
+                  <span class="upload__check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
                 </div>
                 <div class="upload__meta">
                   <span class="upload__filename" id="uploadFilename"></span>
@@ -164,9 +141,14 @@
                 </button>
               </div>
             </label>
-            <button class="search-box__btn search-box__btn--upload" id="uploadSearchBtn" disabled data-i18n="search.btnSource">Source it</button>
+            <button class="search-box__btn search-box__btn--upload" id="uploadSearchBtn" disabled data-i18n="search.btnReverse">Find original</button>
           </div>
-          <!-- Camera Panel -->
+          <!-- Link sub-pane -->
+          <div class="search-box__subpane" data-subpane="link">
+            <input type="url" class="search-box__input" id="linkInput" data-i18n-placeholder="search.placeholder.link" placeholder="Paste a product URL from any fashion site...">
+            <button class="search-box__btn" id="linkBtn" data-i18n="search.btnReverse">Find original</button>
+          </div>
+          <!-- Camera Panel (only for Take photo tab) -->
           <div class="search-box__panel" data-panel="camera">
             <div class="camera" id="cameraArea">
               <!-- Initial state: start camera -->

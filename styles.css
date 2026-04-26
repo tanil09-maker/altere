@@ -544,6 +544,76 @@ img, video {
   color: var(--gold);
 }
 
+/* Sub-tabs (Describe / Photo / Link) */
+.search-box__subtabs {
+  display: flex;
+  gap: 2px;
+  padding: 6px 16px 0;
+  border-bottom: 1px solid var(--cream-dark);
+}
+
+.search-box__subtab {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 14px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--grey-500);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.search-box__subtab.active {
+  color: var(--black);
+  font-weight: 500;
+  border-bottom-color: var(--gold);
+}
+
+.search-box__subtab:hover {
+  color: var(--black);
+}
+
+.search-box__subtab svg {
+  opacity: 0.5;
+}
+
+.search-box__subtab.active svg {
+  opacity: 1;
+  color: var(--gold);
+}
+
+[data-theme="dark"] .search-box__subtabs {
+  border-bottom-color: #333;
+}
+
+[data-theme="dark"] .search-box__subtab {
+  color: #888;
+}
+
+[data-theme="dark"] .search-box__subtab.active {
+  color: #F0EDE8;
+}
+
+/* Sub-panes */
+.search-box__subpane {
+  display: none;
+}
+
+.search-box__subpane.active {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+}
+
+.search-box__subpane[data-subpane="photo"].active {
+  display: block;
+}
+
 .search-box__body {
   padding: 20px;
 }
@@ -558,9 +628,6 @@ img, video {
   align-items: stretch;
 }
 
-.search-box__panel[data-panel="upload"].active {
-  display: block;
-}
 
 .search-box__input {
   flex: 1;
