@@ -214,7 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'results.ai.eyebrow': 'AI Results', 'results.ai.title': 'Your dupes are ready', 'results.demo.eyebrow': 'Demo Results', 'results.demo.hint': 'Add your API key in settings for real AI results', 'results.bestDupe': 'Best Dupe', 'results.moreAlts': 'Spotted Alternatives',
       'free.remaining': 'free AI searches left today', 'free.totalRemaining': 'free AI searches remaining', 'free.exhausted': 'Free searches used \u2014 showing demo results', 'free.unregExhausted': 'Free searches used \u2014 sign in for 3 daily searches', 'free.pro': 'Unlimited AI searches (Pro)',
       'auth.title': 'Sign in to ALTERE', 'auth.subtitle': 'Create a free account to save dupes and share finds.', 'auth.email': 'Email', 'auth.name': 'Name', 'auth.create': 'Create free account', 'auth.tiers': 'Free: 3 AI searches/day. Add your API key for unlimited.', 'auth.signout': 'Sign out', 'auth.freeTier': 'Free', 'auth.freeDesc': '3 AI searches per day + unlimited demo', 'auth.proDesc': 'Unlimited AI searches with your API key', 'auth.welcome': 'Welcome!', 'auth.signedOut': 'Signed out', 'auth.invalidEmail': 'Please enter a valid email.', 'auth.invalidName': 'Please enter your name.',
-      'search.tab.reverse': 'Find original', 'search.placeholder.reverse': 'Describe your high-street item, e.g. "Zara quilted chain bag"...', 'search.btnReverse': 'Find original',
+      'search.tab.reverse': 'Find original', 'search.placeholder.reverse': 'Describe your high-street item, e.g. "Zara quilted chain bag"...', 'search.btnReverse': 'Find original', 'search.btnSource': 'Source it',
       'reverse.loading': 'Identifying the luxury original\u2026', 'reverse.loadingSub': 'Matching your item to designer collections', 'reverse.eyebrow': 'Sourced Original', 'reverse.title': 'We found the original', 'reverse.for': 'Original identified for', 'reverse.originalLabel': 'The Original', 'reverse.identifiedAs': 'Identified as', 'reverse.dupeBelow': 'Spotted Alternatives',
       'results.loading.title': 'Our AI is analysing your item\u2026', 'results.loading.sub': 'Finding the best alternatives across 6 stores',
       'share.whatsapp': 'WhatsApp', 'share.copy': 'Copy link', 'share.copied': 'Copied!',
@@ -232,7 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'search.placeholder.link': 'Plak een product-URL van een modesite...',
       'search.placeholder.text': 'Beschrijf het item, bijv. "cr\u00e8me satijnen midi rok"...',
       'search.btn': 'Vind dupes',
-      'search.tab.reverse': 'Vind origineel', 'search.btnReverse': 'Vind origineel', 'search.placeholder.reverse': 'Beschrijf je winkelstraat-item, bijv. "Zara gewatteerde ketting tas"...',
+      'search.tab.reverse': 'Vind origineel', 'search.btnReverse': 'Vind origineel', 'search.btnSource': 'Source it', 'search.placeholder.reverse': 'Beschrijf je winkelstraat-item, bijv. "Zara gewatteerde ketting tas"...',
       'search.upload.hint': 'Sleep of <strong>blader</strong>',
       'search.upload.formats': 'JPG, PNG of WEBP tot 10 MB',
       'search.upload.ready': 'Klaar om te zoeken',
@@ -312,7 +312,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'search.placeholder.link': 'Collez l\u2019URL d\u2019un produit de mode...',
       'search.placeholder.text': 'D\u00e9crivez l\u2019article, ex. "jupe midi en satin cr\u00e8me"...',
       'search.btn': 'Trouver dupes',
-      'search.tab.reverse': 'Trouver l\u2019original', 'search.btnReverse': 'Trouver l\u2019original', 'search.placeholder.reverse': 'D\u00e9crivez votre article, ex. "sac matelass\u00e9 Zara"...',
+      'search.tab.reverse': 'Trouver l\u2019original', 'search.btnReverse': 'Trouver l\u2019original', 'search.btnSource': 'Sourcer', 'search.placeholder.reverse': 'D\u00e9crivez votre article, ex. "sac matelass\u00e9 Zara"...',
       'search.upload.hint': 'Glisser-d\u00e9poser ou <strong>parcourir</strong>',
       'search.upload.formats': 'JPG, PNG ou WEBP jusqu\u2019\u00e0 10 Mo',
       'search.upload.ready': 'Pr\u00eat \u00e0 rechercher',
@@ -392,7 +392,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'search.placeholder.link': 'Produkt-URL von einer Modeseite einf\u00fcgen...',
       'search.placeholder.text': 'Artikel beschreiben, z.B. "cremefarbener Satin-Midirock"...',
       'search.btn': 'Dupes finden',
-      'search.tab.reverse': 'Original finden', 'search.btnReverse': 'Original finden', 'search.placeholder.reverse': 'Beschreibe dein Item, z.B. "Zara gesteppte Kettentasche"...',
+      'search.tab.reverse': 'Original finden', 'search.btnReverse': 'Original finden', 'search.btnSource': 'Finden', 'search.placeholder.reverse': 'Beschreibe dein Item, z.B. "Zara gesteppte Kettentasche"...',
       'search.upload.hint': 'Ziehen & ablegen oder <strong>durchsuchen</strong>',
       'search.upload.formats': 'JPG, PNG oder WEBP bis 10 MB',
       'search.upload.ready': 'Bereit zum Suchen',
@@ -472,7 +472,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'search.placeholder.link': 'Pega la URL de un producto de cualquier tienda de moda...',
       'search.placeholder.text': 'Describe el art\u00edculo, ej. "falda midi de sat\u00e9n crema"...',
       'search.btn': 'Buscar dupes',
-      'search.tab.reverse': 'Buscar original', 'search.btnReverse': 'Buscar original', 'search.placeholder.reverse': 'Describe tu art\u00edculo, ej. "bolso acolchado Zara"...',
+      'search.tab.reverse': 'Buscar original', 'search.btnReverse': 'Buscar original', 'search.btnSource': 'Buscar', 'search.placeholder.reverse': 'Describe tu art\u00edculo, ej. "bolso acolchado Zara"...',
       'search.upload.hint': 'Arrastra o <strong>explora</strong>',
       'search.upload.formats': 'JPG, PNG o WEBP hasta 10 MB',
       'search.upload.ready': 'Listo para buscar',
@@ -552,7 +552,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'search.placeholder.link': 'Incolla l\u2019URL di un prodotto da un sito di moda...',
       'search.placeholder.text': 'Descrivi l\u2019articolo, es. "gonna midi in raso panna"...',
       'search.btn': 'Trova dupes',
-      'search.tab.reverse': 'Trova originale', 'search.btnReverse': 'Trova originale', 'search.placeholder.reverse': 'Descrivi il tuo articolo, es. "borsa trapuntata Zara"...',
+      'search.tab.reverse': 'Trova originale', 'search.btnReverse': 'Trova originale', 'search.btnSource': 'Trova', 'search.placeholder.reverse': 'Descrivi il tuo articolo, es. "borsa trapuntata Zara"...',
       'search.upload.hint': 'Trascina o <strong>sfoglia</strong>',
       'search.upload.formats': 'JPG, PNG o WEBP fino a 10 MB',
       'search.upload.ready': 'Pronto per cercare',
@@ -632,7 +632,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'search.placeholder.link': '\u0627\u0644\u0635\u0642 \u0631\u0627\u0628\u0637 \u0645\u0646\u062a\u062c \u0645\u0646 \u0623\u064a \u0645\u0648\u0642\u0639 \u0623\u0632\u064a\u0627\u0621...',
       'search.placeholder.text': '\u0635\u0641 \u0627\u0644\u0642\u0637\u0639\u0629\u060c \u0645\u062b\u0644 "\u062a\u0646\u0648\u0631\u0629 \u0633\u0627\u062a\u0627\u0646 \u0643\u0631\u064a\u0645\u064a"...',
       'search.btn': '\u0627\u0628\u062d\u062b \u0639\u0646 \u0628\u062f\u0627\u0626\u0644',
-      'search.tab.reverse': '\u0627\u0639\u062b\u0631 \u0639\u0644\u0649 \u0627\u0644\u0623\u0635\u0644\u064a', 'search.btnReverse': '\u0627\u0639\u062b\u0631 \u0639\u0644\u0649 \u0627\u0644\u0623\u0635\u0644\u064a', 'search.placeholder.reverse': '\u0635\u0641 \u0642\u0637\u0639\u062a\u0643\u060c \u0645\u062b\u0644 "\u062d\u0642\u064a\u0628\u0629 \u0632\u0627\u0631\u0627 \u0627\u0644\u0645\u0628\u0637\u0646\u0629"...',
+      'search.tab.reverse': '\u0627\u0639\u062b\u0631 \u0639\u0644\u0649 \u0627\u0644\u0623\u0635\u0644\u064a', 'search.btnReverse': '\u0627\u0639\u062b\u0631 \u0639\u0644\u0649 \u0627\u0644\u0623\u0635\u0644\u064a', 'search.btnSource': '\u0627\u0628\u062d\u062b', 'search.placeholder.reverse': '\u0635\u0641 \u0642\u0637\u0639\u062a\u0643\u060c \u0645\u062b\u0644 "\u062d\u0642\u064a\u0628\u0629 \u0632\u0627\u0631\u0627 \u0627\u0644\u0645\u0628\u0637\u0646\u0629"...',
       'search.upload.hint': '\u0627\u0633\u062d\u0628 \u0623\u0648 <strong>\u062a\u0635\u0641\u0651\u062d</strong>',
       'search.upload.formats': 'JPG \u0623\u0648 PNG \u0623\u0648 WEBP \u062d\u062a\u0649 10 \u0645\u064a\u063a\u0627',
       'search.upload.ready': '\u062c\u0627\u0647\u0632 \u0644\u0644\u0628\u062d\u062b',
@@ -709,7 +709,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'hero.headline': '\u53d1\u73b0\u5b83\u3002<br>\u6211\u4eec\u627e\u5230\u5b83\u3002',
       'hero.sub': '\u63cf\u8ff0\u4efb\u4f55\u5feb\u65f6\u5c1a\u5355\u54c1\uff0c\u6211\u4eec\u7684AI\u4f1a\u8bc6\u522b\u5b83\u7684\u5962\u4f88\u54c1\u539f\u578b \u2014 \u8fd8\u6709\u66f4\u591a\u5e73\u4ef7\u66ff\u4ee3\u3002',
       'search.tab.link': '\u7c98\u8d34\u94fe\u63a5', 'search.tab.upload': '\u4e0a\u4f20\u7167\u7247', 'search.tab.text': '\u627e\u66ff\u4ee3\u54c1', 'search.tab.camera': '\u62cd\u7167',
-      'search.tab.reverse': '\u627e\u539f\u578b', 'search.btnReverse': '\u627e\u539f\u578b', 'search.placeholder.reverse': '\u63cf\u8ff0\u4f60\u7684\u5355\u54c1\uff0c\u4f8b\u5982\u201cZara\u7ed7\u7f1d\u94fe\u6761\u5305\u201d...',
+      'search.tab.reverse': '\u627e\u539f\u578b', 'search.btnReverse': '\u627e\u539f\u578b', 'search.btnSource': '\u641c\u7d22', 'search.placeholder.reverse': '\u63cf\u8ff0\u4f60\u7684\u5355\u54c1\uff0c\u4f8b\u5982\u201cZara\u7ed7\u7f1d\u94fe\u6761\u5305\u201d...',
       'search.placeholder.link': '\u7c98\u8d34\u4efb\u4f55\u65f6\u5c1a\u7f51\u7ad9\u7684\u4ea7\u54c1\u94fe\u63a5...',
       'search.placeholder.text': '\u63cf\u8ff0\u5355\u54c1\uff0c\u4f8b\u5982\u201c\u5976\u6cb9\u8272\u7f0e\u9762\u4e2d\u88d9\u201d...',
       'search.btn': '\u627e\u66ff\u4ee3\u54c1',
@@ -2493,6 +2493,8 @@ document.addEventListener('DOMContentLoaded', () => {
       document.querySelectorAll('.search-box__btn').forEach(b => {
         if (b.classList.contains('search-box__btn--reverse')) {
           b.textContent = t('search.btnReverse') || 'Find original';
+        } else if (b.dataset.i18n === 'search.btnSource' || b.getAttribute('data-i18n') === 'search.btnSource') {
+          b.textContent = t('search.btnSource') || 'Source it';
         } else {
           b.textContent = t('search.btn') || 'Find dupes';
         }
