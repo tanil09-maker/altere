@@ -1,6 +1,7 @@
-import { initDB, getTodaySearchCount, getAnonymousSearchCount } from '../../lib/db.js';
+import { initDB, getTodaySearchCount, getAnonymousSearchCount, getUserById } from '../../lib/db.js';
 import { getSessionFromRequest } from '../../lib/session.js';
-import { neon } from '@neondatabase/serverless';
+
+const DAILY_LIMIT = 10;
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -20,19 +21,23 @@ export default async function handler(req, res) {
              || 'unknown';
 
     if (userId) {
-      // Authenticated user
-      const sql = neon(process.env.DATABASE_URL);
-      const rows = await sql`SELECT id, name, email, picture FROM users WHERE id = ${userId} LIMIT 1`;
-      const user = rows[0];
+      const user = await getUserById(userId);
       if (!user) return res.status(401).json({ authenticated: false });
 
+      const isAdmin = user.is_admin === true;
       const searchesToday = await getTodaySearchCount(userId);
+
       return res.status(200).json({
         authenticated: true,
-        user: { name: user.name, email: user.email, picture: user.picture },
+        user: {
+          name: user.name,
+          email: user.email,
+          picture: user.picture,
+          is_admin: isAdmin,
+        },
         searches_today: searchesToday,
-        daily_limit: 1,
-        searches_remaining: Math.max(0, 1 - searchesToday)
+        daily_limit: isAdmin ? -1 : DAILY_LIMIT,
+        searches_remaining: isAdmin ? -1 : Math.max(0, DAILY_LIMIT - searchesToday),
       });
     }
 
@@ -42,7 +47,7 @@ export default async function handler(req, res) {
       authenticated: false,
       anonymous_searches_used: anonCount,
       anonymous_limit: 3,
-      searches_remaining: Math.max(0, 3 - anonCount)
+      searches_remaining: Math.max(0, 3 - anonCount),
     });
   } catch (err) {
     console.error('[auth/me] Error:', err);
