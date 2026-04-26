@@ -104,63 +104,9 @@
         </div>
 
         <div class="search-box__body">
-          <!-- Reverse / Find Original Panel (DEFAULT) with 3 sub-tabs -->
+          <!-- Reverse / Find Original Panel (DEFAULT) -->
           <div class="search-box__panel active" data-panel="reverse">
-            <div class="reverse-subtabs">
-              <button class="reverse-subtab active" data-subtab="describe" type="button">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
-                <span>Describe</span>
-              </button>
-              <button class="reverse-subtab" data-subtab="photo" type="button">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-                <span>Photo</span>
-              </button>
-              <button class="reverse-subtab" data-subtab="link" type="button">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-                <span>Link</span>
-              </button>
-            </div>
-
-            <div class="reverse-subpanels">
-              <!-- Describe (text) -->
-              <div class="reverse-subpanel active" data-subpanel="describe">
-                <input type="text" class="search-box__input" id="reverseInput" data-i18n-placeholder="search.placeholder.reverse" placeholder="Describe your high-street item, e.g. &quot;Zara quilted chain bag&quot;...">
-              </div>
-
-              <!-- Photo -->
-              <div class="reverse-subpanel" data-subpanel="photo">
-                <label class="search-box__upload-area" id="reverseUploadArea">
-                  <input type="file" accept="image/*" hidden id="reverseFileInput">
-                  <div class="upload__default" id="reverseUploadDefault">
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                    <span>Drag &amp; drop or <strong>browse</strong></span>
-                    <small>JPG, PNG or WEBP up to 10 MB</small>
-                  </div>
-                  <div class="upload__preview" id="reverseUploadPreview">
-                    <div class="upload__thumb-wrap">
-                      <img class="upload__thumb" id="reverseUploadThumb" src="" alt="Preview">
-                      <span class="upload__check">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                      </span>
-                    </div>
-                    <div class="upload__meta">
-                      <span class="upload__filename" id="reverseUploadFilename"></span>
-                      <small class="upload__filesize" id="reverseUploadFilesize"></small>
-                      <span class="upload__ready">Ready to find original</span>
-                    </div>
-                    <button type="button" class="upload__remove" id="reverseUploadRemove" aria-label="Remove image">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                    </button>
-                  </div>
-                </label>
-              </div>
-
-              <!-- Link -->
-              <div class="reverse-subpanel" data-subpanel="link">
-                <input type="url" class="search-box__input" id="reverseLinkInput" placeholder="Paste a product URL from any fashion site...">
-              </div>
-            </div>
-
+            <input type="text" class="search-box__input" id="reverseInput" data-i18n-placeholder="search.placeholder.reverse" placeholder="Describe your high-street item, e.g. &quot;Zara quilted chain bag&quot;...">
             <button class="search-box__btn search-box__btn--reverse" id="reverseBtn" data-i18n="search.btnReverse">Find original</button>
           </div>
           <!-- Search Text Panel (Find Dupes) -->
