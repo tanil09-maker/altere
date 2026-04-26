@@ -161,17 +161,40 @@ export default async function handler(req, res) {
     }
 
     // Format dupes for frontend
-    const dupes = scoredDupes.map(d => ({
-      store: d.source || '',
-      name: d.title || '',
-      price: d.price || '',
-      image: d.thumbnail || '',
-      link: d.link || '',
-      match_score: d.match_score || 0,
-      savings_percent: (originalVerified.found && d.extracted_price && originalVerified.price)
-        ? Math.round((1 - d.extracted_price / parseFloat(originalVerified.price.replace(/[^0-9.]/g, ''))) * 100)
-        : null,
-    }));
+    const originalPriceNum = originalVerified.found
+      ? parseFloat((originalVerified.price || '').replace(/[^0-9.]/g, '')) || 0
+      : 0;
+
+    const dupes = scoredDupes.map(d => {
+      const dupePrice = d.extracted_price || 0;
+      let savings_percent = null;
+      let savings_amount = null;
+      let savings_display = null;
+
+      if (originalPriceNum > 0 && dupePrice > 0 && dupePrice < originalPriceNum) {
+        const rawPercent = Math.round((1 - dupePrice / originalPriceNum) * 100);
+        savings_amount = Math.round(originalPriceNum - dupePrice);
+        if (rawPercent > 95) {
+          savings_percent = 95;
+          savings_display = { type: 'amount', value: `$${savings_amount}` };
+        } else {
+          savings_percent = rawPercent;
+          savings_display = { type: 'percent', value: `${rawPercent}%` };
+        }
+      }
+
+      return {
+        store: d.source || '',
+        name: d.title || '',
+        price: d.price || '',
+        image: d.thumbnail || '',
+        link: d.link || '',
+        match_score: d.match_score || 0,
+        savings_percent,
+        savings_amount,
+        savings_display,
+      };
+    });
 
     // --- Build response ---
     const result = {
