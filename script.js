@@ -1792,6 +1792,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Show rate limit modal based on error type
   function showRateLimitModal(errorData) {
+    // Admin should never see rate limit modals
+    if (currentUser?.is_admin) return;
+
     if (errorData.error === 'signup_required') {
       anonLimitModal.classList.add('open');
     } else if (errorData.error === 'daily_limit') {
@@ -1978,14 +1981,20 @@ document.addEventListener('DOMContentLoaded', () => {
       el.style.display = 'none';
       return;
     }
+    // Admin: unlimited
+    if (currentUser?.is_admin || remaining === -1) {
+      el.textContent = 'Unlimited searches';
+      el.style.display = '';
+      return;
+    }
     if (remaining > 0) {
       const label = currentUser
-        ? `${remaining} search left today`
+        ? `${remaining} searches left today`
         : `${remaining} free searches remaining`;
       el.textContent = label;
       el.style.display = '';
     } else {
-      el.textContent = currentUser ? 'Daily search used' : 'Free searches used';
+      el.textContent = currentUser ? 'Daily searches used' : 'Free searches used';
       el.style.display = '';
     }
   }
