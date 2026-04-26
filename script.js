@@ -2221,7 +2221,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ---- Link sub-pane handler ---- */
   const linkBtn = document.getElementById('linkBtn');
-  const linkInput = document.getElementById('linkInput');
 
   if (linkBtn) {
     linkBtn.addEventListener('click', () => {
