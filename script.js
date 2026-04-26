@@ -2250,9 +2250,14 @@ document.addEventListener('DOMContentLoaded', () => {
       card.dataset.price = String(dupe.extracted_price || '0');
       card.style.transitionDelay = `${i * 0.08}s`;
 
-      const savingsBadge = dupe.savings_percent && dupe.savings_percent > 0
-        ? `<span class="dupe-card__badge">&minus;${dupe.savings_percent}%</span>`
-        : `<span class="dupe-card__badge">${dupe.match_score}%</span>`;
+      let savingsBadge;
+      if (dupe.savings_display) {
+        savingsBadge = dupe.savings_display.type === 'amount'
+          ? `<span class="dupe-card__badge">Save ${escapeHtml(dupe.savings_display.value)}</span>`
+          : `<span class="dupe-card__badge">&minus;${escapeHtml(dupe.savings_display.value)}</span>`;
+      } else {
+        savingsBadge = `<span class="dupe-card__badge">${dupe.match_score}%</span>`;
+      }
 
       card.innerHTML = `
         <div class="dupe-card__image">
