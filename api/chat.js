@@ -1,8 +1,10 @@
 // ALTERE Search Orchestrator
 // Flow: identify → verify via SerpAPI → find dupes → score → cache → respond
 
-import { initDB, getTodaySearchCount, getAnonymousSearchCount, logSearch, logAnonymousSearch } from '../lib/db.js';
+import { initDB, getTodaySearchCount, getAnonymousSearchCount, logSearch, logAnonymousSearch, getUserById } from '../lib/db.js';
 import { getSessionFromRequest } from '../lib/session.js';
+
+const DAILY_LIMIT = 10;
 import { identifyFromText, identifyFromImage, identifyFromUrl } from '../lib/identify.js';
 import { searchGoogleShopping } from '../lib/serpapi.js';
 import { searchDupes, scoreDupes } from '../lib/dupe_finder.js';
@@ -27,20 +29,30 @@ export default async function handler(req, res) {
   try {
     await initDB();
     const userId = await getSessionFromRequest(req);
+    let user = null;
+    let isAdmin = false;
 
     // --- Rate limiting ---
     if (userId) {
-      const todayCount = await getTodaySearchCount(userId);
-      if (todayCount >= 1) {
-        const tomorrow = new Date();
-        tomorrow.setUTCHours(24, 0, 0, 0);
-        return res.status(429).json({
-          error: 'daily_limit',
-          message: 'You have used your daily search. Come back tomorrow!',
-          reset_at: tomorrow.toISOString(),
-          searches_remaining: 0,
-        });
+      user = await getUserById(userId);
+      isAdmin = user?.is_admin === true;
+
+      if (!isAdmin) {
+        const todayCount = await getTodaySearchCount(userId);
+        if (todayCount >= DAILY_LIMIT) {
+          const tomorrow = new Date();
+          tomorrow.setUTCHours(24, 0, 0, 0);
+          return res.status(429).json({
+            error: 'daily_limit',
+            message: `Daily limit reached. You have used all ${DAILY_LIMIT} searches today.`,
+            reset_at: tomorrow.toISOString(),
+            searches_remaining: 0,
+            searches_used: todayCount,
+            searches_total: DAILY_LIMIT,
+          });
+        }
       }
+      // Admin: no rate limit check, falls through
     } else {
       const anonCount = await getAnonymousSearchCount(ip);
       if (anonCount >= 3) {
@@ -68,14 +80,12 @@ export default async function handler(req, res) {
       if (userId) await logSearch(userId, ip, query || url || 'image search');
       else await logAnonymousSearch(ip);
 
-      const remaining = userId
-        ? Math.max(0, 1 - await getTodaySearchCount(userId))
-        : Math.max(0, 3 - await getAnonymousSearchCount(ip));
+      const rateMeta = await buildRateMeta(userId, user, isAdmin, ip);
 
       return res.status(200).json({
         ...cached,
         search_meta: { cached: true, duration_ms: Date.now() - startTime },
-        _rateLimit: { remaining, limit: userId ? 1 : 3 },
+        ...rateMeta,
       });
     }
 
@@ -96,7 +106,7 @@ export default async function handler(req, res) {
         dupes: [],
         not_found: true,
         message: 'We could not identify this product. Try a different description or a clearer photo.',
-        _rateLimit: { remaining: 0, limit: userId ? 1 : 3 },
+        ...(await buildRateMeta(userId, user, isAdmin, ip)),
       });
     }
 
@@ -188,18 +198,41 @@ export default async function handler(req, res) {
       await logAnonymousSearch(ip);
     }
 
-    const remaining = userId
-      ? Math.max(0, 1 - await getTodaySearchCount(userId))
-      : Math.max(0, 3 - await getAnonymousSearchCount(ip));
+    const rateMeta = await buildRateMeta(userId, user, isAdmin, ip);
 
     return res.status(200).json({
       ...result,
       search_meta: { cached: false, duration_ms: Date.now() - startTime },
-      _rateLimit: { remaining, limit: userId ? 1 : 3 },
+      ...rateMeta,
     });
 
   } catch (err) {
     console.error('[chat] Unhandled error:', err);
     return res.status(500).json({ error: 'Search failed', message: err.message });
   }
+}
+
+async function buildRateMeta(userId, user, isAdmin, ip) {
+  if (userId) {
+    const todayCount = await getTodaySearchCount(userId);
+    return {
+      _rateLimit: {
+        remaining: isAdmin ? -1 : Math.max(0, DAILY_LIMIT - todayCount),
+        limit: isAdmin ? -1 : DAILY_LIMIT,
+      },
+      user_meta: {
+        is_admin: isAdmin,
+        searches_used_today: todayCount,
+        searches_remaining: isAdmin ? -1 : Math.max(0, DAILY_LIMIT - todayCount),
+        daily_limit: DAILY_LIMIT,
+      },
+    };
+  }
+  const anonCount = await getAnonymousSearchCount(ip);
+  return {
+    _rateLimit: {
+      remaining: Math.max(0, 3 - anonCount),
+      limit: 3,
+    },
+  };
 }
