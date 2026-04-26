@@ -1690,11 +1690,117 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   /* ============================================================
-     Auth button — hidden (tier system removed)
+     Auth — Google OAuth + Rate Limit Modals
      ============================================================ */
 
   const authBtn = document.getElementById('authBtn');
-  if (authBtn) authBtn.style.display = 'none';
+  const navUser = document.getElementById('navUser');
+  const navAvatar = document.getElementById('navAvatar');
+  const navUserName = document.getElementById('navUserName');
+  const navUserEmail = document.getElementById('navUserEmail');
+  const navUserDropdown = document.getElementById('navUserDropdown');
+  const authModal = document.getElementById('authModal');
+  const authModalClose = document.getElementById('authModalClose');
+  const anonLimitModal = document.getElementById('anonLimitModal');
+  const anonLimitClose = document.getElementById('anonLimitClose');
+  const dailyLimitModal = document.getElementById('dailyLimitModal');
+  const dailyLimitClose = document.getElementById('dailyLimitClose');
+  const dailyCountdown = document.getElementById('dailyCountdown');
+
+  let currentUser = null;
+  let searchesRemaining = null;
+
+  // Fetch auth state on load
+  async function checkAuth() {
+    try {
+      const res = await fetch('/api/auth/me', { credentials: 'same-origin' });
+      const data = await res.json();
+      if (data.authenticated) {
+        currentUser = data.user;
+        searchesRemaining = data.searches_remaining;
+        authBtn.style.display = 'none';
+        navUser.style.display = '';
+        navAvatar.src = data.user.picture || '';
+        navUserName.textContent = data.user.name || '';
+        navUserEmail.textContent = data.user.email || '';
+      } else {
+        currentUser = null;
+        searchesRemaining = data.searches_remaining;
+        authBtn.style.display = '';
+        navUser.style.display = 'none';
+      }
+      updateFreeCounter(searchesRemaining);
+    } catch {
+      authBtn.style.display = '';
+      navUser.style.display = 'none';
+    }
+  }
+  checkAuth();
+
+  // Sign in button → open modal
+  if (authBtn) {
+    authBtn.addEventListener('click', e => {
+      e.preventDefault();
+      hamburger.classList.remove('active');
+      navLinks.classList.remove('open');
+      authModal.classList.add('open');
+    });
+  }
+
+  // User avatar → toggle dropdown
+  if (navUser) {
+    navUser.addEventListener('click', () => {
+      navUserDropdown.classList.toggle('open');
+    });
+    document.addEventListener('click', e => {
+      if (!navUser.contains(e.target)) navUserDropdown.classList.remove('open');
+    });
+  }
+
+  // Modal close buttons
+  [authModalClose, anonLimitClose, dailyLimitClose].forEach(btn => {
+    if (btn) btn.addEventListener('click', () => {
+      authModal.classList.remove('open');
+      anonLimitModal.classList.remove('open');
+      dailyLimitModal.classList.remove('open');
+    });
+  });
+
+  // Close modals on overlay click
+  [authModal, anonLimitModal, dailyLimitModal].forEach(modal => {
+    if (modal) modal.addEventListener('click', e => {
+      if (e.target === modal) modal.classList.remove('open');
+    });
+  });
+
+  // Daily countdown timer
+  let countdownInterval;
+  function startDailyCountdown(resetAt) {
+    clearInterval(countdownInterval);
+    const target = resetAt ? new Date(resetAt).getTime() : (() => {
+      const t = new Date(); t.setUTCHours(24, 0, 0, 0); return t.getTime();
+    })();
+    function tick() {
+      const diff = target - Date.now();
+      if (diff <= 0) { dailyCountdown.textContent = '00:00:00'; clearInterval(countdownInterval); return; }
+      const h = String(Math.floor(diff / 3600000)).padStart(2, '0');
+      const m = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');
+      const s = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
+      dailyCountdown.textContent = `${h}:${m}:${s}`;
+    }
+    tick();
+    countdownInterval = setInterval(tick, 1000);
+  }
+
+  // Show rate limit modal based on error type
+  function showRateLimitModal(errorData) {
+    if (errorData.error === 'signup_required') {
+      anonLimitModal.classList.add('open');
+    } else if (errorData.error === 'daily_limit') {
+      startDailyCountdown(errorData.reset_at);
+      dailyLimitModal.classList.add('open');
+    }
+  }
 
   /* ============================================================
      Toast notifications
@@ -1912,14 +2018,22 @@ Rules:
 
   function updateFreeCounter(remaining) {
     freeRemaining = remaining;
+    searchesRemaining = remaining;
     const el = document.getElementById('freeCounter');
     if (!el) return;
 
+    if (remaining === null || remaining === undefined) {
+      el.style.display = 'none';
+      return;
+    }
     if (remaining > 0) {
-      el.textContent = `${remaining} ${t('free.remaining') || 'searches left today'}`;
+      const label = currentUser
+        ? `${remaining} search left today`
+        : `${remaining} free searches remaining`;
+      el.textContent = label;
       el.style.display = '';
     } else {
-      el.textContent = t('free.exhausted') || 'Daily limit reached';
+      el.textContent = currentUser ? 'Daily search used' : 'Free searches used';
       el.style.display = '';
     }
   }
@@ -2108,12 +2222,15 @@ No explanation, no markdown — just the URL or NOT_FOUND.`
     const res = await fetch(PROXY_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      credentials: 'same-origin',
       body: JSON.stringify(body)
     });
 
     if (res.status === 429) {
+      const errData = await res.json().catch(() => ({}));
       updateFreeCounter(0);
-      throw new Error('Daily limit reached. Try again tomorrow.');
+      showRateLimitModal(errData);
+      throw new Error(errData.message || 'Limit reached');
     }
 
     if (!res.ok) {
