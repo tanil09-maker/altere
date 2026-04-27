@@ -2167,6 +2167,9 @@ document.addEventListener('DOMContentLoaded', () => {
     bestDupeEl.classList.remove('visible');
     originalFoundEl.innerHTML = '';
     originalFoundEl.classList.remove('visible');
+    // Remove old limited notice if any
+    const oldNotice = resultsGrid.parentElement.querySelector('p[style*="font-style:italic"]');
+    if (oldNotice) oldNotice.remove();
     moreAltsEl.classList.remove('visible');
 
     const eyebrow = resultsHeader.querySelector('.results__eyebrow');
@@ -2217,14 +2220,17 @@ document.addEventListener('DOMContentLoaded', () => {
       sub.textContent     = `${dupes.length} alternatives for \u201c${query}\u201d`;
     }
 
-    // --- Limited results notice ---
-    if (result.dupes_limited && dupes.length > 0) {
-      sub.textContent += ` (limited results \u2014 only ${dupes.length} quality matches found)`;
-    }
-
     // --- Dupes in grid ---
     if (dupes.length > 0) {
       moreAltsEl.classList.add('visible');
+    }
+
+    // --- Limited results notice ---
+    if (result.dupes_limited || dupes.length < 3) {
+      const notice = document.createElement('p');
+      notice.style.cssText = 'text-align:center;color:var(--grey-500);font-size:13px;font-style:italic;margin:0 0 16px;padding:0 20px';
+      notice.innerHTML = '<span style="color:var(--gold)">Limited matches</span> \u2014 luxury items often have fewer high-street dupes available';
+      resultsGrid.parentElement.insertBefore(notice, resultsGrid);
     }
 
     dupes.forEach((dupe, i) => {
@@ -2238,13 +2244,12 @@ document.addEventListener('DOMContentLoaded', () => {
       card.dataset.price = String(dupe.extracted_price || '0');
       card.style.transitionDelay = `${i * 0.08}s`;
 
-      let savingsBadge;
-      if (dupe.savings_display) {
+      // Gold pill badge = ONLY for savings, never match score
+      let savingsBadge = '';
+      if (dupe.savings_display && dupe.savings_percent >= 5) {
         savingsBadge = dupe.savings_display.type === 'amount'
           ? `<span class="dupe-card__badge">Save ${escapeHtml(dupe.savings_display.value)}</span>`
           : `<span class="dupe-card__badge">&minus;${escapeHtml(dupe.savings_display.value)}</span>`;
-      } else {
-        savingsBadge = `<span class="dupe-card__badge">${dupe.match_score}%</span>`;
       }
 
       card.innerHTML = `
