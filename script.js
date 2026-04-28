@@ -2052,6 +2052,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  /* ---- Region meta for currency display ---- */
+  let currentRegionMeta = { symbol: '$', currency: 'USD', region: 'WW' };
+
+  function formatPrice(price, symbol) {
+    if (!price && price !== 0) return '';
+    const sym = symbol || currentRegionMeta.symbol || '$';
+    if (typeof price === 'string') {
+      const numeric = price.replace(/[^0-9.,]/g, '').replace(',', '.');
+      const num = parseFloat(numeric);
+      if (!isNaN(num)) return `${sym}${Math.round(num).toLocaleString()}`;
+      return price;
+    }
+    return `${sym}${Math.round(price).toLocaleString()}`;
+  }
+
   /* ---- Search API call ---- */
 
   async function callSearch(searchBody) {
@@ -2081,6 +2096,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const data = await res.json();
     if (data._rateLimit) {
       updateFreeCounter(data._rateLimit.remaining);
+    }
+    if (data.region_meta) {
+      currentRegionMeta = data.region_meta;
     }
 
     return data;
@@ -2262,7 +2280,6 @@ document.addEventListener('DOMContentLoaded', () => {
     bestDupeEl.classList.remove('visible');
     originalFoundEl.innerHTML = '';
     originalFoundEl.classList.remove('visible');
-    // Remove old limited notice if any
     const oldNotice = resultsGrid.parentElement.querySelector('p[style*="font-style:italic"]');
     if (oldNotice) oldNotice.remove();
     moreAltsEl.classList.remove('visible');
@@ -2271,8 +2288,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const title   = resultsHeader.querySelector('.results__title');
     const sub     = resultsHeader.querySelector('.results__subtitle');
 
-    const orig = result.original || {};
+    const originals = result.originals || [];
     const dupes = result.dupes || [];
+    const symbol = currentRegionMeta.symbol || '$';
 
     // --- Not found state ---
     if (result.not_found) {
@@ -2282,32 +2300,35 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // --- Original card ---
-    if (orig.found) {
-      eyebrow.textContent = t('reverse.eyebrow') || 'Original Found';
-      title.textContent   = t('reverse.title') || 'We found the original';
-      sub.textContent     = `${t('reverse.for') || 'Original identified for'} \u201c${query}\u201d`;
+    // --- Luxury Originals (2 cards) ---
+    if (originals.length > 0) {
+      eyebrow.textContent = 'Luxury Originals';
+      title.textContent   = 'The Inspiration';
+      sub.textContent     = `Found for \u201c${query}\u201d`;
 
-      const origImg = orig.image || getCategoryFallback(orig.category || 'clothing');
+      const origCards = originals.map(item => {
+        const img = item.thumbnail || getCategoryFallback(item.category || 'clothing');
+        const price = item.extracted_price ? formatPrice(item.extracted_price, symbol) : (item.price || '');
+        const linkAttr = item.link ? `href="${escapeAttr(item.link)}" target="_blank" rel="noopener"` : '';
+        return `
+          <a ${linkAttr} class="luxury-card">
+            <div class="luxury-card__image">
+              <img src="${escapeAttr(img)}" alt="${escapeAttr(item.product_name || '')}" loading="lazy" onerror="this.src='${getCategoryFallback(item.category || 'clothing')}'">
+            </div>
+            <div class="luxury-card__info">
+              <div class="luxury-card__brand">${escapeHtml(item.brand || '')}</div>
+              <div class="luxury-card__name">${escapeHtml(item.product_name || item.title || '')}</div>
+              <div class="luxury-card__price">${escapeHtml(price)}</div>
+              ${item.source ? `<div class="luxury-card__cta">View at ${escapeHtml(item.source)} \u2192</div>` : ''}
+            </div>
+          </a>`;
+      }).join('');
 
       originalFoundEl.innerHTML = `
-        <article class="original-found__card">
-          <div class="original-found__image">
-            <img src="${escapeAttr(origImg)}" alt="${escapeHtml(orig.name || '')}" loading="lazy" onerror="this.src='${getCategoryFallback(orig.category || 'clothing')}'">
-            <span class="original-found__ribbon">${t('reverse.originalLabel') || 'The Original'}</span>
-          </div>
-          <div class="original-found__body">
-            <span class="original-found__label">${t('reverse.identifiedAs') || 'Identified as'}</span>
-            <span class="original-found__brand">${escapeHtml(orig.brand || '')}</span>
-            <h3 class="original-found__name">${escapeHtml(orig.name || '')}</h3>
-            <span class="original-found__price">${escapeHtml(orig.price || '')}</span>
-            ${orig.source ? `<span class="original-found__source">${escapeHtml(orig.source)}</span>` : ''}
-            <span class="original-found__arrow">
-              ${t('reverse.dupeBelow') || 'Affordable alternatives below'}
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-            </span>
-          </div>
-        </article>`;
+        <div class="luxury-originals__grid">${origCards}</div>
+        <div class="luxury-originals__divider">
+          <span>Save up to 95% with high-street alternatives below</span>
+        </div>`;
       originalFoundEl.classList.add('visible');
     } else {
       eyebrow.textContent = t('results.ai.eyebrow') || 'AI Results';
@@ -2321,25 +2342,27 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Limited results notice ---
-    if (result.dupes_limited || dupes.length < 3) {
+    if ((result.dupes_limited || dupes.length < 3) && dupes.length > 0) {
       const notice = document.createElement('p');
       notice.style.cssText = 'text-align:center;color:var(--grey-500);font-size:13px;font-style:italic;margin:0 0 16px;padding:0 20px';
       notice.innerHTML = '<span style="color:var(--gold)">Limited matches</span> \u2014 luxury items often have fewer high-street dupes available';
       resultsGrid.parentElement.insertBefore(notice, resultsGrid);
     }
 
+    const category = originals[0]?.category || 'clothing';
+
     dupes.forEach((dupe, i) => {
-      const dupeImg = dupe.image || getCategoryFallback(orig.category || 'clothing');
+      const dupeImg = dupe.image || getCategoryFallback(category);
 
       const card = document.createElement('article');
       card.className = 'dupe-card reveal';
       card.dataset.store = dupe.store || '';
-      card.dataset.category = orig.category || 'clothing';
+      card.dataset.category = category;
       card.dataset.material = 'natural';
       card.dataset.price = String(dupe.extracted_price || '0');
       card.style.transitionDelay = `${i * 0.08}s`;
 
-      // Gold pill badge = ONLY for savings, never match score
+      // Gold pill badge = ONLY for savings
       let savingsBadge = '';
       if (dupe.savings_display && dupe.savings_percent >= 5) {
         savingsBadge = dupe.savings_display.type === 'amount'
@@ -2347,9 +2370,11 @@ document.addEventListener('DOMContentLoaded', () => {
           : `<span class="dupe-card__badge">&minus;${escapeHtml(dupe.savings_display.value)}</span>`;
       }
 
+      const dupePrice = dupe.extracted_price ? formatPrice(dupe.extracted_price, symbol) : (dupe.price || '');
+
       card.innerHTML = `
         <div class="dupe-card__image">
-          <img src="${escapeAttr(dupeImg)}" alt="${escapeAttr(dupe.name || '')}" loading="lazy" onerror="this.src='${getCategoryFallback(orig.category || 'clothing')}'">
+          <img src="${escapeAttr(dupeImg)}" alt="${escapeAttr(dupe.name || '')}" loading="lazy" onerror="this.src='${getCategoryFallback(category)}'">
           <span class="dupe-card__save" aria-label="Save">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
           </span>
@@ -2359,7 +2384,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <span class="dupe-card__store">${escapeHtml(dupe.store || '')}</span>
           <h3 class="dupe-card__name">${escapeHtml(dupe.name || '')}</h3>
           <div class="dupe-card__price-row">
-            <span class="dupe-card__price">${escapeHtml(dupe.price || '')}</span>
+            <span class="dupe-card__price">${escapeHtml(dupePrice)}</span>
           </div>
           <div class="dupe-card__match">
             <div class="dupe-card__match-bar"><div class="dupe-card__match-fill" style="width:0%"></div></div>

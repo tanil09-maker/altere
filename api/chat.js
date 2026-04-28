@@ -6,7 +6,7 @@ import { getSessionFromRequest } from '../lib/session.js';
 import { detectRegion, getRegionConfig, getRegionStoreSet, getSerpApiParams } from '../lib/region.js';
 
 const DAILY_LIMIT = 10;
-import { identifyFromText, identifyFromImage, identifyFromUrl } from '../lib/identify.js';
+import { identifyFromText, identifyFromImage, identifyFromUrl, verifyOriginals } from '../lib/identify.js';
 import { searchGoogleShopping } from '../lib/serpapi.js';
 import { searchDupes, scoreDupes } from '../lib/dupe_finder.js';
 import { hashQuery, getCached, setCached } from '../lib/cache.js';
@@ -99,80 +99,60 @@ export default async function handler(req, res) {
       });
     }
 
-    // --- Step 1: Identify the product ---
-    let productInfo;
+    // --- Step 1: Identify product (returns 2 luxury originals + dupe hints) ---
+    let identified;
 
     if (intent === 'dupes_only') {
-      // Skip identification, use raw input as dupe search basis
-      productInfo = {
-        brand: 'Unknown',
-        product_name: query || url || 'fashion item',
-        category: 'clothing',
-        color: '',
-        material: '',
+      identified = {
+        originals: [],
         key_features: (query || '').split(' ').filter(w => w.length > 3),
-        search_query: query || '',
         dupe_search_hints: [(query || '').toLowerCase()],
         confidence: 50,
       };
     } else {
       try {
         if (inputType === 'image' && imageData) {
-          productInfo = await identifyFromImage(imageData, mediaType);
+          identified = await identifyFromImage(imageData, mediaType);
         } else if (inputType === 'url' && url) {
-          productInfo = await identifyFromUrl(url);
+          identified = await identifyFromUrl(url);
         } else {
-          productInfo = await identifyFromText(query);
+          identified = await identifyFromText(query);
         }
       } catch (err) {
         console.error('[chat] Identification failed:', err.message);
         return res.status(200).json({
-          original: { found: false, description: query || 'Unknown item' },
+          originals: [],
           dupes: [],
           not_found: true,
           message: 'We could not identify this product. Try a different description or a clearer photo.',
+          region_meta: { region, currency: regionConfig.currency, symbol: regionConfig.symbol },
           ...(await buildRateMeta(userId, user, isAdmin, ip)),
         });
       }
     }
 
-    // --- Step 2: Verify original via SerpAPI Shopping ---
-    let originalVerified = null;
-    if (intent !== 'dupes_only' && productInfo.confidence >= 70 && productInfo.search_query) {
+    // --- Step 2: Verify originals via SerpAPI ---
+    let verifiedOriginals = [];
+    if (intent !== 'dupes_only' && identified.originals?.length > 0) {
       try {
-        const shopResults = await searchGoogleShopping(productInfo.search_query, { num: 5, ...serpApiParams });
-        if (shopResults.length > 0) {
-          // Pick the best match — prefer official brand sources
-          const best = shopResults[0];
-          originalVerified = {
-            found: true,
-            brand: productInfo.brand || '',
-            name: productInfo.product_name || best.title,
-            price: best.price || '',
-            image: best.thumbnail || '',
-            source: best.source || '',
-            link: best.link || '',
-            description: `${productInfo.product_name} by ${productInfo.brand}. ${productInfo.color || ''} ${productInfo.material || ''}`.trim(),
-            category: productInfo.category || 'clothing',
-          };
-        }
+        verifiedOriginals = await verifyOriginals(identified.originals, serpApiParams);
       } catch (err) {
         console.error('[chat] Original verification failed:', err.message);
       }
     }
 
-    // Fallback if not verified
-    if (!originalVerified) {
-      originalVerified = {
-        found: false,
-        brand: productInfo.brand || '',
-        name: productInfo.product_name || '',
-        description: `${productInfo.product_name || query} — ${productInfo.color || ''} ${productInfo.material || ''} ${productInfo.category || ''}`.trim(),
-        category: productInfo.category || 'clothing',
-      };
-    }
-
     // --- Step 3: Find dupes ---
+    // Build productInfo for dupe_finder from identified data
+    const productInfo = {
+      brand: identified.originals?.[0]?.brand || 'Unknown',
+      product_name: identified.originals?.[0]?.product_name || query || '',
+      category: identified.originals?.[0]?.category || 'clothing',
+      color: identified.originals?.[0]?.color || '',
+      material: identified.originals?.[0]?.material || '',
+      key_features: identified.key_features || [],
+      dupe_search_hints: identified.dupe_search_hints || [(query || '').toLowerCase()],
+    };
+
     let scoredDupes = [];
     let dupesLimited = false;
     try {
@@ -187,9 +167,8 @@ export default async function handler(req, res) {
     }
 
     // Format dupes for frontend
-    const originalPriceNum = originalVerified.found
-      ? parseFloat((originalVerified.price || '').replace(/[^0-9.]/g, '')) || 0
-      : 0;
+    const symbol = regionConfig.symbol;
+    const originalPriceNum = verifiedOriginals[0]?.extracted_price || 0;
 
     const dupes = scoredDupes.map(d => {
       const dupePrice = d.extracted_price || 0;
@@ -202,7 +181,7 @@ export default async function handler(req, res) {
         savings_amount = Math.round(originalPriceNum - dupePrice);
         if (rawPercent > 95) {
           savings_percent = 95;
-          savings_display = { type: 'amount', value: `$${savings_amount}` };
+          savings_display = { type: 'amount', value: `${symbol}${savings_amount}` };
         } else {
           savings_percent = rawPercent;
           savings_display = { type: 'percent', value: `${rawPercent}%` };
@@ -213,6 +192,7 @@ export default async function handler(req, res) {
         store: d.source || '',
         name: d.title || '',
         price: d.price || '',
+        extracted_price: dupePrice,
         image: d.thumbnail || '',
         link: d.link || '',
         match_score: d.match_score || 0,
@@ -224,11 +204,11 @@ export default async function handler(req, res) {
 
     // --- Build response ---
     const result = {
-      original: originalVerified,
+      originals: verifiedOriginals,
       dupes,
       dupes_limited: dupesLimited,
-      not_found: !originalVerified.found && dupes.length === 0,
-      message: (!originalVerified.found && dupes.length === 0)
+      not_found: verifiedOriginals.length === 0 && dupes.length === 0,
+      message: (verifiedOriginals.length === 0 && dupes.length === 0)
         ? 'We couldn\'t verify this product or find quality dupes. Try a different description.'
         : undefined,
     };
