@@ -129,6 +129,97 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   /* ============================================================
+     Region / Country switcher
+     ============================================================ */
+
+  const REGION_KEY    = 'altere_region';
+  const COUNTRY_KEY   = 'altere_country';
+  const regionSwitcher = document.getElementById('regionSwitcher');
+  const regionBtn     = document.getElementById('regionBtn');
+  const regionMenu    = document.getElementById('regionMenu');
+  const regionFlag    = document.getElementById('regionFlag');
+  const regionCode    = document.getElementById('regionCode');
+
+  const REGION_FLAGS = {
+    US: '\ud83c\uddfa\ud83c\uddf8', EU: '\ud83c\uddea\ud83c\uddfa', UK: '\ud83c\uddec\ud83c\udde7',
+    CA: '\ud83c\udde8\ud83c\udde6', AU: '\ud83c\udde6\ud83c\uddfa', JP: '\ud83c\uddef\ud83c\uddf5',
+    WW: '\ud83c\udf0d',
+  };
+  const COUNTRY_FLAGS = {
+    NL: '\ud83c\uddf3\ud83c\uddf1', ES: '\ud83c\uddea\ud83c\uddf8', FR: '\ud83c\uddeb\ud83c\uddf7',
+    DE: '\ud83c\udde9\ud83c\uddea', IT: '\ud83c\uddee\ud83c\uddf9', BE: '\ud83c\udde7\ud83c\uddea',
+    AT: '\ud83c\udde6\ud83c\uddf9', PT: '\ud83c\uddf5\ud83c\uddf9', SE: '\ud83c\uddf8\ud83c\uddea',
+    DK: '\ud83c\udde9\ud83c\uddf0', FI: '\ud83c\uddeb\ud83c\uddee', IE: '\ud83c\uddee\ud83c\uddea',
+    PL: '\ud83c\uddf5\ud83c\uddf1', GR: '\ud83c\uddec\ud83c\uddf7', NO: '\ud83c\uddf3\ud83c\uddf4',
+    CH: '\ud83c\udde8\ud83c\udded', NZ: '\ud83c\uddf3\ud83c\uddff',
+  };
+
+  let currentRegion  = localStorage.getItem(REGION_KEY) || null;
+  let currentCountry = localStorage.getItem(COUNTRY_KEY) || null;
+
+  function updateRegionUI(region, country) {
+    currentRegion = region;
+    currentCountry = country;
+    const flag = (country && COUNTRY_FLAGS[country.toUpperCase()]) || REGION_FLAGS[region] || REGION_FLAGS.WW;
+    if (regionFlag) regionFlag.textContent = flag;
+    if (regionCode) regionCode.textContent = region || '--';
+    // Highlight active option
+    regionMenu?.querySelectorAll('.nav__region-option').forEach(opt => {
+      opt.classList.toggle('active', opt.dataset.region === region);
+    });
+  }
+
+  // Detect on first load
+  async function initRegion() {
+    if (currentRegion) {
+      updateRegionUI(currentRegion, currentCountry);
+      return;
+    }
+    try {
+      const res = await fetch('/api/region');
+      const data = await res.json();
+      currentRegion = data.region;
+      currentCountry = data.detected_country || '';
+      localStorage.setItem(REGION_KEY, currentRegion);
+      localStorage.setItem(COUNTRY_KEY, currentCountry);
+      updateRegionUI(currentRegion, currentCountry);
+    } catch {
+      updateRegionUI('WW', '');
+    }
+  }
+  initRegion();
+
+  // Toggle dropdown
+  if (regionBtn) {
+    regionBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      regionSwitcher.classList.toggle('open');
+      // Close lang menu if open
+      document.getElementById('langSwitcher')?.classList.remove('open');
+    });
+  }
+
+  // Pick region
+  if (regionMenu) {
+    regionMenu.addEventListener('click', e => {
+      const opt = e.target.closest('[data-region]');
+      if (!opt) return;
+      const region = opt.dataset.region;
+      localStorage.setItem(REGION_KEY, region);
+      localStorage.setItem(COUNTRY_KEY, '');
+      updateRegionUI(region, '');
+      regionSwitcher.classList.remove('open');
+    });
+  }
+
+  // Close on outside click
+  document.addEventListener('click', e => {
+    if (regionSwitcher && !regionSwitcher.contains(e.target)) {
+      regionSwitcher.classList.remove('open');
+    }
+  });
+
+  /* ============================================================
      Language switcher
      ============================================================ */
 
@@ -1964,6 +2055,10 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ---- Search API call ---- */
 
   async function callSearch(searchBody) {
+    // Inject region into every search request
+    searchBody.region = currentRegion || localStorage.getItem(REGION_KEY) || '';
+    searchBody.country = currentCountry || localStorage.getItem(COUNTRY_KEY) || '';
+
     const res = await fetch(PROXY_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

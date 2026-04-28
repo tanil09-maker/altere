@@ -3,6 +3,7 @@
 
 import { initDB, getTodaySearchCount, getAnonymousSearchCount, logSearch, logAnonymousSearch, getUserById } from '../lib/db.js';
 import { getSessionFromRequest } from '../lib/session.js';
+import { detectRegion, getRegionConfig, getRegionStoreSet, getSerpApiParams } from '../lib/region.js';
 
 const DAILY_LIMIT = 10;
 import { identifyFromText, identifyFromImage, identifyFromUrl } from '../lib/identify.js';
@@ -73,8 +74,15 @@ export default async function handler(req, res) {
     const url = body.url || '';
     const intent = body.intent || 'identify_and_dupes'; // 'identify_and_dupes' | 'dupes_only'
 
-    // --- Cache check ---
-    const cacheKey = hashQuery(query || url || (imageData || '').substring(0, 100), { type: inputType });
+    // --- Region detection ---
+    const countryCode = body.country || req.headers['x-vercel-ip-country'] || null;
+    const region = body.region || detectRegion(countryCode);
+    const regionConfig = getRegionConfig(region);
+    const storeSet = getRegionStoreSet(region);
+    const serpApiParams = getSerpApiParams(region, countryCode);
+
+    // --- Cache check (includes region) ---
+    const cacheKey = hashQuery(query || url || (imageData || '').substring(0, 100), { type: inputType, region });
     const cached = await getCached(cacheKey, 'full_result');
     if (cached) {
       // Log the search even if cached
@@ -86,6 +94,7 @@ export default async function handler(req, res) {
       return res.status(200).json({
         ...cached,
         search_meta: { cached: true, duration_ms: Date.now() - startTime },
+        region_meta: { region, currency: regionConfig.currency, symbol: regionConfig.symbol },
         ...rateMeta,
       });
     }
@@ -131,7 +140,7 @@ export default async function handler(req, res) {
     let originalVerified = null;
     if (intent !== 'dupes_only' && productInfo.confidence >= 70 && productInfo.search_query) {
       try {
-        const shopResults = await searchGoogleShopping(productInfo.search_query, { num: 5 });
+        const shopResults = await searchGoogleShopping(productInfo.search_query, { num: 5, ...serpApiParams });
         if (shopResults.length > 0) {
           // Pick the best match — prefer official brand sources
           const best = shopResults[0];
@@ -167,7 +176,7 @@ export default async function handler(req, res) {
     let scoredDupes = [];
     let dupesLimited = false;
     try {
-      const candidates = await searchDupes(productInfo);
+      const candidates = await searchDupes(productInfo, { storeSet, serpApiParams });
       if (candidates.length > 0) {
         scoredDupes = await scoreDupes(productInfo, candidates);
       }
@@ -243,6 +252,7 @@ export default async function handler(req, res) {
     return res.status(200).json({
       ...result,
       search_meta: { cached: false, duration_ms: Date.now() - startTime },
+      region_meta: { region, currency: regionConfig.currency, symbol: regionConfig.symbol },
       ...rateMeta,
     });
 
