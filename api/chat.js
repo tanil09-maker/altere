@@ -229,6 +229,14 @@ export default async function handler(req, res) {
 
     const rateMeta = await buildRateMeta(userId, user, isAdmin, ip);
 
+    console.log('[api/chat] FINAL RESPONSE:', JSON.stringify({
+      originalsCount: result.originals?.length || 0,
+      dupesCount: result.dupes?.length || 0,
+      dupesLimited: result.dupes_limited,
+      duration: Date.now() - startTime,
+      dupesSample: result.dupes?.slice(0, 2).map(d => `${d.store}: ${d.name?.slice(0, 30)}`) || [],
+    }));
+
     return res.status(200).json({
       ...result,
       search_meta: { cached: false, duration_ms: Date.now() - startTime },
