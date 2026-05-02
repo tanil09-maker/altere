@@ -156,7 +156,8 @@ export default async function handler(req, res) {
     let scoredDupes = [];
     let dupesLimited = false;
     try {
-      const candidates = await searchDupes(productInfo, { storeSet, serpApiParams });
+      const keyAttributes = identified.key_attributes || {};
+      const candidates = await searchDupes(productInfo, { storeSet, serpApiParams, keyAttributes });
       if (candidates.length > 0) {
         scoredDupes = await scoreDupes(productInfo, candidates);
       }
