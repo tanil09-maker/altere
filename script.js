@@ -2509,12 +2509,12 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('dotdOrigImg').style.backgroundImage = `url('${item.origImg}')`;
     document.getElementById('dotdOrigBrand').textContent = item.origBrand;
     document.getElementById('dotdOrigName').textContent = item.origName;
-    document.getElementById('dotdOrigPrice').textContent = `$${item.origPrice.toLocaleString()}`;
+    document.getElementById('dotdOrigPrice').textContent = `${currentRegionMeta.symbol}${item.origPrice.toLocaleString()}`;
 
     document.getElementById('dotdDupeImg').style.backgroundImage = `url('${item.dupeImg}')`;
     document.getElementById('dotdDupeBrand').textContent = item.dupeBrand;
     document.getElementById('dotdDupeName').textContent = item.dupeName;
-    document.getElementById('dotdDupePrice').textContent = `$${item.dupePrice.toFixed(2)}`;
+    document.getElementById('dotdDupePrice').textContent = `${currentRegionMeta.symbol}${item.dupePrice.toFixed(2)}`;
 
     document.getElementById('dotdSavings').textContent = `\u2212${savings}%`;
 
