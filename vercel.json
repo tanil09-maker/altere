@@ -1,5 +1,8 @@
 {
   "functions": {
+    "api/seed-dotd.js": {
+      "maxDuration": 300
+    },
     "api/**/*.js": {
       "maxDuration": 60
     }
