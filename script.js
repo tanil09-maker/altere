@@ -2450,53 +2450,74 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const DOTD_ITEMS = [
     {
-      origBrand: 'BOTTEGA VENETA', origName: 'Cassette Padded Leather Bag', origPrice: 3200,
-      origImg: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=500&h=625&fit=crop&crop=center&q=80',
-      dupeBrand: 'MANGO', dupeName: 'Quilted Chain Shoulder Bag', dupePrice: 59.99,
-      dupeImg: 'https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?w=500&h=625&fit=crop&crop=center&q=80',
-      query: 'Bottega Veneta Cassette bag'
+      id: 1,
+      origBrand: 'BOTTEGA VENETA', origName: 'Cassette Padded Intrecciato Leather Shoulder Bag', origPrice: 4200,
+      origImg: 'https://wjhzkqnbxa5dr2rj.public.blob.vercel-storage.com/dotd/1-original-Y42vrzWnHv5X752IwUhoIANFCE2H6R.jpg',
+      origLink: 'https://www.google.es/search?ibp=oshop&q=Bottega+Veneta+Cassette+black+leather+shoulder+bag',
+      dupeBrand: 'ASOS', dupeName: 'Dickies Samburg Tote Bag', dupePrice: 45,
+      dupeImg: 'https://wjhzkqnbxa5dr2rj.public.blob.vercel-storage.com/dotd/1-dupe-y4XcGLj4DO4K1zaPf7IpziD3AsmIEA.jpg',
+      dupeLink: 'https://www.google.es/search?ibp=oshop&q=black+quilted+shoulder+bag+woven',
+      query: 'Cassette Padded Intrecciato Leather Shoulder Bag'
     },
     {
-      origBrand: 'MAX MARA', origName: 'Madame Wool Double-Breasted Coat', origPrice: 2590,
-      origImg: 'https://images.unsplash.com/photo-1539533113208-f6df8cc8b543?w=500&h=625&fit=crop&crop=center&q=80',
-      dupeBrand: 'H&M', dupeName: 'Oversized Wool-Blend Coat', dupePrice: 89.99,
-      dupeImg: 'https://images.unsplash.com/photo-1653660666869-2345adc51155?w=500&h=625&fit=crop&crop=center&q=80',
-      query: 'Max Mara double breasted wool coat'
+      id: 2,
+      origBrand: 'THE ROW', origName: 'Margaux 15 Suede Tote Bag', origPrice: 6735.73,
+      origImg: 'https://wjhzkqnbxa5dr2rj.public.blob.vercel-storage.com/dotd/2-original-oR6fqsJWbMnvulsldqXzf8rhZcBaRw.jpg',
+      origLink: 'https://www.google.es/search?ibp=oshop&q=The+Row+Margaux+15+suede+tote+bag',
+      dupeBrand: 'COS', dupeName: 'COS Women\'s Bolso Tote Paradigm Ante', dupePrice: 199,
+      dupeImg: 'https://wjhzkqnbxa5dr2rj.public.blob.vercel-storage.com/dotd/2-dupe-YzMTqHDOGpkJXX0Paax00h5w7sHcQE.jpg',
+      dupeLink: 'https://www.google.es/search?ibp=oshop&q=suede+structured+tote+bag',
+      query: 'Margaux 15 Suede Tote Bag'
     },
     {
-      origBrand: 'THE ROW', origName: 'Margaux Leather Tote', origPrice: 5500,
-      origImg: 'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=500&h=625&fit=crop&crop=center&q=80',
-      dupeBrand: 'COS', dupeName: 'Structured Leather Tote', dupePrice: 120,
-      dupeImg: 'https://images.unsplash.com/photo-1594223274512-ad4803739b7c?w=500&h=625&fit=crop&crop=center&q=80',
-      query: 'The Row Margaux leather tote'
+      id: 3,
+      origBrand: 'LOEWE', origName: 'Puzzle Small Bag Black Leather', origPrice: 3000,
+      origImg: 'https://wjhzkqnbxa5dr2rj.public.blob.vercel-storage.com/dotd/3-original-iPkejjWkREuKFuHBE5bV8ueAKSPtzN.jpg',
+      origLink: 'https://www.google.es/search?ibp=oshop&q=Loewe+Puzzle+small+bag+black+leather',
+      dupeBrand: 'PAUL COSTELLOE BAGS', dupeName: 'Bonita Jet Black', dupePrice: 76.55,
+      dupeImg: 'https://wjhzkqnbxa5dr2rj.public.blob.vercel-storage.com/dotd/3-dupe-RwQMOo7KVbppfwAKOt66FI4ZT5SRq3.jpg',
+      dupeLink: 'https://www.google.es/search?ibp=oshop&q=black+leather+structured+small+bag',
+      query: 'Puzzle Small Bag Black Leather'
     },
     {
-      origBrand: 'CELINE', origName: 'Triomphe Shoulder Bag', origPrice: 2850,
-      origImg: 'https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?w=500&h=625&fit=crop&crop=center&q=80',
-      dupeBrand: 'ZARA', dupeName: 'Chain Detail Shoulder Bag', dupePrice: 45.99,
-      dupeImg: 'https://images.unsplash.com/photo-1598532163257-ae3c6b2524b6?w=500&h=625&fit=crop&crop=center&q=80',
-      query: 'Celine Triomphe shoulder bag'
+      id: 4,
+      origBrand: 'TOTEME', origName: 'Signature Wool Coat Camel', origPrice: 1190,
+      origImg: 'https://wjhzkqnbxa5dr2rj.public.blob.vercel-storage.com/dotd/4-original-FQ5JbWBSNEcxAnBD4CxVF5eVGN0GlF.jpg',
+      origLink: 'https://www.google.es/search?ibp=oshop&q=Toteme+Signature+wool+coat+camel',
+      dupeBrand: 'ASOS', dupeName: 'New Look Formal Coat In Camel-Neutral', dupePrice: 55.99,
+      dupeImg: 'https://wjhzkqnbxa5dr2rj.public.blob.vercel-storage.com/dotd/4-dupe-bqT9MVKPXeZQu4iGVOBT7Q73Eccqkc.jpg',
+      dupeLink: 'https://www.google.es/search?ibp=oshop&q=camel+wool+coat+minimalist',
+      query: 'Signature Wool Coat Camel'
     },
     {
-      origBrand: 'ACNE STUDIOS', origName: 'Musubi Mini Leather Bag', origPrice: 1150,
-      origImg: 'https://images.unsplash.com/photo-1614179689702-355944cd0918?w=500&h=625&fit=crop&crop=center&q=80',
-      dupeBrand: 'ASOS', dupeName: 'Knotted Leather Crossbody', dupePrice: 48,
-      dupeImg: 'https://images.unsplash.com/photo-1598532163257-ae3c6b2524b6?w=500&h=625&fit=crop&crop=center&q=80',
-      query: 'Acne Studios Musubi mini bag'
+      id: 5,
+      origBrand: 'THE ROW', origName: 'Bare Leather Flat Sandals', origPrice: 1240,
+      origImg: 'https://wjhzkqnbxa5dr2rj.public.blob.vercel-storage.com/dotd/5-original-IHFVsAacXlEGbX1a1cX4EJn9dFBMk3.jpg',
+      origLink: 'https://www.google.es/search?ibp=oshop&q=The+Row+Bare+black+leather+sandals',
+      dupeBrand: 'ASOS', dupeName: 'Calvin Klein Black Leather Square Toe Thong Sandals', dupePrice: 99.9,
+      dupeImg: 'https://wjhzkqnbxa5dr2rj.public.blob.vercel-storage.com/dotd/5-dupe-QjRAp7nYm4ouhxxCLiTozQSo0yPF99.jpg',
+      dupeLink: 'https://www.google.es/search?ibp=oshop&q=black+leather+flat+sandals+minimalist',
+      query: 'Bare Leather Flat Sandals'
     },
     {
-      origBrand: 'JACQUEMUS', origName: 'Le Chiquito Long Bag', origPrice: 680,
-      origImg: 'https://images.unsplash.com/photo-1524672353063-4f66ee1f385e?w=500&h=625&fit=crop&crop=center&q=80',
-      dupeBrand: '& OTHER STORIES', dupeName: 'Mini Structured Handbag', dupePrice: 69,
-      dupeImg: 'https://images.unsplash.com/photo-1544511196-1646449a253b?w=500&h=625&fit=crop&crop=center&q=80',
-      query: 'Jacquemus Le Chiquito long bag'
+      id: 6,
+      origBrand: 'KHAITE', origName: 'Elena Cashmere Ribbed Tank Top', origPrice: 854,
+      origImg: 'https://wjhzkqnbxa5dr2rj.public.blob.vercel-storage.com/dotd/6-original-rv1G7hpKK6VF7qcohQ7jmwT1xFvIAv.jpg',
+      origLink: 'https://www.google.es/search?ibp=oshop&q=Khaite+Elena+cashmere+tank+top+cream',
+      dupeBrand: 'LOOP CASHMERE', dupeName: 'Ribbed Detail Lofty Cashmere Tank', dupePrice: 258.95,
+      dupeImg: 'https://wjhzkqnbxa5dr2rj.public.blob.vercel-storage.com/dotd/6-dupe-vFYUVkF4rmsGDTnFe8Cyh5m7DY1E55.jpg',
+      dupeLink: 'https://www.google.es/search?ibp=oshop&q=cream+ribbed+tank+top+cashmere',
+      query: 'Elena Cashmere Ribbed Tank Top'
     },
     {
-      origBrand: 'SAINT LAURENT', origName: 'Le 5 à 7 Leather Shoulder Bag', origPrice: 2150,
-      origImg: 'https://images.unsplash.com/photo-1575032617751-6ddec2089882?w=500&h=625&fit=crop&crop=center&q=80',
-      dupeBrand: 'MANGO', dupeName: 'Leather Effect Shoulder Bag', dupePrice: 55.99,
-      dupeImg: 'https://images.unsplash.com/photo-1591561954557-26941169b49e?w=500&h=625&fit=crop&crop=center&q=80',
-      query: 'Saint Laurent Le 5 a 7 bag'
+      id: 7,
+      origBrand: 'BOTTEGA VENETA', origName: 'Andiamo Mini Intrecciato Bag', origPrice: 3900,
+      origImg: 'https://wjhzkqnbxa5dr2rj.public.blob.vercel-storage.com/dotd/7-original-KwM4S45kptYDNTvCXak59gdnhBXxpK.jpg',
+      origLink: 'https://www.google.es/search?ibp=oshop&q=Bottega+Veneta+Andiamo+mini+intrecciato+bag',
+      dupeBrand: 'ASOS', dupeName: 'Topshop Cheryl large nylon crossbody bag', dupePrice: 34.99,
+      dupeImg: 'https://wjhzkqnbxa5dr2rj.public.blob.vercel-storage.com/dotd/7-dupe-7PFzYRQWddoaldlTgLF7Yw3O6yioDK.jpg',
+      dupeLink: 'https://www.google.es/search?ibp=oshop&q=compact+textured+crossbody+purse',
+      query: 'Andiamo Mini Intrecciato Bag'
     }
   ];
 
