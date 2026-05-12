@@ -206,9 +206,6 @@
 [dir="rtl"] .faq__question { flex-direction: row-reverse; text-align: right; }
 [dir="rtl"] .faq__answer p { text-align: right; }
 
-[dir="rtl"] .review__author { flex-direction: row-reverse; }
-[dir="rtl"] .review__name, [dir="rtl"] .review__location { text-align: right; }
-[dir="rtl"] .review__quote { text-align: right; }
 
 [dir="rtl"] .dotd__meta { text-align: right; }
 [dir="rtl"] .celeb__info { text-align: right; }
@@ -2737,129 +2734,6 @@ img, video {
   .faq__answer p { font-size: 13px; }
 }
 
-/* ============================================================
-   Testimonials
-   ============================================================ */
-
-.testimonials {
-  padding: 100px 24px;
-  background: var(--white);
-}
-
-.testimonials__inner {
-  max-width: 1100px;
-  margin: 0 auto;
-}
-
-.testimonials__eyebrow {
-  text-align: center;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 4px;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 16px;
-}
-
-.testimonials__title {
-  text-align: center;
-  font-family: var(--font-display);
-  font-size: clamp(28px, 3.5vw, 42px);
-  font-weight: 300;
-  color: var(--black);
-  margin-bottom: 48px;
-}
-
-.testimonials__grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-}
-
-/* Review card */
-.review {
-  background: var(--cream);
-  border-radius: 16px;
-  padding: 28px 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  border: 1px solid transparent;
-  transition: border-color 0.3s var(--ease-out), box-shadow 0.3s var(--ease-out);
-}
-
-.review:hover {
-  border-color: var(--cream-dark);
-  box-shadow: 0 8px 28px rgba(0,0,0,0.04);
-}
-
-.review__stars {
-  display: flex;
-  gap: 2px;
-}
-
-.review__stars svg {
-  width: 16px;
-  height: 16px;
-  color: var(--gold);
-}
-
-.review__quote {
-  font-family: var(--font-display);
-  font-size: 16px;
-  font-weight: 400;
-  font-style: italic;
-  color: var(--black);
-  line-height: 1.55;
-  flex: 1;
-}
-
-.review__author {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding-top: 4px;
-}
-
-.review__avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid var(--white);
-  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-}
-
-.review__name {
-  display: block;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--black);
-}
-
-.review__location {
-  display: block;
-  font-size: 11px;
-  color: var(--grey-500);
-  letter-spacing: 0.5px;
-}
-
-/* Dark mode */
-[data-theme="dark"] .testimonials { background: #1A1A1A; }
-[data-theme="dark"] .review { background: #252525; }
-[data-theme="dark"] .review:hover { border-color: #333; box-shadow: 0 8px 28px rgba(0,0,0,0.12); }
-[data-theme="dark"] .review__avatar { border-color: #252525; }
-
-/* Responsive */
-@media (max-width: 1024px) {
-  .testimonials__grid { grid-template-columns: repeat(2, 1fr); }
-}
-
-@media (max-width: 768px) {
-  .testimonials { padding: 72px 16px; }
-  .testimonials__grid { grid-template-columns: 1fr; max-width: 440px; margin: 0 auto; }
-  .review__quote { font-size: 15px; }
-}
 
 /* ============================================================
    Invite Friends
