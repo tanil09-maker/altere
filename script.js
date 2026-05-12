@@ -170,9 +170,20 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Detect on first load
+  const REGION_SYMBOLS = { US: '$', EU: '\u20ac', UK: '\u00a3', CA: 'C$', AU: 'A$', JP: '\u00a5', WW: '$' };
+
+  function applyRegionMeta(region) {
+    if (typeof currentRegionMeta !== 'undefined') {
+      currentRegionMeta.symbol = REGION_SYMBOLS[region] || '$';
+      currentRegionMeta.region = region;
+    }
+  }
+
   async function initRegion() {
     if (currentRegion) {
       updateRegionUI(currentRegion, currentCountry);
+      applyRegionMeta(currentRegion);
+      if (typeof renderDupeOfDay === 'function') renderDupeOfDay();
       return;
     }
     try {
@@ -183,6 +194,8 @@ document.addEventListener('DOMContentLoaded', () => {
       localStorage.setItem(REGION_KEY, currentRegion);
       localStorage.setItem(COUNTRY_KEY, currentCountry);
       updateRegionUI(currentRegion, currentCountry);
+      applyRegionMeta(currentRegion);
+      if (typeof renderDupeOfDay === 'function') renderDupeOfDay();
     } catch {
       updateRegionUI('WW', '');
     }
@@ -208,6 +221,8 @@ document.addEventListener('DOMContentLoaded', () => {
       localStorage.setItem(REGION_KEY, region);
       localStorage.setItem(COUNTRY_KEY, '');
       updateRegionUI(region, '');
+      applyRegionMeta(region);
+      if (typeof renderDupeOfDay === 'function') renderDupeOfDay();
       regionSwitcher.classList.remove('open');
     });
   }

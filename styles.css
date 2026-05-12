@@ -1143,7 +1143,7 @@ img, video {
 
 .dotd__img {
   aspect-ratio: 4 / 5;
-  background: var(--cream-dark);
+  background-color: #f5f3ef;
   background-size: cover;
   background-position: center;
   transition: transform 0.5s var(--ease-out);
@@ -1267,7 +1267,7 @@ img, video {
 /* Dark mode */
 [data-theme="dark"] .dotd { background: #1E1E1E; }
 [data-theme="dark"] .dotd__card { background: #252525; box-shadow: 0 8px 40px rgba(0,0,0,0.15); }
-[data-theme="dark"] .dotd__img { background-color: #2A2A2A; }
+[data-theme="dark"] .dotd__img { background-color: #3a3a3a; }
 [data-theme="dark"] .dotd__label { background: rgba(30,30,30,0.9); color: #BBB; }
 [data-theme="dark"] .dotd__vs-circle { background: #252525; border-color: #333; }
 
