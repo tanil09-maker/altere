@@ -249,7 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'nav.discover': 'Discover', 'nav.brands': 'Brands', 'nav.saved': 'Saved', 'nav.signin': 'Sign in',
       'hero.eyebrow': 'AI-Powered Fashion Discovery',
       'hero.headline': 'Spot it.<br>We\u2019ll source it.',
-      'hero.sub': 'Describe any high-street item and our AI identifies the luxury original it was inspired by \u2014 plus more affordable alternatives.',
+      'hero.sub': 'Spot any fashion item \u2014 luxury or high-street \u2014 and our AI shows you both: the designer original and affordable dupes from Zara, H&M, COS and more.',
       'search.tab.link': 'Paste link', 'search.tab.upload': 'Upload photo', 'search.tab.text': 'Find dupes',
       'search.placeholder.link': 'Paste a product URL from any fashion site...',
       'search.placeholder.text': 'Describe the item, e.g. "cream satin midi skirt"...',
@@ -333,7 +333,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'nav.discover': 'Ontdek', 'nav.brands': 'Merken', 'nav.saved': 'Opgeslagen', 'nav.signin': 'Inloggen',
       'hero.eyebrow': 'AI-Gestuurde Mode Ontdekking',
       'hero.headline': 'Spot het.<br>Wij vinden het.',
-      'hero.sub': 'Beschrijf een winkelstraat-item en onze AI identificeert het luxe origineel \u2014 plus betaalbare alternatieven.',
+      'hero.sub': 'Zie je een fashion item \u2014 luxe of high-street \u2014 onze AI toont je beide: het designer origineel \u00e9n betaalbare dupes van Zara, H&M, COS en meer.',
       'search.tab.link': 'Link plakken', 'search.tab.upload': 'Foto uploaden', 'search.tab.text': 'Vind dupes',
       'search.placeholder.link': 'Plak een product-URL van een modesite...',
       'search.placeholder.text': 'Beschrijf het item, bijv. "cr\u00e8me satijnen midi rok"...',
@@ -413,7 +413,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'nav.discover': 'D\u00e9couvrir', 'nav.brands': 'Marques', 'nav.saved': 'Sauv\u00e9s', 'nav.signin': 'Connexion',
       'hero.eyebrow': 'D\u00e9couverte Mode par IA',
       'hero.headline': 'Rep\u00e9rez-le.<br>On le trouve.',
-      'hero.sub': 'D\u00e9crivez un article de fast-fashion et notre IA identifie l\u2019original de luxe \u2014 plus des alternatives abordables.',
+      'hero.sub': 'Rep\u00e9rez un article de mode \u2014 luxe ou fast-fashion \u2014 notre IA vous montre les deux : l\u2019original et des dupes abordables de Zara, H&M, COS et plus.',
       'search.tab.link': 'Coller un lien', 'search.tab.upload': 'Uploader une photo', 'search.tab.text': 'Trouver dupes',
       'search.placeholder.link': 'Collez l\u2019URL d\u2019un produit de mode...',
       'search.placeholder.text': 'D\u00e9crivez l\u2019article, ex. "jupe midi en satin cr\u00e8me"...',
@@ -493,7 +493,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'nav.discover': 'Entdecken', 'nav.brands': 'Marken', 'nav.saved': 'Gespeichert', 'nav.signin': 'Anmelden',
       'hero.eyebrow': 'KI-gest\u00fctzte Mode-Entdeckung',
       'hero.headline': 'Entdeckt.<br>Wir finden es.',
-      'hero.sub': 'Beschreibe ein High-Street-Item und unsere KI identifiziert das Luxus-Original \u2014 plus bezahlbare Alternativen.',
+      'hero.sub': 'Entdecke ein Mode-Item \u2014 Luxus oder High-Street \u2014 unsere KI zeigt dir beides: das Designer-Original und bezahlbare Dupes von Zara, H&M, COS und mehr.',
       'search.tab.link': 'Link einf\u00fcgen', 'search.tab.upload': 'Foto hochladen', 'search.tab.text': 'Dupes finden',
       'search.placeholder.link': 'Produkt-URL von einer Modeseite einf\u00fcgen...',
       'search.placeholder.text': 'Artikel beschreiben, z.B. "cremefarbener Satin-Midirock"...',
@@ -573,7 +573,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'nav.discover': 'Descubrir', 'nav.brands': 'Marcas', 'nav.saved': 'Guardados', 'nav.signin': 'Iniciar sesi\u00f3n',
       'hero.eyebrow': 'Descubrimiento de Moda con IA',
       'hero.headline': 'Lo viste.<br>Nosotros lo encontramos.',
-      'hero.sub': 'Describe cualquier art\u00edculo de moda accesible y nuestra IA identifica el original de lujo \u2014 m\u00e1s alternativas asequibles.',
+      'hero.sub': 'Descubre cualquier art\u00edculo de moda \u2014 lujo o high-street \u2014 nuestra IA te muestra ambos: el original de dise\u00f1ador y dupes asequibles de Zara, H&M, COS y m\u00e1s.',
       'search.tab.link': 'Pegar enlace', 'search.tab.upload': 'Subir foto', 'search.tab.text': 'Buscar dupes',
       'search.placeholder.link': 'Pega la URL de un producto de cualquier tienda de moda...',
       'search.placeholder.text': 'Describe el art\u00edculo, ej. "falda midi de sat\u00e9n crema"...',
@@ -653,7 +653,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'nav.discover': 'Scopri', 'nav.brands': 'Marchi', 'nav.saved': 'Salvati', 'nav.signin': 'Accedi',
       'hero.eyebrow': 'Scoperta Moda con IA',
       'hero.headline': 'L\u2019hai visto.<br>Noi lo troviamo.',
-      'hero.sub': 'Descrivi un capo high-street e la nostra IA identifica l\u2019originale di lusso \u2014 pi\u00f9 alternative accessibili.',
+      'hero.sub': 'Scopri un capo di moda \u2014 lusso o high-street \u2014 la nostra IA ti mostra entrambi: l\u2019originale e dupes accessibili da Zara, H&M, COS e altri.',
       'search.tab.link': 'Incolla link', 'search.tab.upload': 'Carica foto', 'search.tab.text': 'Trova dupes',
       'search.placeholder.link': 'Incolla l\u2019URL di un prodotto da un sito di moda...',
       'search.placeholder.text': 'Descrivi l\u2019articolo, es. "gonna midi in raso panna"...',
@@ -733,7 +733,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'nav.discover': '\u0627\u0643\u062a\u0634\u0641', 'nav.brands': '\u0627\u0644\u0639\u0644\u0627\u0645\u0627\u062a', 'nav.saved': '\u0627\u0644\u0645\u062d\u0641\u0648\u0638\u0627\u062a', 'nav.signin': '\u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u062f\u062e\u0648\u0644',
       'hero.eyebrow': '\u0627\u0643\u062a\u0634\u0627\u0641 \u0627\u0644\u0645\u0648\u0636\u0629 \u0628\u0627\u0644\u0630\u0643\u0627\u0621 \u0627\u0644\u0627\u0635\u0637\u0646\u0627\u0639\u064a',
       'hero.headline': '\u0634\u0641\u062a\u0647.<br>\u0646\u062d\u0646 \u0646\u062c\u062f\u0647.',
-      'hero.sub': '\u0635\u0641 \u0623\u064a \u0642\u0637\u0639\u0629 \u0645\u0646 \u0627\u0644\u0634\u0627\u0631\u0639 \u0648\u0633\u064a\u062d\u062f\u062f \u0630\u0643\u0627\u0624\u0646\u0627 \u0627\u0644\u0627\u0635\u0637\u0646\u0627\u0639\u064a \u0627\u0644\u0623\u0635\u0644 \u0627\u0644\u0641\u0627\u062e\u0631 \u2014 \u0645\u0639 \u0628\u062f\u0627\u0626\u0644 \u0645\u0639\u0642\u0648\u0644\u0629.',
+      'hero.sub': '\u0627\u0643\u062a\u0634\u0641 \u0623\u064a \u0642\u0637\u0639\u0629 \u0623\u0632\u064a\u0627\u0621 \u2014 \u0641\u0627\u062e\u0631\u0629 \u0623\u0648 \u0639\u0627\u062f\u064a\u0629 \u2014 \u0630\u0643\u0627\u0624\u0646\u0627 \u064a\u0639\u0631\u0636 \u0644\u0643 \u0627\u0644\u0623\u0635\u0644 \u0648\u0628\u062f\u0627\u0626\u0644 \u0628\u0623\u0633\u0639\u0627\u0631 \u0645\u0639\u0642\u0648\u0644\u0629.',
       'search.tab.link': '\u0644\u0635\u0642 \u0631\u0627\u0628\u0637', 'search.tab.upload': '\u0631\u0641\u0639 \u0635\u0648\u0631\u0629', 'search.tab.text': '\u0627\u0628\u062d\u062b \u0639\u0646 \u0628\u062f\u0627\u0626\u0644', 'search.tab.camera': '\u0627\u0644\u062a\u0642\u0637 \u0635\u0648\u0631\u0629',
       'search.placeholder.link': '\u0627\u0644\u0635\u0642 \u0631\u0627\u0628\u0637 \u0645\u0646\u062a\u062c \u0645\u0646 \u0623\u064a \u0645\u0648\u0642\u0639 \u0623\u0632\u064a\u0627\u0621...',
       'search.placeholder.text': '\u0635\u0641 \u0627\u0644\u0642\u0637\u0639\u0629\u060c \u0645\u062b\u0644 "\u062a\u0646\u0648\u0631\u0629 \u0633\u0627\u062a\u0627\u0646 \u0643\u0631\u064a\u0645\u064a"...',
@@ -813,7 +813,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'nav.discover': '\u53d1\u73b0', 'nav.brands': '\u54c1\u724c', 'nav.saved': '\u6536\u85cf', 'nav.signin': '\u767b\u5f55',
       'hero.eyebrow': 'AI\u65f6\u5c1a\u53d1\u73b0',
       'hero.headline': '\u53d1\u73b0\u5b83\u3002<br>\u6211\u4eec\u627e\u5230\u5b83\u3002',
-      'hero.sub': '\u63cf\u8ff0\u4efb\u4f55\u5feb\u65f6\u5c1a\u5355\u54c1\uff0c\u6211\u4eec\u7684AI\u4f1a\u8bc6\u522b\u5b83\u7684\u5962\u4f88\u54c1\u539f\u578b \u2014 \u8fd8\u6709\u66f4\u591a\u5e73\u4ef7\u66ff\u4ee3\u3002',
+      'hero.sub': '\u53d1\u73b0\u4efb\u4f55\u65f6\u5c1a\u5355\u54c1 \u2014 \u5962\u4f88\u6216\u5e73\u4ef7 \u2014 \u6211\u4eec\u7684AI\u5c55\u793a\u539f\u578b\u548c\u6765\u81eaZara\u3001H&M\u3001COS\u7b49\u7684\u5e73\u4ef7\u66ff\u4ee3\u3002',
       'search.tab.link': '\u7c98\u8d34\u94fe\u63a5', 'search.tab.upload': '\u4e0a\u4f20\u7167\u7247', 'search.tab.text': '\u627e\u66ff\u4ee3\u54c1', 'search.tab.camera': '\u62cd\u7167',
       'search.tab.reverse': '\u627e\u539f\u578b', 'search.btnReverse': '\u627e\u539f\u578b', 'search.btnSource': '\u641c\u7d22', 'search.subtab.describe': '\u63cf\u8ff0', 'search.subtab.photo': '\u7167\u7247', 'search.subtab.link': '\u94fe\u63a5', 'search.placeholder.reverse': '\u63cf\u8ff0\u4f60\u7684\u5355\u54c1\uff0c\u4f8b\u5982\u201cZara\u7ed7\u7f1d\u94fe\u6761\u5305\u201d...',
       'search.placeholder.link': '\u7c98\u8d34\u4efb\u4f55\u65f6\u5c1a\u7f51\u7ad9\u7684\u4ea7\u54c1\u94fe\u63a5...',
@@ -2703,30 +2703,6 @@ document.addEventListener('DOMContentLoaded', () => {
   bindSaveButtons(resultsGrid);
   bindShareButtons(resultsGrid);
   syncSaveStates(resultsGrid);
-
-  /* ============================================================
-     Waitlist form
-     ============================================================ */
-
-  const waitlistForm    = document.getElementById('waitlistForm');
-  const waitlistEmail   = document.getElementById('waitlistEmail');
-  const waitlistBtn     = document.getElementById('waitlistBtn');
-  const waitlistSuccess = document.getElementById('waitlistSuccess');
-
-  waitlistForm.addEventListener('submit', e => {
-    e.preventDefault();
-    const email = waitlistEmail.value.trim();
-    if (!email) return;
-
-    waitlistBtn.disabled = true;
-    waitlistBtn.textContent = t('search.joining');
-
-    // Simulate a short network delay
-    setTimeout(() => {
-      waitlistForm.style.display = 'none';
-      waitlistSuccess.classList.add('visible');
-    }, 600);
-  });
 
   /* ============================================================
      FAQ Accordion
