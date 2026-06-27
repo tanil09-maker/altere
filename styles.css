@@ -473,11 +473,11 @@ img, video {
 
 /* Search Box */
 .search-box {
-  background: var(--white);
+  background: #FCFAF6;
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 25px 60px rgba(0,0,0,0.15), 0 0 0 1px rgba(255,255,255,0.08);
-  max-width: 580px;
+  box-shadow: 0 30px 70px rgba(26,18,8,0.22), 0 0 0 1px rgba(201,169,110,0.14);
+  max-width: 600px;
   margin: 0 auto;
   animation: fadeUp 1s var(--ease-out) 0.5s both;
 }
@@ -631,11 +631,11 @@ img, video {
   min-width: 0;
   padding: 14px 18px;
   font-family: var(--font-body);
-  font-size: 14px;
+  font-size: 13.5px;
   border: 1px solid var(--cream-dark);
   border-radius: 10px;
   outline: none;
-  background: var(--cream);
+  background: #FFFFFF;
   color: var(--black);
   transition: border-color 0.3s;
 }
@@ -3760,7 +3760,8 @@ img, video {
   font-size: 11px;
   font-weight: 400;
   letter-spacing: 0.5px;
-  color: rgba(255,255,255,0.35);
+  color: rgba(255,255,255,0.78);
+  text-shadow: 0 1px 10px rgba(26,18,8,0.55);
   animation: fadeUp 0.4s var(--ease-out) both;
 }
 
@@ -3792,14 +3793,16 @@ img, video {
   font-weight: 500;
   letter-spacing: 2px;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.35);
+  color: rgba(255,255,255,0.7);
+  text-shadow: 0 1px 10px rgba(26,18,8,0.55);
 }
 
 .recent-searches__clear {
   font-family: var(--font-body);
   font-size: 11px;
   font-weight: 400;
-  color: rgba(255,255,255,0.3);
+  color: rgba(255,255,255,0.6);
+  text-shadow: 0 1px 10px rgba(26,18,8,0.5);
   background: none;
   border: none;
   cursor: pointer;
@@ -3828,13 +3831,15 @@ img, video {
   font-family: var(--font-body);
   font-size: 12px;
   font-weight: 400;
-  color: rgba(255,255,255,0.7);
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.85);
+  background: rgba(40,32,22,0.28);
+  border: 1px solid rgba(255,255,255,0.16);
   border-radius: 100px;
   cursor: pointer;
   transition: all 0.25s var(--ease-out);
   white-space: nowrap;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   max-width: 200px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -3876,7 +3881,8 @@ img, video {
   font-weight: 500;
   letter-spacing: 2px;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.35);
+  color: rgba(255,255,255,0.7);
+  text-shadow: 0 1px 10px rgba(26,18,8,0.55);
 }
 
 .trending__label svg {
@@ -3901,13 +3907,15 @@ img, video {
   font-family: var(--font-body);
   font-size: 12px;
   font-weight: 400;
-  color: rgba(255,255,255,0.55);
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.82);
+  background: rgba(40,32,22,0.28);
+  border: 1px solid rgba(255,255,255,0.16);
   border-radius: 100px;
   cursor: pointer;
   transition: all 0.25s var(--ease-out);
   white-space: nowrap;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
 }
 
 .trending__chip:hover {
