@@ -169,7 +169,10 @@ export default async function handler(req, res) {
 
     // Format dupes for frontend
     const symbol = regionConfig.symbol;
-    const originalPriceNum = verifiedOriginals[0]?.extracted_price || 0;
+    // Anchor savings to the highest-priced verified original (the luxury reference),
+    // so "save X%" still shows when original #0 happens to be unverified/price-less.
+    const originalPriceNum = verifiedOriginals.reduce(
+      (max, o) => Math.max(max, o?.extracted_price || 0), 0);
 
     const dupes = scoredDupes.map(d => {
       const dupePrice = d.extracted_price || 0;
