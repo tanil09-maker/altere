@@ -1,11 +1,15 @@
 // ALTERE Search Orchestrator
 // Flow: identify → verify via SerpAPI → find dupes → score → cache → respond
 
-import { initDB, getTodaySearchCount, getAnonymousSearchCount, logSearch, logAnonymousSearch, getUserById } from '../lib/db.js';
+import { initDB, getMonthSearchCount, getAnonymousSearchCount, logSearch, logAnonymousSearch, getUserById } from '../lib/db.js';
 import { getSessionFromRequest } from '../lib/session.js';
 import { detectRegion, getRegionConfig, getRegionStoreSet, getSerpApiParams } from '../lib/region.js';
 
-const DAILY_LIMIT = 10;
+// Free-tier limits. Registered users get MONTHLY_LIMIT searches per calendar
+// month; anonymous visitors get ANON_LIMIT lifetime searches per IP.
+// Change MONTHLY_LIMIT here to adjust the registered allowance.
+const MONTHLY_LIMIT = 10;
+const ANON_LIMIT = 3;
 import { identifyFromText, identifyFromImage, identifyFromUrl, verifyOriginals } from '../lib/identify.js';
 import { searchGoogleShopping } from '../lib/serpapi.js';
 import { searchDupes, scoreDupes } from '../lib/dupe_finder.js';
@@ -39,27 +43,28 @@ export default async function handler(req, res) {
       isAdmin = user?.is_admin === true;
 
       if (!isAdmin) {
-        const todayCount = await getTodaySearchCount(userId);
-        if (todayCount >= DAILY_LIMIT) {
-          const tomorrow = new Date();
-          tomorrow.setUTCHours(24, 0, 0, 0);
+        const monthCount = await getMonthSearchCount(userId);
+        if (monthCount >= MONTHLY_LIMIT) {
+          const nextMonth = new Date();
+          nextMonth.setUTCMonth(nextMonth.getUTCMonth() + 1, 1);
+          nextMonth.setUTCHours(0, 0, 0, 0);
           return res.status(429).json({
             error: 'daily_limit',
-            message: `Daily limit reached. You have used all ${DAILY_LIMIT} searches today.`,
-            reset_at: tomorrow.toISOString(),
+            message: `Monthly limit reached. You have used all ${MONTHLY_LIMIT} searches this month.`,
+            reset_at: nextMonth.toISOString(),
             searches_remaining: 0,
-            searches_used: todayCount,
-            searches_total: DAILY_LIMIT,
+            searches_used: monthCount,
+            searches_total: MONTHLY_LIMIT,
           });
         }
       }
       // Admin: no rate limit check, falls through
     } else {
       const anonCount = await getAnonymousSearchCount(ip);
-      if (anonCount >= 3) {
+      if (anonCount >= ANON_LIMIT) {
         return res.status(429).json({
           error: 'signup_required',
-          message: 'You have used all 3 free searches. Sign in to continue.',
+          message: `You have used all ${ANON_LIMIT} free searches. Sign in to continue.`,
           searches_remaining: 0,
         });
       }
@@ -169,7 +174,10 @@ export default async function handler(req, res) {
 
     // Format dupes for frontend
     const symbol = regionConfig.symbol;
-    const originalPriceNum = verifiedOriginals[0]?.extracted_price || 0;
+    // Anchor savings to the highest-priced verified original (the luxury reference),
+    // so "save X%" still shows when original #0 happens to be unverified/price-less.
+    const originalPriceNum = verifiedOriginals.reduce(
+      (max, o) => Math.max(max, o?.extracted_price || 0), 0);
 
     const dupes = scoredDupes.map(d => {
       const dupePrice = d.extracted_price || 0;
@@ -253,25 +261,25 @@ export default async function handler(req, res) {
 
 async function buildRateMeta(userId, user, isAdmin, ip) {
   if (userId) {
-    const todayCount = await getTodaySearchCount(userId);
+    const monthCount = await getMonthSearchCount(userId);
     return {
       _rateLimit: {
-        remaining: isAdmin ? -1 : Math.max(0, DAILY_LIMIT - todayCount),
-        limit: isAdmin ? -1 : DAILY_LIMIT,
+        remaining: isAdmin ? -1 : Math.max(0, MONTHLY_LIMIT - monthCount),
+        limit: isAdmin ? -1 : MONTHLY_LIMIT,
       },
       user_meta: {
         is_admin: isAdmin,
-        searches_used_today: todayCount,
-        searches_remaining: isAdmin ? -1 : Math.max(0, DAILY_LIMIT - todayCount),
-        daily_limit: DAILY_LIMIT,
+        searches_used_today: monthCount,
+        searches_remaining: isAdmin ? -1 : Math.max(0, MONTHLY_LIMIT - monthCount),
+        daily_limit: MONTHLY_LIMIT,
       },
     };
   }
   const anonCount = await getAnonymousSearchCount(ip);
   return {
     _rateLimit: {
-      remaining: Math.max(0, 3 - anonCount),
-      limit: 3,
+      remaining: Math.max(0, ANON_LIMIT - anonCount),
+      limit: ANON_LIMIT,
     },
   };
 }

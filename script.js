@@ -69,13 +69,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const nav             = document.getElementById('nav');
   const hamburger       = document.getElementById('hamburger');
   const navLinks        = document.getElementById('navLinks');
-  const settingsBtn     = document.getElementById('settingsBtn');
-  const settingsModal   = document.getElementById('settingsModal');
-  const modalClose      = document.getElementById('modalClose');
-  const apiKeyInput     = document.getElementById('apiKeyInput');
-  const unsplashInput   = document.getElementById('unsplashKeyInput');
-  const apiStatus       = document.getElementById('apiStatus');
-  const saveApiKeyBtn   = document.getElementById('saveApiKey');
   const uploadArea      = document.getElementById('uploadArea');
   const fileInput       = document.getElementById('fileInput');
   const uploadSearchBtn = document.getElementById('uploadSearchBtn');
@@ -1712,56 +1705,10 @@ document.addEventListener('DOMContentLoaded', () => {
   updateBadge();
 
   /* ============================================================
-     API key management
+     Image key helper (Unsplash, optional — server handles AI keys)
      ============================================================ */
 
-  function getApiKey()      { return localStorage.getItem(LS_KEY) || ''; }
   function getUnsplashKey() { return localStorage.getItem(UNSPLASH_KEY) || ''; }
-
-  function setApiKey(key) {
-    key ? localStorage.setItem(LS_KEY, key) : localStorage.removeItem(LS_KEY);
-    updateSettingsIndicator();
-  }
-
-  function setUnsplashKey(key) {
-    key ? localStorage.setItem(UNSPLASH_KEY, key) : localStorage.removeItem(UNSPLASH_KEY);
-  }
-
-  function updateSettingsIndicator() {
-    settingsBtn.classList.toggle('has-key', !!getApiKey());
-  }
-
-  updateSettingsIndicator();
-
-  // Modal open/close
-  settingsBtn.addEventListener('click', () => {
-    apiKeyInput.value    = getApiKey();
-    unsplashInput.value  = getUnsplashKey();
-    apiStatus.textContent = '';
-    apiStatus.className   = 'modal__status';
-    settingsModal.classList.add('open');
-  });
-
-  function closeModal() { settingsModal.classList.remove('open'); }
-
-  modalClose.addEventListener('click', closeModal);
-  settingsModal.addEventListener('click', e => {
-    if (e.target === settingsModal) closeModal();
-  });
-
-  saveApiKeyBtn.addEventListener('click', () => {
-    const key = apiKeyInput.value.trim();
-    if (!key) {
-      apiStatus.textContent = 'Please enter an Anthropic API key.';
-      apiStatus.className = 'modal__status error';
-      return;
-    }
-    setApiKey(key);
-    setUnsplashKey(unsplashInput.value.trim());
-    apiStatus.textContent = 'Settings saved.';
-    apiStatus.className = 'modal__status success';
-    setTimeout(closeModal, 800);
-  });
 
   /* ============================================================
      Auth — Google OAuth + Rate Limit Modals
@@ -1857,10 +1804,11 @@ document.addEventListener('DOMContentLoaded', () => {
     function tick() {
       const diff = target - Date.now();
       if (diff <= 0) { dailyCountdown.textContent = '00:00:00'; clearInterval(countdownInterval); return; }
-      const h = String(Math.floor(diff / 3600000)).padStart(2, '0');
+      const days = Math.floor(diff / 86400000);
+      const h = String(Math.floor((diff % 86400000) / 3600000)).padStart(2, '0');
       const m = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');
       const s = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
-      dailyCountdown.textContent = `${h}:${m}:${s}`;
+      dailyCountdown.textContent = days > 0 ? `${days}d ${h}:${m}:${s}` : `${h}:${m}:${s}`;
     }
     tick();
     countdownInterval = setInterval(tick, 1000);
@@ -2065,7 +2013,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if (remaining > 0) {
       const label = currentUser
-        ? `${remaining} searches left today`
+        ? `${remaining} searches left this month`
         : `${remaining} free searches remaining`;
       el.textContent = label;
       el.style.display = '';
@@ -2515,7 +2463,7 @@ document.addEventListener('DOMContentLoaded', () => {
     {
       id: 5,
       origBrand: 'THE ROW', origName: 'Bare Leather Flat Sandals', origPrice: 1240,
-      origImg: 'https://wjhzkqnbxa5dr2rj.public.blob.vercel-storage.com/dotd/5-original-IHFVsAacXlEGbX1a1cX4EJn9dFBMk3.jpg',
+      origImg: 'https://cdn-images.farfetch-contents.com/36/33/27/08/36332708_68312164_1000.jpg',
       origLink: 'https://www.google.es/search?ibp=oshop&q=The+Row+Bare+black+leather+sandals',
       dupeBrand: 'ASOS', dupeName: 'Calvin Klein Black Leather Square Toe Thong Sandals', dupePrice: 99.9,
       dupeImg: 'https://wjhzkqnbxa5dr2rj.public.blob.vercel-storage.com/dotd/5-dupe-QjRAp7nYm4ouhxxCLiTozQSo0yPF99.jpg',
