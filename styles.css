@@ -367,6 +367,7 @@ body::before {
   box-shadow: 0 0 14px var(--champagne-glow);
   pointer-events: none;
   opacity: 0;
+  will-change: transform;
   transition: width 0.28s var(--ease-lux), height 0.28s var(--ease-lux),
               background 0.28s, border-color 0.28s, opacity 0.3s;
 }
