@@ -257,7 +257,6 @@ document.addEventListener('DOMContentLoaded', () => {
       'hero.searching': 'Searching across', 'hero.scroll': 'Scroll to explore',
       'dotd.eyebrow': 'Spotted Today', 'dotd.original': 'The Original', 'dotd.dupe': 'Smart alternative', 'dotd.vs': 'VS', 'dotd.btn': 'Shop it',
       'calc.eyebrow': 'Smart Sourcing', 'calc.title': 'How much could you save?', 'calc.sub': 'Same item, different stores \u2014 see what smart sourcing saves you.', 'calc.budget': 'Monthly fashion budget', 'calc.perMonth': 'Per month', 'calc.perYear': 'Per year', 'calc.fiveYears': 'In 5 years', 'calc.note': 'Based on the average price difference we find for the same look across stores and alternatives.',
-      'proof.dupes': 'items identified today', 'proof.shoppers': 'happy shoppers', 'proof.saved': 'saved this week', 'press.label': 'As seen in',
       'celeb.eyebrow': 'Style Inspiration', 'celeb.title': 'Get the look', 'celeb.sub': 'Spot the aesthetic \u2014 we\u2019ll find the exact items.', 'celeb.btn': 'Shop the look',
       'celeb.c1.name': 'The Quiet Luxury', 'celeb.c1.desc': 'Understated elegance. Neutral tones, cashmere knits and clean silhouettes inspired by old-money minimalism.',
       'celeb.c2.name': 'Street Chic', 'celeb.c2.desc': 'Bold, confident and effortless. Oversized blazers, leather trousers and statement sneakers straight from fashion week.',
@@ -343,7 +342,6 @@ document.addEventListener('DOMContentLoaded', () => {
       'hero.searching': 'Zoeken bij', 'hero.scroll': 'Scroll om te ontdekken',
       'dotd.eyebrow': 'Vandaag Gespot', 'dotd.original': 'Het Origineel', 'dotd.dupe': 'Slim alternatief', 'dotd.vs': 'VS', 'dotd.btn': 'Shop het',
       'calc.eyebrow': 'Slim Shoppen', 'calc.title': 'Hoeveel kun je besparen?', 'calc.sub': 'Hetzelfde item, verschillende winkels \u2014 zie wat slim shoppen je scheelt.', 'calc.budget': 'Maandelijks modebudget', 'calc.perMonth': 'Per maand', 'calc.perYear': 'Per jaar', 'calc.fiveYears': 'In 5 jaar', 'calc.note': 'Gebaseerd op het gemiddelde prijsverschil dat we vinden voor dezelfde look tussen winkels en alternatieven.',
-      'proof.dupes': 'items ge\u00efdentificeerd vandaag', 'proof.shoppers': 'blije shoppers', 'proof.saved': 'bespaard deze week', 'press.label': 'Bekend van',
       'celeb.eyebrow': 'Stijlinspiratie', 'celeb.title': 'Krijg de look', 'celeb.sub': 'Spot de aesthetic \u2014 wij vinden de items.', 'celeb.btn': 'Shop de look',
       'celeb.c1.name': 'The Quiet Luxury', 'celeb.c1.desc': 'Ingetogen elegantie. Neutrale tinten, kasjmier en strakke silhouetten ge\u00efnspireerd door old-money minimalisme.',
       'celeb.c2.name': 'Street Chic', 'celeb.c2.desc': 'Gedurfd, zelfverzekerd en moeiteloos. Oversized blazers, leren broeken en opvallende sneakers recht van fashion week.',
@@ -424,7 +422,6 @@ document.addEventListener('DOMContentLoaded', () => {
       'hero.searching': 'Recherche sur', 'hero.scroll': 'D\u00e9filez pour explorer',
       'dotd.eyebrow': 'Rep\u00e9r\u00e9 Aujourd\u2019hui', 'dotd.original': 'L\u2019Original', 'dotd.dupe': 'Alternative maline', 'dotd.vs': 'VS', 'dotd.btn': 'Shopper',
       'calc.eyebrow': 'Sourcing Malin', 'calc.title': 'Combien pourriez-vous \u00e9conomiser ?', 'calc.sub': 'M\u00eame article, boutiques diff\u00e9rentes \u2014 voyez ce que le sourcing malin vous fait \u00e9conomiser.', 'calc.budget': 'Budget mode mensuel', 'calc.perMonth': 'Par mois', 'calc.perYear': 'Par an', 'calc.fiveYears': 'En 5 ans', 'calc.note': 'Bas\u00e9 sur l\u2019\u00e9cart de prix moyen que nous trouvons pour le m\u00eame look entre boutiques et alternatives.',
-      'proof.dupes': 'articles identifi\u00e9s aujourd\u2019hui', 'proof.shoppers': 'acheteurs satisfaits', 'proof.saved': '\u00e9conomis\u00e9s cette semaine', 'press.label': 'Vu dans',
       'celeb.eyebrow': 'Inspiration Style', 'celeb.title': 'Adoptez le look', 'celeb.sub': 'Rep\u00e9rez l\u2019esth\u00e9tique \u2014 nous trouvons les articles exacts.', 'celeb.btn': 'Shopper le look',
       'celeb.c1.name': 'The Quiet Luxury', 'celeb.c1.desc': '\u00c9l\u00e9gance discr\u00e8te. Tons neutres, cachemire et silhouettes \u00e9pur\u00e9es inspir\u00e9es du minimalisme old-money.',
       'celeb.c2.name': 'Street Chic', 'celeb.c2.desc': 'Audacieux, confiant et sans effort. Blazers oversize, pantalons en cuir et baskets statement tout droit de la fashion week.',
@@ -505,7 +502,6 @@ document.addEventListener('DOMContentLoaded', () => {
       'hero.searching': 'Suche bei', 'hero.scroll': 'Scrollen zum Entdecken',
       'dotd.eyebrow': 'Heute Gespottet', 'dotd.original': 'Das Original', 'dotd.dupe': 'Clevere Alternative', 'dotd.vs': 'VS', 'dotd.btn': 'Shoppen',
       'calc.eyebrow': 'Cleveres Sourcing', 'calc.title': 'Wie viel k\u00f6nntest du sparen?', 'calc.sub': 'Gleiches Teil, verschiedene Shops \u2014 sieh, was cleveres Sourcing dir spart.', 'calc.budget': 'Monatliches Modebudget', 'calc.perMonth': 'Pro Monat', 'calc.perYear': 'Pro Jahr', 'calc.fiveYears': 'In 5 Jahren', 'calc.note': 'Basierend auf dem durchschnittlichen Preisunterschied, den wir f\u00fcr denselben Look zwischen Shops und Alternativen finden.',
-      'proof.dupes': 'Teile heute identifiziert', 'proof.shoppers': 'zufriedene K\u00e4ufer', 'proof.saved': 'diese Woche gespart', 'press.label': 'Bekannt aus',
       'celeb.eyebrow': 'Stil-Inspiration', 'celeb.title': 'Hol dir den Look', 'celeb.sub': 'Spotte die \u00c4sthetik \u2014 wir finden die exakten Teile.', 'celeb.btn': 'Look shoppen',
       'celeb.c1.name': 'The Quiet Luxury', 'celeb.c1.desc': 'Zur\u00fcckhaltende Eleganz. Neutrale T\u00f6ne, Kaschmir und klare Silhouetten inspiriert von Old-Money-Minimalismus.',
       'celeb.c2.name': 'Street Chic', 'celeb.c2.desc': 'Mutig, selbstbewusst und m\u00fchelos. Oversized Blazer, Lederhosen und Statement-Sneaker direkt von der Fashion Week.',
@@ -586,7 +582,6 @@ document.addEventListener('DOMContentLoaded', () => {
       'hero.searching': 'Buscando en', 'hero.scroll': 'Despl\u00e1zate para explorar',
       'dotd.eyebrow': 'Visto Hoy', 'dotd.original': 'El Original', 'dotd.dupe': 'Alternativa inteligente', 'dotd.vs': 'VS', 'dotd.btn': 'Comprarlo',
       'calc.eyebrow': 'Compra Inteligente', 'calc.title': '\u00bfCu\u00e1nto podr\u00edas ahorrar?', 'calc.sub': 'El mismo art\u00edculo, distintas tiendas \u2014 mira lo que ahorras comprando con cabeza.', 'calc.budget': 'Presupuesto mensual de moda', 'calc.perMonth': 'Al mes', 'calc.perYear': 'Al a\u00f1o', 'calc.fiveYears': 'En 5 a\u00f1os', 'calc.note': 'Basado en la diferencia de precio media que encontramos para el mismo look entre tiendas y alternativas.',
-      'proof.dupes': 'art\u00edculos identificados hoy', 'proof.shoppers': 'compradores felices', 'proof.saved': 'ahorrados esta semana', 'press.label': 'Visto en',
       'celeb.eyebrow': 'Inspiraci\u00f3n de Estilo', 'celeb.title': 'Consigue el look', 'celeb.sub': 'Detecta la est\u00e9tica \u2014 nosotros encontramos las prendas exactas.', 'celeb.btn': 'Comprar el look',
       'celeb.c1.name': 'The Quiet Luxury', 'celeb.c1.desc': 'Elegancia discreta. Tonos neutros, cachemira y siluetas limpias inspiradas en el minimalismo old-money.',
       'celeb.c2.name': 'Street Chic', 'celeb.c2.desc': 'Audaz, seguro y sin esfuerzo. Blazers oversize, pantalones de cuero y zapatillas statement directos de la fashion week.',
@@ -667,7 +662,6 @@ document.addEventListener('DOMContentLoaded', () => {
       'hero.searching': 'Ricerca su', 'hero.scroll': 'Scorri per esplorare',
       'dotd.eyebrow': 'Avvistato Oggi', 'dotd.original': 'L\u2019Originale', 'dotd.dupe': 'Alternativa intelligente', 'dotd.vs': 'VS', 'dotd.btn': 'Acquista',
       'calc.eyebrow': 'Sourcing Intelligente', 'calc.title': 'Quanto potresti risparmiare?', 'calc.sub': 'Stesso articolo, negozi diversi \u2014 scopri quanto ti fa risparmiare un sourcing intelligente.', 'calc.budget': 'Budget moda mensile', 'calc.perMonth': 'Al mese', 'calc.perYear': 'All\u2019anno', 'calc.fiveYears': 'In 5 anni', 'calc.note': 'Basato sulla differenza di prezzo media che troviamo per lo stesso look tra negozi e alternative.',
-      'proof.dupes': 'articoli identificati oggi', 'proof.shoppers': 'acquirenti soddisfatti', 'proof.saved': 'risparmiati questa settimana', 'press.label': 'Visto su',
       'celeb.eyebrow': 'Ispirazione Stile', 'celeb.title': 'Ottieni il look', 'celeb.sub': 'Individua l\u2019estetica \u2014 noi troviamo i capi esatti.', 'celeb.btn': 'Acquista il look',
       'celeb.c1.name': 'The Quiet Luxury', 'celeb.c1.desc': 'Eleganza sobria. Toni neutri, cashmere e silhouette pulite ispirate al minimalismo old-money.',
       'celeb.c2.name': 'Street Chic', 'celeb.c2.desc': 'Audace, sicuro e senza sforzo. Blazer oversize, pantaloni in pelle e sneaker statement direttamente dalla fashion week.',
@@ -746,7 +740,6 @@ document.addEventListener('DOMContentLoaded', () => {
       'recent.label': '\u0627\u0644\u0623\u062e\u064a\u0631\u0629', 'recent.clear': '\u0645\u0633\u062d',
       'trending.label': '\u0631\u0627\u0626\u062c \u0627\u0644\u0622\u0646',
       'hero.searching': '\u0628\u062d\u062b \u0641\u064a', 'hero.scroll': '\u0645\u0631\u0631 \u0644\u0644\u0623\u0633\u0641\u0644 \u0644\u0644\u0627\u0633\u062a\u0643\u0634\u0627\u0641',
-      'proof.dupes': '\u0642\u0637\u0639\u0629 \u062a\u0645 \u062a\u062d\u062f\u064a\u062f\u0647\u0627 \u0627\u0644\u064a\u0648\u0645', 'proof.shoppers': '\u0645\u062a\u0633\u0648\u0642 \u0633\u0639\u064a\u062f', 'proof.saved': '\u062a\u0645 \u062a\u0648\u0641\u064a\u0631\u0647 \u0647\u0630\u0627 \u0627\u0644\u0623\u0633\u0628\u0648\u0639', 'press.label': '\u0643\u0645\u0627 \u0634\u0648\u0647\u062f \u0641\u064a',
       'celeb.eyebrow': '\u0625\u0644\u0647\u0627\u0645 \u0627\u0644\u0623\u0633\u0644\u0648\u0628', 'celeb.title': '\u0627\u062d\u0635\u0644 \u0639\u0644\u0649 \u0627\u0644\u0625\u0637\u0644\u0627\u0644\u0629', 'celeb.sub': '\u0627\u0644\u062a\u0642\u0637 \u0627\u0644\u0623\u0633\u0644\u0648\u0628 \u2014 \u0648\u0646\u062d\u0646 \u0646\u062c\u062f \u0627\u0644\u0642\u0637\u0639 \u0628\u0627\u0644\u0636\u0628\u0637.', 'celeb.btn': '\u062a\u0633\u0648\u0651\u0642 \u0627\u0644\u0625\u0637\u0644\u0627\u0644\u0629',
       'celeb.c1.name': '\u0627\u0644\u0641\u062e\u0627\u0645\u0629 \u0627\u0644\u0647\u0627\u062f\u0626\u0629', 'celeb.c1.desc': '\u0623\u0646\u0627\u0642\u0629 \u0631\u0627\u0642\u064a\u0629. \u0623\u0644\u0648\u0627\u0646 \u0645\u062d\u0627\u064a\u062f\u0629\u060c \u0643\u0634\u0645\u064a\u0631 \u0648\u062e\u0637\u0648\u0637 \u0646\u0638\u064a\u0641\u0629 \u0645\u0633\u062a\u0648\u062d\u0627\u0629 \u0645\u0646 \u0627\u0644\u0628\u0633\u0627\u0637\u0629 \u0627\u0644\u0641\u0627\u062e\u0631\u0629.',
       'celeb.c2.name': '\u0623\u0646\u0627\u0642\u0629 \u0627\u0644\u0634\u0627\u0631\u0639', 'celeb.c2.desc': '\u062c\u0631\u064a\u0621 \u0648\u0648\u0627\u062b\u0642. \u0628\u0644\u064a\u0632\u0631\u0627\u062a \u0643\u0628\u064a\u0631\u0629\u060c \u0633\u0631\u0627\u0648\u064a\u0644 \u062c\u0644\u062f\u064a\u0629 \u0648\u0623\u062d\u0630\u064a\u0629 \u0645\u0645\u064a\u0632\u0629 \u0645\u0646 \u0623\u0633\u0627\u0628\u064a\u0639 \u0627\u0644\u0645\u0648\u0636\u0629.',
@@ -827,7 +820,6 @@ document.addEventListener('DOMContentLoaded', () => {
       'recent.label': '\u6700\u8fd1', 'recent.clear': '\u6e05\u9664',
       'trending.label': '\u70ed\u95e8\u641c\u7d22',
       'hero.searching': '\u641c\u7d22\u8303\u56f4', 'hero.scroll': '\u5411\u4e0b\u6ed1\u52a8\u63a2\u7d22',
-      'proof.dupes': '\u4eca\u65e5\u8bc6\u522b\u7684\u5355\u54c1', 'proof.shoppers': '\u6ee1\u610f\u7684\u8d2d\u7269\u8005', 'proof.saved': '\u672c\u5468\u8282\u7701', 'press.label': '\u5a92\u4f53\u62a5\u9053',
       'celeb.eyebrow': '\u98ce\u683c\u7075\u611f', 'celeb.title': '\u590d\u523b\u8fd9\u8eab\u9020\u578b', 'celeb.sub': '\u53d1\u73b0\u8fd9\u79cd\u7f8e\u5b66\u2014\u2014\u6211\u4eec\u5e2e\u4f60\u627e\u5230\u540c\u6b3e\u5355\u54c1\u3002', 'celeb.btn': '\u9009\u8d2d\u8fd9\u8eab\u9020\u578b',
       'celeb.c1.name': '\u9759\u5962', 'celeb.c1.desc': '\u4f4e\u8c03\u7684\u4f18\u96c5\u3002\u4e2d\u6027\u8272\u8c03\u3001\u7f8a\u7ed2\u886b\u548c\u5229\u843d\u7684\u5267\u5f71\uff0c\u7075\u611f\u6765\u81ea\u8001\u94b1\u7b80\u7ea6\u4e3b\u4e49\u3002',
       'celeb.c2.name': '\u8857\u5934\u65f6\u5c1a', 'celeb.c2.desc': '\u5927\u80c6\u3001\u81ea\u4fe1\u3001\u6f47\u6d12\u3002\u5bbd\u677e\u897f\u88c5\u3001\u76ae\u88e4\u548c\u6f6e\u978b\uff0c\u76f4\u63a5\u6765\u81ea\u65f6\u88c5\u5468\u3002',
@@ -2376,44 +2368,6 @@ document.addEventListener('DOMContentLoaded', () => {
     bindShareButtons(resultsGrid);
     syncSaveStates(resultsGrid);
   }
-
-  /* ============================================================
-     Social Proof Counter Animation
-     ============================================================ */
-
-  function animateCounter(el, target, duration) {
-    const start = performance.now();
-    const format = (n) => Math.round(n).toLocaleString();
-
-    function tick(now) {
-      const elapsed = now - start;
-      const progress = Math.min(elapsed / duration, 1);
-      // Ease-out cubic for a smooth deceleration
-      const eased = 1 - Math.pow(1 - progress, 3);
-      el.textContent = format(target * eased);
-      if (progress < 1) requestAnimationFrame(tick);
-    }
-
-    requestAnimationFrame(tick);
-  }
-
-  const proofBar = document.getElementById('proofBar');
-  let proofAnimated = false;
-
-  const proofObserver = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting && !proofAnimated) {
-        proofAnimated = true;
-        document.querySelectorAll('.proof__num').forEach(el => {
-          const target = parseInt(el.dataset.target, 10);
-          animateCounter(el, target, 2000);
-        });
-        proofObserver.unobserve(proofBar);
-      }
-    });
-  }, { threshold: 0.3 });
-
-  proofObserver.observe(proofBar);
 
   /* ============================================================
      Dupe of the Day
