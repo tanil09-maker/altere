@@ -110,9 +110,24 @@
   <section class="hero" id="discover">
     <div class="hero__video-wrap" style="background-image:url('/assets/video/hero-poster.jpg')">
       <video class="hero__video" data-video="hero" muted loop playsinline preload="auto"
-             poster="/assets/video/hero-poster.jpg">
-        <source src="/assets/video/hero-loop.mp4" type="video/mp4">
-      </video>
+             poster="/assets/video/hero-poster.jpg"></video>
+      <script>
+        /* Responsive hero source: 4K for >=1024px, 1080p below.
+           The `media` attribute on <video><source> is not honored by browsers
+           (only inside <picture>), so we inject the correct single source
+           synchronously here → one fetch, preload untouched. */
+        (function () {
+          var v = document.currentScript.previousElementSibling;
+          if (!v || v.tagName !== 'VIDEO') v = document.querySelector('.hero__video');
+          if (!v) return;
+          var s = document.createElement('source');
+          s.type = 'video/mp4';
+          s.src = window.matchMedia('(min-width: 1024px)').matches
+            ? '/assets/video/hero-loop.mp4'
+            : '/assets/video/hero-loop-1080.mp4';
+          v.appendChild(s);
+        })();
+      </script>
       <div class="hero__overlay"></div>
     </div>
 
