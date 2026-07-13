@@ -470,7 +470,7 @@ html.has-cursor [contenteditable] { cursor: auto; }
   font-size: 28px;
   font-weight: 500;
   letter-spacing: 6px;
-  color: var(--white);
+  color: #F3EEE6;            /* ivory — always light over the dark hero (was var(--white), which is #121212 in dark mode) */
   transition: color 0.4s;
 }
 
