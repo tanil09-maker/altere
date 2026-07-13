@@ -425,6 +425,36 @@ html.has-cursor [contenteditable] { cursor: auto; }
   box-shadow: 0 1px 0 rgba(0,0,0,0.06);
 }
 
+/* --- Header legibility over the hero video ---
+   Soft top scrim so the logo + nav always sit on a darkened band, even on the
+   video's brightest/gold frames. Fades out once the solid scrolled nav takes over. */
+.nav::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 150px;
+  background: linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.30) 48%, transparent 100%);
+  pointer-events: none;
+  z-index: -1;
+  transition: opacity 0.4s var(--ease-out);
+}
+.nav--scrolled::before { opacity: 0; }
+
+/* Extra insurance on the brightest frames: subtle shadow on every header element,
+   only while transparent over the hero (removed once the nav has a solid bg). */
+.nav:not(.nav--scrolled) .nav__logo,
+.nav:not(.nav--scrolled) .nav__links a {
+  text-shadow: 0 1px 12px rgba(0,0,0,0.6);
+}
+.nav:not(.nav--scrolled) .nav__region-btn,
+.nav:not(.nav--scrolled) .nav__lang-btn,
+.nav:not(.nav--scrolled) .nav__theme,
+.nav:not(.nav--scrolled) .nav__hamburger {
+  filter: drop-shadow(0 1px 8px rgba(0,0,0,0.55));
+}
+
 .nav__inner {
   display: flex;
   align-items: center;
