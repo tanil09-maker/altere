@@ -297,11 +297,11 @@
   <!-- Demo: How it works (phone video) -->
   <section class="demo" id="demo">
     <div class="demo__inner">
-      <div class="demo__copy" data-fx="reveal">
-        <p class="demo__eyebrow" data-i18n="demo.eyebrow">See it in action</p>
-        <h2 class="demo__title" data-fx="title" data-i18n="demo.title">Spotted to sourced, in seconds</h2>
-        <p class="demo__sub" data-i18n="demo.sub">Point your camera at any piece and watch ALTERE identify the exact item — then show you where to buy it.</p>
-        <ol class="demo__steps">
+      <div class="demo__copy">
+        <p class="demo__eyebrow" data-reveal="fade" data-i18n="demo.eyebrow">See it in action</p>
+        <h2 class="demo__title" data-reveal="up" data-reveal-delay="80" data-i18n="demo.title">Spotted to sourced, in seconds</h2>
+        <p class="demo__sub" data-reveal="up" data-reveal-delay="180" data-i18n="demo.sub">Point your camera at any piece and watch ALTERE identify the exact item — then show you where to buy it.</p>
+        <ol class="demo__steps" data-reveal-group="up">
           <li class="demo__step">
             <span class="demo__step-num">01</span>
             <span class="demo__step-text" data-i18n="demo.step1">Snap a photo</span>
@@ -334,7 +334,7 @@
   <!-- Dupe of the Day -->
   <section class="dotd" id="dotd">
     <div class="dotd__inner">
-      <p class="dotd__eyebrow" data-i18n="dotd.eyebrow">Spotted Today</p>
+      <p class="dotd__eyebrow" data-reveal="fade" data-i18n="dotd.eyebrow">Spotted Today</p>
       <div class="dotd__card" data-dotd-build>
         <div class="dotd__side dotd__original">
           <span class="dotd__label" data-i18n="dotd.original">Original</span>
@@ -379,11 +379,12 @@
   <!-- Savings Calculator -->
   <section class="calc" id="calc">
     <div class="calc__inner">
-      <p class="calc__eyebrow" data-i18n="calc.eyebrow">Smart Sourcing</p>
-      <h2 class="calc__title" data-fx="title" data-i18n="calc.title">How much could you save?</h2>
-      <p class="calc__sub" data-i18n="calc.sub">Same item, different stores — see what smart sourcing saves you.</p>
+      <p class="calc__eyebrow" data-reveal="fade" data-i18n="calc.eyebrow">Smart Sourcing</p>
+      <h2 class="calc__title" data-reveal="up" data-reveal-delay="80" data-i18n="calc.title">How much could you save?</h2>
+      <div class="reveal-divider" data-reveal="draw"></div>
+      <p class="calc__sub" data-reveal="up" data-reveal-delay="180" data-i18n="calc.sub">Same item, different stores — see what smart sourcing saves you.</p>
 
-      <div class="calc__card" data-fx="reveal">
+      <div class="calc__card" data-reveal="up">
         <div class="calc__slider-area">
           <label class="calc__label" data-i18n="calc.budget">Monthly fashion budget</label>
           <div class="calc__amount" id="calcAmount">&euro;500</div>
@@ -419,12 +420,13 @@
   <!-- Celebrity Looks -->
   <section class="celeb" id="celeb">
     <div class="celeb__inner">
-      <p class="celeb__eyebrow" data-i18n="celeb.eyebrow">Style Inspiration</p>
-      <h2 class="celeb__title" data-fx="title" data-i18n="celeb.title">Get the look</h2>
-      <p class="celeb__sub" data-i18n="celeb.sub">Spot the aesthetic — we’ll find the exact items.</p>
-      <div class="celeb__grid">
+      <p class="celeb__eyebrow" data-reveal="fade" data-i18n="celeb.eyebrow">Style Inspiration</p>
+      <h2 class="celeb__title" data-reveal="up" data-reveal-delay="80" data-i18n="celeb.title">Get the look</h2>
+      <div class="reveal-divider" data-reveal="draw"></div>
+      <p class="celeb__sub" data-reveal="up" data-reveal-delay="180" data-i18n="celeb.sub">Spot the aesthetic — we’ll find the exact items.</p>
+      <div class="celeb__grid" data-reveal-group="up">
 
-        <article class="celeb__card" data-fx="reveal" data-fx-delay="0">
+        <article class="celeb__card">
           <div class="celeb__img" style="background-image:url('https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=500&h=600&fit=crop&crop=center&q=80')"></div>
           <div class="celeb__info">
             <h3 class="celeb__name" data-i18n="celeb.c1.name">The Quiet Luxury</h3>
@@ -433,7 +435,7 @@
           </div>
         </article>
 
-        <article class="celeb__card" data-fx="reveal" data-fx-delay="0.08">
+        <article class="celeb__card">
           <div class="celeb__img" style="background-image:url('https://images.unsplash.com/photo-1509631179647-0177331693ae?w=500&h=600&fit=crop&crop=center&q=80')"></div>
           <div class="celeb__info">
             <h3 class="celeb__name" data-i18n="celeb.c2.name">Street Chic</h3>
@@ -442,7 +444,7 @@
           </div>
         </article>
 
-        <article class="celeb__card" data-fx="reveal" data-fx-delay="0.16">
+        <article class="celeb__card">
           <div class="celeb__img" style="background-image:url('https://images.unsplash.com/photo-1485968579580-b6d095142e6e?w=500&h=600&fit=crop&crop=center&q=80')"></div>
           <div class="celeb__info">
             <h3 class="celeb__name" data-i18n="celeb.c3.name">Old Money</h3>
@@ -451,7 +453,7 @@
           </div>
         </article>
 
-        <article class="celeb__card" data-fx="reveal" data-fx-delay="0.24">
+        <article class="celeb__card">
           <div class="celeb__img" style="background-image:url('https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=500&h=600&fit=crop&crop=center&q=80')"></div>
           <div class="celeb__info">
             <h3 class="celeb__name" data-i18n="celeb.c4.name">French Girl</h3>
@@ -478,9 +480,10 @@
   <section class="results" id="results">
     <div class="results__inner">
       <div class="results__header">
-        <p class="results__eyebrow" data-i18n="results.eyebrow">Most Wanted</p>
-        <h2 class="results__title" data-fx="title" data-i18n="results.title">The week’s most spotted</h2>
-        <p class="results__subtitle" data-i18n="results.subtitle">Curated this week — ready to shop.</p>
+        <p class="results__eyebrow" data-reveal="fade" data-i18n="results.eyebrow">Most Wanted</p>
+        <h2 class="results__title" data-reveal="up" data-reveal-delay="80" data-i18n="results.title">The week’s most spotted</h2>
+        <div class="reveal-divider" data-reveal="draw"></div>
+        <p class="results__subtitle" data-reveal="up" data-reveal-delay="180" data-i18n="results.subtitle">Curated this week — ready to shop.</p>
       </div>
 
       <div class="results__filter-rows">
@@ -569,7 +572,7 @@
         <p class="more-alts__label" data-i18n="results.moreAlts">Spotted Alternatives</p>
       </div>
 
-      <div class="results__grid">
+      <div class="results__grid" data-reveal-group="up">
 
         <!-- Card 1 -->
         <article class="dupe-card" data-price="49.90" data-store="ZARA" data-category="clothing" data-material="natural">
@@ -804,9 +807,10 @@
   <!-- How it Works -->
   <section class="how" id="how">
     <div class="how__inner">
-      <p class="how__eyebrow" data-i18n="how.eyebrow">How it works</p>
-      <h2 class="how__title" data-fx="title" data-i18n="how.title">Three steps to find what you love</h2>
-      <div class="how__steps">
+      <p class="how__eyebrow" data-reveal="fade" data-i18n="how.eyebrow">How it works</p>
+      <h2 class="how__title" data-reveal="up" data-reveal-delay="80" data-i18n="how.title">Three steps to find what you love</h2>
+      <div class="reveal-divider" data-reveal="draw"></div>
+      <div class="how__steps" data-reveal-group="up">
         <div class="how__step">
           <div class="how__step-num">01</div>
           <h3 data-i18n="how.step1.title">Upload or paste</h3>
@@ -829,8 +833,9 @@
   <!-- FAQ -->
   <section class="faq" id="faq">
     <div class="faq__inner">
-      <p class="faq__eyebrow" data-i18n="faq.eyebrow">Support</p>
-      <h2 class="faq__title" data-fx="title" data-i18n="faq.title">Frequently asked questions</h2>
+      <p class="faq__eyebrow" data-reveal="fade" data-i18n="faq.eyebrow">Support</p>
+      <h2 class="faq__title" data-reveal="up" data-reveal-delay="80" data-i18n="faq.title">Frequently asked questions</h2>
+      <div class="reveal-divider" data-reveal="draw"></div>
 
       <div class="faq__list" id="faqList">
         <div class="faq__item">
@@ -886,9 +891,10 @@
   <!-- Invite Friends -->
   <section class="invite" id="invite">
     <div class="invite__inner">
-      <p class="invite__eyebrow" data-i18n="invite.eyebrow">Spread the Word</p>
-      <h2 class="invite__title" data-fx="title" data-i18n="invite.title">Share ALTERE with friends</h2>
-      <p class="invite__sub" data-i18n="invite.sub">Know someone who loves fashion but hates overpaying? Send them our way.</p>
+      <p class="invite__eyebrow" data-reveal="fade" data-i18n="invite.eyebrow">Spread the Word</p>
+      <h2 class="invite__title" data-reveal="up" data-reveal-delay="80" data-i18n="invite.title">Share ALTERE with friends</h2>
+      <div class="reveal-divider" data-reveal="draw"></div>
+      <p class="invite__sub" data-reveal="up" data-reveal-delay="180" data-i18n="invite.sub">Know someone who loves fashion but hates overpaying? Send them our way.</p>
       <div class="invite__buttons">
         <button class="invite__btn invite__btn--wa" id="inviteWA" type="button">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
@@ -932,7 +938,7 @@
 
   <footer class="footer">
     <div class="footer__inner">
-      <div class="footer__top">
+      <div class="footer__top" data-reveal-group="up">
         <div class="footer__brand">
           <a href="#" class="footer__logo">ALTERE</a>
           <p data-i18n="footer.tagline">AI fashion visual search. Spot it, we’ll source it.</p>
@@ -1118,5 +1124,6 @@
   <script src="motion-fx.js"></script>
   <script src="viral-fx.js"></script>
   <script src="js/video-engine.js"></script>
+  <script src="js/scroll-reveal.js"></script>
 </body>
 </html>

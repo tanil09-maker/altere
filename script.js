@@ -2837,36 +2837,9 @@ document.addEventListener('DOMContentLoaded', () => {
   cookieManage.addEventListener('click', () => dismissCookie('managed'));
 
   /* ============================================================
-     Scroll-reveal animation
+     Match bars — animate width on scroll-in.
+     (Generic scroll-reveal now handled by js/scroll-reveal.js via data-reveal.)
      ============================================================ */
-
-  const revealEls = document.querySelectorAll(
-    '.dupe-card, .how__step, .results__header, .how__inner'
-  );
-
-  revealEls.forEach(el => el.classList.add('reveal'));
-
-  const observer = new IntersectionObserver(
-    entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    },
-    { threshold: 0.15, rootMargin: '0px 0px -40px 0px' }
-  );
-
-  revealEls.forEach(el => observer.observe(el));
-
-  /* ============================================================
-     Stagger initial card reveal + match bars
-     ============================================================ */
-
-  document.querySelectorAll('.dupe-card').forEach((card, i) => {
-    card.style.transitionDelay = `${i * 0.08}s`;
-  });
 
   document.querySelectorAll('.dupe-card__match-fill').forEach(fill => {
     const width = fill.style.width;

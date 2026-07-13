@@ -97,58 +97,12 @@
     setTimeout(function () { root.classList.remove('pre-motion'); }, 500);
   }
 
-  /* --- Big section titles: per-word masked line-wipe on scroll-in --- */
-  function titleReveals() {
-    var titles = document.querySelectorAll('[data-fx="title"]');
-    titles.forEach(function (el) {
-      if (el.dataset.split) return;
-      el.dataset.split = '1';
-      // Wrap each word in an overflow-hidden mask with an inner slider.
-      var raw = el.textContent.trim();
-      el.innerHTML = '';
-      raw.split(/\s+/).forEach(function (word, i, arr) {
-        var mask = document.createElement('span');
-        mask.className = 'fx-word-mask';
-        var inner = document.createElement('span');
-        inner.className = 'fx-word';
-        inner.textContent = word;
-        inner.style.transform = 'translateY(110%)';
-        mask.appendChild(inner);
-        el.appendChild(mask);
-        if (i < arr.length - 1) el.appendChild(document.createTextNode(' '));
-      });
-      el.style.opacity = '1';
-      var stop = inView(el, function () {
-        animate(el.querySelectorAll('.fx-word'),
-          { transform: ['translateY(110%)', 'translateY(0)'] },
-          { duration: 0.9, delay: stagger(0.08), easing: EASE });
-        if (typeof stop === 'function') stop();
-      }, { margin: '0px 0px -14% 0px' });
-    });
-  }
-
-  /* --- Cinematic scroll reveals: scale-from-depth (+ optional blur) --- */
-  function scrollReveals() {
-    if (typeof inView !== 'function') return;
-    var targets = document.querySelectorAll('[data-fx="reveal"]');
-    targets.forEach(function (el) {
-      el.style.opacity = '0';
-      el.style.transform = 'scale(0.9) translateY(48px)';
-      el.style.filter = 'blur(6px)';
-      var stop = inView(el, function () {
-        var delay = parseFloat(el.getAttribute('data-fx-delay')) || 0;
-        animate(el,
-          { opacity: [0, 1], filter: ['blur(6px)', 'blur(0px)'], transform: ['scale(0.9) translateY(48px)', 'scale(1) translateY(0)'] },
-          { duration: 1.0, delay: delay, easing: EASE });
-        if (typeof stop === 'function') stop();
-      }, { margin: '0px 0px -12% 0px' });
-    });
-  }
+  /* Scroll reveals + section-title reveals are now handled by the dedicated
+     vanilla js/scroll-reveal.js (data-reveal). motion-fx only owns the hero
+     load-in choreography (nav logo + headline letters + hero elements). */
 
   function init() {
     heroReveal();
-    titleReveals();
-    scrollReveals();
   }
 
   if (document.readyState === 'loading') {

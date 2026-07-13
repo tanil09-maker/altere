@@ -57,12 +57,19 @@
      1. HERO PARALLAX — background depth layers (scroll + mouse)
      --------------------------------------------------------- */
   (function heroParallax() {
-    var hero  = document.querySelector('.hero');
-    var vwrap = document.querySelector('.hero__video-wrap');
+    var hero    = document.querySelector('.hero');
+    var vwrap   = document.querySelector('.hero__video-wrap');
+    var content = document.querySelector('.hero__content');
     if (!hero || !vwrap) return;
 
-    vwrap.style.willChange = 'transform';
-    vwrap.style.transformOrigin = 'center';
+    // Video parallax is skipped on mobile / touch (keep the heavy 4K/1080p
+    // video static there → frames). The cheap text fade still runs everywhere.
+    var lite = !fine || window.matchMedia('(max-width: 767px)').matches;
+
+    if (!lite) {
+      vwrap.style.willChange = 'transform';
+      vwrap.style.transformOrigin = 'center';
+    }
 
     var sy = 0, mx = 0, my = 0, ticking = false, hr = null;
 
@@ -70,8 +77,12 @@
       ticking = false;
       var vh = window.innerHeight;
       if (sy > vh + 40) return; // hero scrolled away → idle
-      vwrap.style.transform =
-        'translate3d(' + (mx * 20) + 'px,' + (sy * 0.15 + my * 20) + 'px,0) scale(1.35)';
+      if (!lite) {
+        vwrap.style.transform =
+          'translate3d(' + (mx * 20) + 'px,' + (sy * 0.15 + my * 20) + 'px,0) scale(1.35)';
+      }
+      // Hero text fades subtly as you scroll away (transform-free = cheap).
+      if (content) content.style.opacity = String(sy > 0 ? Math.max(0, 1 - sy / (vh * 0.55)) : 1);
     }
     function request() { if (!ticking) { ticking = true; requestAnimationFrame(render); } }
 
@@ -81,7 +92,7 @@
     }, { passive: true });
     window.addEventListener('resize', function () { hr = null; }, { passive: true });
 
-    if (fine) {
+    if (fine && !lite) {
       // cache the hero rect on enter (read once), never per-move
       hero.addEventListener('pointerenter', function () { hr = hero.getBoundingClientRect(); });
       hero.addEventListener('pointermove', function (e) {
@@ -292,7 +303,7 @@
     var ry = clamp(px * 16, -8, 8);
     var rx = clamp(-py * 16, -8, 8);
     card.style.transform =
-      'perspective(1000px) rotateX(' + rx + 'deg) rotateY(' + ry + 'deg) translateY(-8px)';
+      'perspective(1000px) rotateX(' + rx + 'deg) rotateY(' + ry + 'deg) translateY(-4px)';
     card.style.setProperty('--gx', (px + 0.5) * 100 + '%');
     card.style.setProperty('--gy', (py + 0.5) * 100 + '%');
   }
