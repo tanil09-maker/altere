@@ -2361,7 +2361,7 @@ document.addEventListener('DOMContentLoaded', () => {
     {
       id: 5,
       origBrand: 'THE ROW', origName: 'Bare Leather Flat Sandals', origPrice: 1240,
-      origImg: 'https://cdn-images.farfetch-contents.com/36/33/27/08/36332708_68312164_1000.jpg',
+      origImg: 'https://wjhzkqnbxa5dr2rj.public.blob.vercel-storage.com/dotd/5-original-IHFVsAacXlEGbX1a1cX4EJn9dFBMk3.jpg',
       origLink: 'https://www.google.es/search?ibp=oshop&q=The+Row+Bare+black+leather+sandals',
       dupeBrand: 'ASOS', dupeName: 'Calvin Klein Black Leather Square Toe Thong Sandals', dupePrice: 99.9,
       dupeImg: 'https://wjhzkqnbxa5dr2rj.public.blob.vercel-storage.com/dotd/5-dupe-QjRAp7nYm4ouhxxCLiTozQSo0yPF99.jpg',
