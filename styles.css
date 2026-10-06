@@ -5754,3 +5754,16 @@ html.has-cursor [contenteditable] { cursor: auto; }
     transition: none;
   }
 }
+
+/* Search clarity and accessible controls */
+[hidden] { display: none !important; }
+.search-box__tab, .search-box__subtab { min-height: 44px; }
+[data-theme="dark"] .search-box__tab:not(.active),
+[data-theme="dark"] .search-box__subtab:not(.active) { color: #bdb8ad; }
+[data-theme="dark"] .hero__sub { color: #e0d9cb; }
+.product-listing-link { display: inline-block; padding: 12px 0; color: var(--gold); text-decoration: underline; }
+.cookie-preferences { width: min(92vw, 520px); padding: 28px; background: #171717; color: #eee; border: 1px solid #c9a96e; border-radius: 12px; }
+.cookie-preferences::backdrop { background: #0009; }
+.cookie-preferences p { margin: 16px 0; line-height: 1.6; }
+.cookie-preferences button { padding: 12px; margin: 4px; cursor: pointer; }
+:focus-visible { outline: 2px solid #c9a96e; outline-offset: 4px; }
