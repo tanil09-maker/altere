@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ALTERE — AI Fashion Visual Search | Spot it. We’ll source it.</title>
-  <meta name="description" content="Shazam for fashion. See an item on social media, the street or TV? Snap a photo and ALTERE’s AI identifies the exact piece — with every store and price. Can’t stretch to it? Discover smarter alternatives.">
+  <meta name="description" content="Shazam for fashion. See an item on social media, the street or TV? Snap a photo and ALTERE helps you explore matching products and alternatives. Can’t stretch to it? Discover smarter alternatives.">
   <meta name="theme-color" content="#0A0A0A">
   <meta name="robots" content="index, follow">
   <!-- Open Graph -->
@@ -16,7 +16,7 @@
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="ALTERE — AI Fashion Visual Search">
-  <meta name="twitter:description" content="Spot it, we’ll source it. Our AI identifies the exact fashion item — with every store and price.">
+  <meta name="twitter:description" content="Spot it, we’ll source it. Explore fashion products and alternatives from a photo, link or description.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&family=Noto+Kufi+Arabic:wght@300;400;500;600&family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -134,14 +134,14 @@
     <div class="hero__content">
       <p class="hero__eyebrow" data-i18n="hero.eyebrow">AI-Powered Fashion Discovery</p>
       <h1 class="hero__headline" data-i18n="hero.headline">Spot it.<br>We'll source it.</h1>
-      <p class="hero__sub" data-i18n="hero.sub">See something on social media, on the street or on TV? Upload a photo and our AI identifies the exact item — with every store and price. Too steep? We’ll show smarter alternatives too.</p>
+      <p class="hero__sub" data-i18n="hero.sub">Upload a photo of something you love. Explore matching products and alternatives from online shops. An exact match is not always available.</p>
 
       <!-- Search Box -->
       <div class="search-box">
         <div class="search-box__tabs">
           <button class="search-box__tab active" data-tab="reverse">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><polyline points="23 20 23 14 17 14"/><path d="M20.49 9A9 9 0 005.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 013.51 15"/></svg>
-            <span data-i18n="search.tab.reverse">Find original</span>
+            <span data-i18n="search.tab.reverse">Find products</span>
           </button>
           <button class="search-box__tab" data-tab="text">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -155,13 +155,13 @@
 
         <!-- Sub-tabs (visible for Find original & Find dupes) -->
         <div class="search-box__subtabs" id="subtabRow">
-          <button class="search-box__subtab active" data-subtab="describe" type="button">
+          <button class="search-box__subtab" data-subtab="describe" type="button">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
             <span data-i18n="search.subtab.describe">Describe</span>
           </button>
-          <button class="search-box__subtab" data-subtab="photo" type="button">
+          <button class="search-box__subtab active" data-subtab="photo" type="button">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-            <span data-i18n="search.subtab.photo">Photo</span>
+            <span data-i18n="search.subtab.photo">Upload a photo</span>
           </button>
           <button class="search-box__subtab" data-subtab="link" type="button">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
@@ -171,12 +171,12 @@
 
         <div class="search-box__body">
           <!-- Describe sub-pane (shared by Find original & Find dupes) -->
-          <div class="search-box__subpane active" data-subpane="describe">
-            <input type="text" class="search-box__input" id="describeInput" data-i18n-placeholder="search.placeholder.reverse" placeholder="Describe the item you spotted, e.g. &quot;black quilted chain bag&quot;...">
-            <button class="search-box__btn search-box__btn--reverse" id="describeBtn" data-i18n="search.btnReverse">Find original</button>
+          <div class="search-box__subpane" data-subpane="describe">
+            <input type="text" class="search-box__input" id="describeInput" aria-label="Describe a fashion item" data-i18n-placeholder="search.placeholder.reverse" placeholder="Describe the item you spotted, e.g. &quot;black quilted chain bag&quot;...">
+            <button class="search-box__btn search-box__btn--reverse" id="describeBtn" data-i18n="search.btnReverse">Find products</button>
           </div>
           <!-- Photo sub-pane -->
-          <div class="search-box__subpane" data-subpane="photo">
+          <div class="search-box__subpane active" data-subpane="photo">
             <label class="search-box__upload-area" id="uploadArea">
               <input type="file" accept="image/*" hidden id="fileInput">
               <div class="upload__default" id="uploadDefault">
@@ -199,12 +199,12 @@
                 </button>
               </div>
             </label>
-            <button class="search-box__btn search-box__btn--upload" id="uploadSearchBtn" disabled data-i18n="search.btnReverse">Find original</button>
+            <button class="search-box__btn search-box__btn--upload" id="uploadSearchBtn" disabled data-i18n="search.btnReverse">Find products</button>
           </div>
           <!-- Link sub-pane -->
           <div class="search-box__subpane" data-subpane="link">
-            <input type="url" class="search-box__input" id="linkInput" data-i18n-placeholder="search.placeholder.link" placeholder="Paste a product URL from any fashion site...">
-            <button class="search-box__btn" id="linkBtn" data-i18n="search.btnReverse">Find original</button>
+            <input type="url" class="search-box__input" id="linkInput" aria-label="Product page URL" data-i18n-placeholder="search.placeholder.link" placeholder="Paste a product URL from any fashion site...">
+            <button class="search-box__btn" id="linkBtn" data-i18n="search.btnReverse">Find products</button>
           </div>
           <!-- Camera Panel (only for Take photo tab) -->
           <div class="search-box__panel" data-panel="camera">
@@ -300,7 +300,7 @@
       <div class="demo__copy">
         <p class="demo__eyebrow" data-reveal="fade" data-i18n="demo.eyebrow">See it in action</p>
         <h2 class="demo__title" data-reveal="up" data-reveal-delay="80" data-i18n="demo.title">Spotted to sourced, in seconds</h2>
-        <p class="demo__sub" data-reveal="up" data-reveal-delay="180" data-i18n="demo.sub">Point your camera at any piece and watch ALTERE identify the exact item — then show you where to buy it.</p>
+        <p class="demo__sub" data-reveal="up" data-reveal-delay="180" data-i18n="demo.sub">Start with a photo, link or description. Compare suggested products and check the details at the shop.</p>
         <ol class="demo__steps" data-reveal-group="up">
           <li class="demo__step">
             <span class="demo__step-num">01</span>
@@ -308,11 +308,11 @@
           </li>
           <li class="demo__step">
             <span class="demo__step-num">02</span>
-            <span class="demo__step-text" data-i18n="demo.step2">We identify the original</span>
+            <span class="demo__step-text" data-i18n="demo.step2">Explore possible matches</span>
           </li>
           <li class="demo__step">
             <span class="demo__step-num">03</span>
-            <span class="demo__step-text" data-i18n="demo.step3">Get every store &amp; price</span>
+            <span class="demo__step-text" data-i18n="demo.step3">Compare shop listings</span>
           </li>
         </ol>
       </div>
@@ -332,7 +332,7 @@
   </section>
 
   <!-- Dupe of the Day -->
-  <section class="dotd" id="dotd">
+  <section class="dotd" id="dotd" hidden>
     <div class="dotd__inner">
       <p class="dotd__eyebrow" data-reveal="fade" data-i18n="dotd.eyebrow">Spotted Today</p>
       <div class="dotd__card" data-dotd-build>
@@ -377,7 +377,7 @@
   </section>
 
   <!-- Savings Calculator -->
-  <section class="calc" id="calc">
+  <section class="calc" id="calc" hidden>
     <div class="calc__inner">
       <p class="calc__eyebrow" data-reveal="fade" data-i18n="calc.eyebrow">Smart Sourcing</p>
       <h2 class="calc__title" data-reveal="up" data-reveal-delay="80" data-i18n="calc.title">How much could you save?</h2>
@@ -480,10 +480,10 @@
   <section class="results" id="results">
     <div class="results__inner">
       <div class="results__header">
-        <p class="results__eyebrow" data-reveal="fade" data-i18n="results.eyebrow">Most Wanted</p>
-        <h2 class="results__title" data-reveal="up" data-reveal-delay="80" data-i18n="results.title">The week’s most spotted</h2>
+        <p class="results__eyebrow" data-reveal="fade" data-i18n="results.eyebrow">PRODUCT DISCOVERY</p>
+        <h2 class="results__title" data-reveal="up" data-reveal-delay="80" data-i18n="results.title">Find your next favourite</h2>
         <div class="reveal-divider" data-reveal="draw"></div>
-        <p class="results__subtitle" data-reveal="up" data-reveal-delay="180" data-i18n="results.subtitle">Curated this week — ready to shop.</p>
+        <p class="results__subtitle" data-reveal="up" data-reveal-delay="180" data-i18n="results.subtitle">Upload a photo or describe an item to see shop listings.</p>
       </div>
 
       <div class="results__filter-rows">
@@ -496,7 +496,7 @@
           <button class="filter-btn filter-btn--cat" data-category="jewellery"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg> <span data-i18n="filter.jewellery">Jewellery</span></button>
           <button class="filter-btn filter-btn--cat" data-category="accessories"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg> <span data-i18n="filter.accessories">Accessories</span></button>
         </div>
-        <div class="results__filters" id="materialFilters">
+        <div class="results__filters" id="materialFilters" hidden>
           <span class="filter-label" data-i18n="filter.material">Material</span>
           <button class="filter-btn filter-btn--mat active" data-material="all" data-i18n="filter.all">All</button>
           <button class="filter-btn filter-btn--mat" data-material="natural"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8C8 10 5.9 16.17 3.82 21.34L5.71 22l1-2.3A4.49 4.49 0 008 17c0-2 0-4.5 2.5-7.5S17 5 17 5z"/><path d="M11 14c1.1 0 2 .9 2 2 0 1.1-.9 2-2 2"/></svg> <span data-i18n="filter.natural">Natural fibres</span></button>
@@ -533,7 +533,7 @@
               <button class="sort-select__option active" data-sort="match" type="button" data-i18n="sort.match">Best match</button>
               <button class="sort-select__option" data-sort="price-asc" type="button" data-i18n="sort.priceAsc">Price: Low to High</button>
               <button class="sort-select__option" data-sort="price-desc" type="button" data-i18n="sort.priceDesc">Price: High to Low</button>
-              <button class="sort-select__option" data-sort="saving" type="button" data-i18n="sort.saving">Biggest saving</button>
+              <button hidden class="sort-select__option" data-sort="saving" type="button" data-i18n="sort.saving">Biggest saving</button>
             </div>
           </div>
           <div class="results__share" id="resultsShare">
@@ -572,225 +572,7 @@
         <p class="more-alts__label" data-i18n="results.moreAlts">Spotted Alternatives</p>
       </div>
 
-      <div class="results__grid" data-reveal-group="up">
-
-        <!-- Card 1 -->
-        <article class="dupe-card" data-price="49.90" data-store="ZARA" data-category="clothing" data-material="natural">
-          <div class="dupe-card__image">
-            <img src="https://images.unsplash.com/photo-1682397125309-56077754235d?w=600&h=800&fit=crop&crop=center&q=80" alt="Satin Midi Skirt with Side Slit" loading="lazy">
-            <span class="dupe-card__save" aria-label="Save">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-            </span>
-            <span class="dupe-card__share" aria-label="Share">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-              <div class="share-dropdown">
-                <button class="share-dropdown__item share-dropdown__whatsapp" type="button">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                  WhatsApp
-                </button>
-                <button class="share-dropdown__item share-dropdown__copy" type="button">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-                  Copy link
-                </button>
-              </div>
-            </span>
-            <span class="dupe-card__badge">−72%</span>
-          </div>
-          <div class="dupe-card__info">
-            <span class="dupe-card__store">ZARA</span>
-            <h3 class="dupe-card__name">Satin Midi Skirt with Side Slit</h3>
-            <div class="dupe-card__price-row">
-              <span class="dupe-card__price">$49.90</span>
-              <span class="dupe-card__original">$178.00</span>
-            </div>
-            <div class="dupe-card__match">
-              <div class="dupe-card__match-bar"><div class="dupe-card__match-fill" style="width:94%"></div></div>
-              <span>94% match</span>
-            </div>
-          </div>
-        </article>
-
-        <!-- Card 2 -->
-        <article class="dupe-card" data-price="89.99" data-store="H&amp;M" data-category="clothing" data-material="natural">
-          <div class="dupe-card__image">
-            <img src="https://images.unsplash.com/photo-1653660666869-2345adc51155?w=600&h=800&fit=crop&crop=center&q=80" alt="Oversized Wool-Blend Coat" loading="lazy">
-            <span class="dupe-card__save" aria-label="Save">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-            </span>
-            <span class="dupe-card__share" aria-label="Share">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-              <div class="share-dropdown">
-                <button class="share-dropdown__item share-dropdown__whatsapp" type="button">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                  WhatsApp
-                </button>
-                <button class="share-dropdown__item share-dropdown__copy" type="button">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-                  Copy link
-                </button>
-              </div>
-            </span>
-            <span class="dupe-card__badge">−65%</span>
-          </div>
-          <div class="dupe-card__info">
-            <span class="dupe-card__store">H&amp;M</span>
-            <h3 class="dupe-card__name">Oversized Wool-Blend Coat</h3>
-            <div class="dupe-card__price-row">
-              <span class="dupe-card__price">$89.99</span>
-              <span class="dupe-card__original">$258.00</span>
-            </div>
-            <div class="dupe-card__match">
-              <div class="dupe-card__match-bar"><div class="dupe-card__match-fill" style="width:91%"></div></div>
-              <span>91% match</span>
-            </div>
-          </div>
-        </article>
-
-        <!-- Card 3 -->
-        <article class="dupe-card" data-price="59.99" data-store="MANGO" data-category="clothing" data-material="vegan">
-          <div class="dupe-card__image">
-            <img src="https://images.unsplash.com/photo-1618597724686-aee8bba9cf99?w=600&h=800&fit=crop&crop=center&q=80" alt="Leather Effect Straight Trousers" loading="lazy">
-            <span class="dupe-card__save" aria-label="Save">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-            </span>
-            <span class="dupe-card__share" aria-label="Share">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-              <div class="share-dropdown">
-                <button class="share-dropdown__item share-dropdown__whatsapp" type="button">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                  WhatsApp
-                </button>
-                <button class="share-dropdown__item share-dropdown__copy" type="button">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-                  Copy link
-                </button>
-              </div>
-            </span>
-            <span class="dupe-card__badge">−58%</span>
-          </div>
-          <div class="dupe-card__info">
-            <span class="dupe-card__store">MANGO</span>
-            <h3 class="dupe-card__name">Leather Effect Straight Trousers</h3>
-            <div class="dupe-card__price-row">
-              <span class="dupe-card__price">$59.99</span>
-              <span class="dupe-card__original">$142.00</span>
-            </div>
-            <div class="dupe-card__match">
-              <div class="dupe-card__match-bar"><div class="dupe-card__match-fill" style="width:89%"></div></div>
-              <span>89% match</span>
-            </div>
-          </div>
-        </article>
-
-        <!-- Card 4 -->
-        <article class="dupe-card" data-price="72.00" data-store="ASOS" data-category="clothing" data-material="nopolyester">
-          <div class="dupe-card__image">
-            <img src="https://images.unsplash.com/photo-1606776627650-454d6d7bd7bf?w=600&h=800&fit=crop&crop=center&q=80" alt="Structured Blazer with Gold Buttons" loading="lazy">
-            <span class="dupe-card__save" aria-label="Save">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-            </span>
-            <span class="dupe-card__share" aria-label="Share">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-              <div class="share-dropdown">
-                <button class="share-dropdown__item share-dropdown__whatsapp" type="button">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                  WhatsApp
-                </button>
-                <button class="share-dropdown__item share-dropdown__copy" type="button">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-                  Copy link
-                </button>
-              </div>
-            </span>
-            <span class="dupe-card__badge">−70%</span>
-          </div>
-          <div class="dupe-card__info">
-            <span class="dupe-card__store">ASOS</span>
-            <h3 class="dupe-card__name">Structured Blazer with Gold Buttons</h3>
-            <div class="dupe-card__price-row">
-              <span class="dupe-card__price">$72.00</span>
-              <span class="dupe-card__original">$240.00</span>
-            </div>
-            <div class="dupe-card__match">
-              <div class="dupe-card__match-bar"><div class="dupe-card__match-fill" style="width:87%"></div></div>
-              <span>87% match</span>
-            </div>
-          </div>
-        </article>
-
-        <!-- Card 5 -->
-        <article class="dupe-card" data-price="55.00" data-store="COS" data-category="clothing" data-material="natural">
-          <div class="dupe-card__image">
-            <img src="https://images.unsplash.com/photo-1759229874914-c1ffdb3ebd0c?w=600&h=800&fit=crop&crop=center&q=80" alt="Draped Asymmetric Knit Top" loading="lazy">
-            <span class="dupe-card__save" aria-label="Save">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-            </span>
-            <span class="dupe-card__share" aria-label="Share">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-              <div class="share-dropdown">
-                <button class="share-dropdown__item share-dropdown__whatsapp" type="button">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                  WhatsApp
-                </button>
-                <button class="share-dropdown__item share-dropdown__copy" type="button">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-                  Copy link
-                </button>
-              </div>
-            </span>
-            <span class="dupe-card__badge">−61%</span>
-          </div>
-          <div class="dupe-card__info">
-            <span class="dupe-card__store">COS</span>
-            <h3 class="dupe-card__name">Draped Asymmetric Knit Top</h3>
-            <div class="dupe-card__price-row">
-              <span class="dupe-card__price">$55.00</span>
-              <span class="dupe-card__original">$140.00</span>
-            </div>
-            <div class="dupe-card__match">
-              <div class="dupe-card__match-bar"><div class="dupe-card__match-fill" style="width:85%"></div></div>
-              <span>85% match</span>
-            </div>
-          </div>
-        </article>
-
-        <!-- Card 6 -->
-        <article class="dupe-card" data-price="79.00" data-store="&amp; OTHER STORIES" data-category="clothing" data-material="natural">
-          <div class="dupe-card__image">
-            <img src="https://images.unsplash.com/photo-1765229279946-f265fa703385?w=600&h=800&fit=crop&crop=center&q=80" alt="Belted Linen-Blend Wrap Dress" loading="lazy">
-            <span class="dupe-card__save" aria-label="Save">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-            </span>
-            <span class="dupe-card__share" aria-label="Share">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-              <div class="share-dropdown">
-                <button class="share-dropdown__item share-dropdown__whatsapp" type="button">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                  WhatsApp
-                </button>
-                <button class="share-dropdown__item share-dropdown__copy" type="button">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-                  Copy link
-                </button>
-              </div>
-            </span>
-            <span class="dupe-card__badge">−55%</span>
-          </div>
-          <div class="dupe-card__info">
-            <span class="dupe-card__store">&amp; OTHER STORIES</span>
-            <h3 class="dupe-card__name">Belted Linen-Blend Wrap Dress</h3>
-            <div class="dupe-card__price-row">
-              <span class="dupe-card__price">$79.00</span>
-              <span class="dupe-card__original">$175.00</span>
-            </div>
-            <div class="dupe-card__match">
-              <div class="dupe-card__match-bar"><div class="dupe-card__match-fill" style="width:82%"></div></div>
-              <span>82% match</span>
-            </div>
-          </div>
-        </article>
-
-      </div>
+      <div class="results__grid"></div>
     </div>
   </section>
   <!-- Detail clip C -->
@@ -819,12 +601,12 @@
         <div class="how__step">
           <div class="how__step-num">02</div>
           <h3 data-i18n="how.step2.title">AI analysis</h3>
-          <p data-i18n="how.step2.desc">Our vision model deconstructs fabric, cut, colour and silhouette in seconds.</p>
+          <p data-i18n="how.step2.desc">AI describes visible features and searches product listings. It may not identify the exact brand or material.</p>
         </div>
         <div class="how__step">
           <div class="how__step-num">03</div>
           <h3 data-i18n="how.step3.title">Discover alternatives</h3>
-          <p data-i18n="how.step3.desc">Browse ranked alternatives with match scores, prices and direct store links.</p>
+          <p data-i18n="how.step3.desc">Compare suggested products and follow the listing to check price and availability.</p>
         </div>
       </div>
     </div>
@@ -844,7 +626,7 @@
             <svg class="faq__chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
           <div class="faq__answer">
-            <p data-i18n="faq.a1">Our AI vision model analyses the item in your photo, link or description — breaking it down into fabric, cut, colour, silhouette and construction. It then identifies the exact piece and where to buy it, and if you’d rather spend less, surfaces the closest alternatives ranked by accuracy.</p>
+            <p data-i18n="faq.a1">AI describes the item, then searches product listings. Results are suggestions, not confirmed identifications. Check the product details and current price at the shop.</p>
           </div>
         </div>
         <div class="faq__item">
@@ -862,7 +644,7 @@
             <svg class="faq__chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
           <div class="faq__answer">
-            <p data-i18n="faq.a3">Yes, ALTERE is completely free to use. You can run unlimited searches, save your favourites and share them — all without creating an account or paying anything. We plan to keep the core experience free forever.</p>
+            <p data-i18n="faq.a3">Try 3 free searches without an account. Sign in with Google for 10 free searches per calendar month. Guest searches are counted per IP address. Favourites are currently saved in this browser.</p>
           </div>
         </div>
         <div class="faq__item">
@@ -871,7 +653,7 @@
             <svg class="faq__chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
           <div class="faq__answer">
-            <p data-i18n="faq.a4">Match percentages reflect how closely a match resembles the original item across many style dimensions including material, shape, colour and proportions. A score above 90% means the match is visually very close; 80–90% indicates a strong resemblance with minor differences. We continuously refine our model to improve accuracy.</p>
+            <p data-i18n="faq.a4">Results are ranked using available product information. Rankings are estimates, not measured visual match percentages or proof of identity.</p>
           </div>
         </div>
         <div class="faq__item">
@@ -1108,6 +890,13 @@
   <!-- Toast notifications -->
   <div class="toast" id="toast"></div>
 
+  <dialog id="cookiePreferences" class="cookie-preferences" aria-labelledby="cookiePreferencesTitle">
+    <h2 id="cookiePreferencesTitle">Privacy preferences</h2>
+    <p>Sign-in cookies keep your session active. Browser storage remembers your theme, region, language, recent searches and saved items.</p>
+    <p>Photos and searches are sent for processing when you submit a search. External images and fonts can contact their providers.</p>
+    <button id="cookieEssential" type="button">Use essential settings</button>
+    <button id="cookieClose" type="button">Close</button>
+  </dialog>
   <!-- Cookie Consent -->
   <div class="cookie" id="cookieBanner">
     <div class="cookie__inner">

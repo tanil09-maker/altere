@@ -1,6 +1,7 @@
 // ALTERE Search Orchestrator
 // Flow: identify → verify via SerpAPI → find dupes → score → cache → respond
 
+import { searchCacheKey } from '../lib/search-key.js';
 import { initDB, getMonthSearchCount, getAnonymousSearchCount, logSearch, logAnonymousSearch, getUserById } from '../lib/db.js';
 import { getSessionFromRequest } from '../lib/session.js';
 import { detectRegion, getRegionConfig, getRegionStoreSet, getSerpApiParams } from '../lib/region.js';
@@ -13,7 +14,7 @@ const ANON_LIMIT = 3;
 import { identifyFromText, identifyFromImage, identifyFromUrl, verifyOriginals } from '../lib/identify.js';
 import { searchGoogleShopping } from '../lib/serpapi.js';
 import { searchDupes, scoreDupes } from '../lib/dupe_finder.js';
-import { hashQuery, getCached, setCached } from '../lib/cache.js';
+import { getCached, setCached } from '../lib/cache.js';
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -87,7 +88,7 @@ export default async function handler(req, res) {
     const serpApiParams = getSerpApiParams(region, countryCode);
 
     // --- Cache check (includes region) ---
-    const cacheKey = hashQuery(query || url || (imageData || '').substring(0, 100), { type: inputType, region });
+    const cacheKey = searchCacheKey({ query, url, imageData, mediaType, inputType, intent, region, countryCode });
     const cached = await getCached(cacheKey, 'full_result');
     if (cached) {
       // Log the search even if cached
@@ -104,37 +105,30 @@ export default async function handler(req, res) {
       });
     }
 
-    // --- Step 1: Identify product (returns 2 luxury originals + dupe hints) ---
+    // --- Step 1: Describe the item and suggest search candidates ---
     let identified;
 
-    if (intent === 'dupes_only') {
-      identified = {
-        originals: [],
-        key_features: (query || '').split(' ').filter(w => w.length > 3),
-        dupe_search_hints: [(query || '').toLowerCase()],
-        confidence: 50,
-      };
-    } else {
-      try {
-        if (inputType === 'image' && imageData) {
-          identified = await identifyFromImage(imageData, mediaType);
-        } else if (inputType === 'url' && url) {
-          identified = await identifyFromUrl(url);
-        } else {
-          identified = await identifyFromText(query);
-        }
-      } catch (err) {
-        console.error('[chat] Identification failed:', err.message);
-        return res.status(200).json({
-          originals: [],
-          dupes: [],
-          not_found: true,
-          message: 'We could not identify this product. Try a different description or a clearer photo.',
-          region_meta: { region, currency: regionConfig.currency, symbol: regionConfig.symbol },
-          ...(await buildRateMeta(userId, user, isAdmin, ip)),
-        });
+    try {
+      if (inputType === 'image' && imageData) {
+        identified = await identifyFromImage(imageData, mediaType);
+      } else if (inputType === 'url' && url) {
+        identified = await identifyFromUrl(url);
+      } else {
+        identified = await identifyFromText(query);
       }
+    } catch (err) {
+      console.error('[chat] Identification failed:', err.message);
+      return res.status(200).json({
+        originals: [],
+        dupes: [],
+        not_found: true,
+        message: 'We could not identify this product. Try a different description or a clearer photo.',
+        region_meta: { region, currency: regionConfig.currency, symbol: regionConfig.symbol },
+        ...(await buildRateMeta(userId, user, isAdmin, ip)),
+      });
     }
+
+
 
     // --- Step 2: Verify originals via SerpAPI ---
     let verifiedOriginals = [];
@@ -173,47 +167,18 @@ export default async function handler(req, res) {
     }
 
     // Format dupes for frontend
-    const symbol = regionConfig.symbol;
-    // Anchor savings to the highest-priced verified original (the luxury reference),
-    // so "save X%" still shows when original #0 happens to be unverified/price-less.
-    const originalPriceNum = verifiedOriginals.reduce(
-      (max, o) => Math.max(max, o?.extracted_price || 0), 0);
-
-    const dupes = scoredDupes.map(d => {
-      const dupePrice = d.extracted_price || 0;
-      let savings_percent = null;
-      let savings_amount = null;
-      let savings_display = null;
-
-      if (originalPriceNum > 0 && dupePrice > 0 && dupePrice < originalPriceNum) {
-        const rawPercent = Math.round((1 - dupePrice / originalPriceNum) * 100);
-        savings_amount = Math.round(originalPriceNum - dupePrice);
-        if (rawPercent > 95) {
-          savings_percent = 95;
-          savings_display = { type: 'amount', value: `${symbol}${savings_amount}` };
-        } else {
-          savings_percent = rawPercent;
-          savings_display = { type: 'percent', value: `${rawPercent}%` };
-        }
-      }
-
-      return {
-        store: d.source || '',
-        name: d.title || '',
-        price: d.price || '',
-        extracted_price: dupePrice,
-        image: d.thumbnail || '',
-        link: d.link || '',
-        match_score: d.match_score || 0,
-        savings_percent,
-        savings_amount,
-        savings_display,
-      };
-    });
+    // No savings claim without a user-confirmed reference product and price.
+    const dupes = scoredDupes.map(d => ({
+      store: d.source || '', name: d.title || '', price: d.price || '',
+      extracted_price: d.extracted_price || null, image: d.thumbnail || '',
+      link: d.link || '', match_score: Number.isFinite(d.match_score) ? d.match_score : null,
+      savings_percent: null, savings_amount: null, savings_display: null,
+    }));
 
     // --- Build response ---
     const result = {
       originals: verifiedOriginals,
+      category: productInfo.category,
       dupes,
       dupes_limited: dupesLimited,
       not_found: verifiedOriginals.length === 0 && dupes.length === 0,

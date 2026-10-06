@@ -828,6 +828,56 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+  const SEARCH_COPY = {
+  "hero.sub": "Upload a photo of something you love. Explore matching products and alternatives from online shops. An exact match is not always available.",
+  "search.tab.reverse": "Find products",
+  "search.btnReverse": "Find products",
+  "search.subtab.photo": "Upload a photo",
+  "demo.sub": "Start with a photo, link or description. Compare suggested products and check the details at the shop.",
+  "demo.step2": "Explore possible matches",
+  "demo.step3": "Compare shop listings",
+  "faq.a1": "AI describes the item, then searches product listings. Results are suggestions, not confirmed identifications. Check the product details and current price at the shop.",
+  "faq.a3": "Try 3 free searches without an account. Sign in with Google for 10 free searches per calendar month. Guest searches are counted per IP address. Favourites are currently saved in this browser.",
+  "faq.a4": "Results are ranked using available product information. Rankings are estimates, not measured visual match percentages or proof of identity.",
+  "about.step1Desc": "AI extracts visible features and searches for matching products. Brand and material may be uncertain.",
+  "about.step2Desc": "Shopping search returns candidate listings. We do not directly scan every store inventory.",
+  "results.eyebrow": "PRODUCT DISCOVERY",
+  "results.title": "Find your next favourite",
+  "results.subtitle": "Upload a photo or describe an item to see shop listings.",
+  "how.step2.desc": "AI describes visible features and searches product listings. It may not identify the exact brand or material.",
+  "how.step3.desc": "Compare suggested products and follow the listing to check price and availability.",
+  "about.storyP2": "We help you explore fashion products and alternatives from online shopping listings.",
+  "about.step3Desc": "Results are suggestions based on available product information. Verify details at the shop.",
+  "search.status": "Searching product listings",
+  "camera.hint": "Point at an item to explore possible matches.",
+  "camera.use": "Find products",
+  "celeb.sub": "Explore products inspired by these styles.",
+  "results.loading.sub": "Looking for relevant product listings",
+  "cookie.accept": "Got it"
+};
+  const SEARCH_COPY_NL = {
+  "hero.sub": "Upload een foto van iets dat je mooi vindt. Ontdek passende producten en alternatieven bij webwinkels. Een exacte match is niet altijd beschikbaar.",
+  "search.tab.reverse": "Zoek producten",
+  "search.btnReverse": "Zoek producten",
+  "search.subtab.photo": "Upload een foto",
+  "demo.sub": "Begin met een foto, link of beschrijving. Vergelijk suggesties en controleer de details bij de winkel.",
+  "demo.step2": "Bekijk mogelijke matches",
+  "demo.step3": "Vergelijk aanbiedingen",
+  "faq.a1": "AI beschrijft het item en zoekt productvermeldingen. De resultaten zijn suggesties, geen bevestigde identificaties. Controleer details en prijzen bij de winkel.",
+  "faq.a3": "Probeer 3 gratis zoekopdrachten zonder account. Log in met Google voor 10 gratis zoekopdrachten per kalendermaand. Gastgebruik wordt per IP-adres geteld. Favorieten staan momenteel in deze browser.",
+  "faq.a4": "De rangschikking gebruikt beschikbare productinformatie. Het is een schatting, geen gemeten visuele overeenkomst of bewijs van identiteit.",
+  "results.eyebrow": "ONTDEK PRODUCTEN",
+  "results.title": "Vind je volgende favoriet",
+  "results.subtitle": "Upload een foto of beschrijf een item om aanbiedingen te bekijken.",
+  "search.status": "Producten zoeken",
+  "camera.hint": "Richt op een item om mogelijke matches te zoeken.",
+  "camera.use": "Zoek producten",
+  "celeb.sub": "Ontdek producten geïnspireerd op deze stijlen.",
+  "results.loading.sub": "We zoeken passende producten",
+  "cookie.accept": "Begrepen"
+};
+  Object.keys(TRANSLATIONS).forEach(lang => Object.assign(TRANSLATIONS[lang], SEARCH_COPY, lang === "nl" ? SEARCH_COPY_NL : {}));
+
   const LANG_LABELS = { en: 'EN', nl: 'NL', fr: 'FR', de: 'DE', es: 'ES', it: 'IT', ar: 'AR', zh: '\u4e2d' };
   const RTL_LANGS   = new Set(['ar']);
   let currentLang = localStorage.getItem(LANG_KEY) || 'en';
@@ -1022,7 +1072,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function handleFile(file) {
-    if (!file.type.startsWith('image/')) return;
+    if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) { showToast('Choose a JPG, PNG or WEBP image.', true); return; }
+    if (file.size > 10 * 1024 * 1024) { showToast('Choose an image smaller than 10 MB.', true); return; }
     currentFile = file;
 
     // Show preview thumbnail
@@ -1265,7 +1316,11 @@ document.addEventListener('DOMContentLoaded', () => {
       const pricePass = priceAll || (aboveMin && belowMax);
 
       // Store check
-      const storePass = activeStores.size === 0 || activeStores.has(store);
+      const normalizeStore = value => (value || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+      const storePass = activeStores.size === 0 || [...activeStores].some(selected => {
+        const name = normalizeStore(store), filter = normalizeStore(selected);
+        return name === filter || ['nl', 'es', 'uk', 'us', 'de', 'fr', 'com'].some(region => name === filter + region);
+      });
 
       const show = catPass && matPass && pricePass && storePass;
       card.classList.toggle('filter-hidden', !show);
@@ -1354,8 +1409,8 @@ document.addEventListener('DOMContentLoaded', () => {
     cards.sort((a, b) => {
       const priceA = parseFloat(a.dataset.price) || 0;
       const priceB = parseFloat(b.dataset.price) || 0;
-      const matchA = parseInt(a.querySelector('.dupe-card__match span')?.textContent) || 0;
-      const matchB = parseInt(b.querySelector('.dupe-card__match span')?.textContent) || 0;
+      const matchA = Number(a.dataset.matchScore) || 0;
+      const matchB = Number(b.dataset.matchScore) || 0;
       const origA  = parseFloat((a.querySelector('.dupe-card__original')?.textContent || '0').replace(/[^0-9.]/g, '')) || 0;
       const origB  = parseFloat((b.querySelector('.dupe-card__original')?.textContent || '0').replace(/[^0-9.]/g, '')) || 0;
       const savingA = origA > 0 ? origA - priceA : 0;
@@ -1429,6 +1484,8 @@ document.addEventListener('DOMContentLoaded', () => {
       dupe_price: parseFloat(card.dataset.price) || 0,
       original_price: parseFloat((card.querySelector('.dupe-card__original')?.textContent || '0').replace(/[^0-9.]/g, '')) || 0,
       match_percentage: parseInt((card.querySelector('.dupe-card__match span')?.textContent || '0')) || 0,
+      listing_url: card.querySelector('.product-listing-link')?.href || '',
+      price_display: card.querySelector('.dupe-card__price')?.textContent || '',
       image_url: (img && img.src && !img.classList.contains('loading')) ? img.src : ''
     };
   }
@@ -1557,9 +1614,6 @@ document.addEventListener('DOMContentLoaded', () => {
     savedClearAll.style.display = items.length === 0 ? 'none' : '';
 
     items.forEach((item, i) => {
-      const savings = item.original_price > 0
-        ? Math.round(((item.original_price - item.dupe_price) / item.original_price) * 100)
-        : 0;
 
       const card = document.createElement('article');
       card.className = 'dupe-card reveal visible';
@@ -1569,13 +1623,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (item.image_url) {
         imageContent = `<img src="${escapeAttr(item.image_url)}" alt="${escapeAttr(item.product_name)}" loading="lazy">`;
       } else {
-        const fallbackImages = [
-          'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=400&h=400&fit=crop&q=80',
-          'https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?w=400&h=400&fit=crop&q=80', 
-          'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=400&h=400&fit=crop&q=80',
-          'https://images.unsplash.com/photo-1594223274512-ad4803739b7c?w=400&h=400&fit=crop&q=80'
-        ];
-        imageContent = `<img src="${fallbackImages[i % fallbackImages.length]}" alt="${escapeAttr(item.product_name)}" loading="lazy">`;
+        imageContent = '<img src="/assets/product-unavailable.svg" alt="Product image unavailable" loading="lazy">';
       }
 
       card.innerHTML = `
@@ -1584,20 +1632,14 @@ document.addEventListener('DOMContentLoaded', () => {
           <button class="saved-card__remove" aria-label="Remove" data-index="${i}">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
           </button>
-          ${savings > 0 ? `<span class="dupe-card__badge">&minus;${savings}%</span>` : ''}
         </div>
         <div class="dupe-card__info">
           <span class="dupe-card__store">${escapeHtml(item.store)}</span>
           <h3 class="dupe-card__name">${escapeHtml(item.product_name)}</h3>
           <div class="dupe-card__price-row">
-            <span class="dupe-card__price">$${item.dupe_price.toFixed(2)}</span>
-            ${item.original_price > 0 ? `<span class="dupe-card__original">$${item.original_price.toFixed(2)}</span>` : ''}
+            <span class="dupe-card__price">${escapeHtml(item.price_display || "Check price at shop")}</span>
+            ${safeListingUrl(item.listing_url) ? `<a class="product-listing-link" href="${escapeAttr(item.listing_url)}" target="_blank" rel="noopener noreferrer">View product listing →</a>` : ''}
           </div>
-          ${item.match_percentage > 0 ? `
-          <div class="dupe-card__match">
-            <div class="dupe-card__match-bar"><div class="dupe-card__match-fill" style="width:${item.match_percentage}%"></div></div>
-            <span>${item.match_percentage}% match</span>
-          </div>` : ''}
         </div>`;
 
       savedGrid.appendChild(card);
@@ -1904,7 +1946,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Use working images from Daily Source data
     const fallbackImages = [
       'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=400&h=400&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?w=400&h=400&fit=crop&q=80', 
+      'https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?w=400&h=400&fit=crop&q=80',
       'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=400&h=400&fit=crop&q=80',
       'https://images.unsplash.com/photo-1594223274512-ad4803739b7c?w=400&h=400&fit=crop&q=80',
       'https://images.unsplash.com/photo-1614179689702-355944cd0918?w=400&h=400&fit=crop&q=80',
@@ -1954,7 +1996,7 @@ document.addEventListener('DOMContentLoaded', () => {
       el.textContent = label;
       el.style.display = '';
     } else {
-      el.textContent = currentUser ? 'Daily searches used' : 'Free searches used';
+      el.textContent = currentUser ? 'Monthly searches used' : 'Free searches used';
       el.style.display = '';
     }
   }
@@ -2174,6 +2216,11 @@ document.addEventListener('DOMContentLoaded', () => {
      Unified Results Renderer
      ============================================================ */
 
+  function safeListingUrl(value) {
+    try { const url = new URL(value); return ['https:', 'http:'].includes(url.protocol) ? url.href : ''; }
+    catch { return ''; }
+  }
+
   function renderFullResults(result, query) {
     resultsGrid.innerHTML = '';
     resetFilters();
@@ -2209,24 +2256,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Luxury Originals (2 cards) ---
     if (originals.length > 0) {
-      eyebrow.textContent = 'Luxury Originals';
-      title.textContent   = 'The Inspiration';
+      eyebrow.textContent = 'POSSIBLE MATCHES';
+      title.textContent   = 'Products to explore';
       sub.textContent     = `Found for \u201c${query}\u201d`;
 
       const origCards = originals.map(item => {
-        const img = item.thumbnail || getCategoryFallback(item.category || 'clothing');
-        const price = item.extracted_price ? formatPrice(item.extracted_price, symbol) : (item.price || '');
-        const linkAttr = item.link ? `href="${escapeAttr(item.link)}" target="_blank" rel="noopener"` : '';
+        const img = item.thumbnail || '/assets/product-unavailable.svg';
+        const price = item.price || 'Check price at shop';
+        const linkAttr = safeListingUrl(item.link) ? `href="${escapeAttr(item.link)}" target="_blank" rel="noopener"` : '';
         return `
           <a ${linkAttr} class="luxury-card">
             <div class="luxury-card__image">
-              <img src="${escapeAttr(img)}" alt="${escapeAttr(item.product_name || '')}" loading="lazy" onerror="this.src='${getCategoryFallback(item.category || 'clothing')}'">
+              <img src="${escapeAttr(img)}" alt="${escapeAttr(item.product_name || '')}" loading="lazy" onerror="this.onerror=null;this.src='/assets/product-unavailable.svg'">
             </div>
             <div class="luxury-card__info">
               <div class="luxury-card__brand">${escapeHtml(item.brand || '')}</div>
               <div class="luxury-card__name">${escapeHtml(item.product_name || item.title || '')}</div>
               <div class="luxury-card__price">${escapeHtml(price)}</div>
-              ${item.source ? `<div class="luxury-card__cta">View at ${escapeHtml(item.source)} \u2192</div>` : ''}
+              ${item.source ? `<div class="luxury-card__cta">View listing: ${escapeHtml(item.source)} \u2192</div>` : ''}
             </div>
           </a>`;
       }).join('');
@@ -2234,7 +2281,7 @@ document.addEventListener('DOMContentLoaded', () => {
       originalFoundEl.innerHTML = `
         <div class="luxury-originals__grid">${origCards}</div>
         <div class="luxury-originals__divider">
-          <span>Save up to 95% with high-street alternatives below</span>
+          <span>Suggestions, not confirmed identifications. Check current prices and product details at the shop.</span>
         </div>`;
       originalFoundEl.classList.add('visible');
     } else {
@@ -2256,17 +2303,18 @@ document.addEventListener('DOMContentLoaded', () => {
       resultsGrid.parentElement.insertBefore(notice, resultsGrid);
     }
 
-    const category = originals[0]?.category || 'clothing';
+    const category = result.category || originals[0]?.category || 'clothing';
 
     dupes.forEach((dupe, i) => {
-      const dupeImg = dupe.image || getCategoryFallback(category);
+      const dupeImg = dupe.image || '/assets/product-unavailable.svg';
 
       const card = document.createElement('article');
       card.className = 'dupe-card reveal';
       card.dataset.store = dupe.store || '';
       card.dataset.category = category;
-      card.dataset.material = 'natural';
-      card.dataset.price = String(dupe.extracted_price || '0');
+      card.dataset.material = 'unknown';
+      card.dataset.price = dupe.extracted_price == null ? '' : String(dupe.extracted_price);
+      card.dataset.matchScore = dupe.match_score == null ? '' : String(dupe.match_score);
       card.style.transitionDelay = `${i * 0.08}s`;
 
       // Gold pill badge = ONLY for savings
@@ -2277,11 +2325,11 @@ document.addEventListener('DOMContentLoaded', () => {
           : `<span class="dupe-card__badge">&minus;${escapeHtml(dupe.savings_display.value)}</span>`;
       }
 
-      const dupePrice = dupe.extracted_price ? formatPrice(dupe.extracted_price, symbol) : (dupe.price || '');
+      const dupePrice = dupe.price || 'Check price at shop';
 
       card.innerHTML = `
         <div class="dupe-card__image">
-          <img src="${escapeAttr(dupeImg)}" alt="${escapeAttr(dupe.name || '')}" loading="lazy" onerror="this.src='${getCategoryFallback(category)}'">
+          <img src="${escapeAttr(dupeImg)}" alt="${escapeAttr(dupe.name || '')}" loading="lazy" onerror="this.onerror=null;this.src='/assets/product-unavailable.svg'">
           <span class="dupe-card__save" aria-label="Save">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
           </span>
@@ -2294,11 +2342,21 @@ document.addEventListener('DOMContentLoaded', () => {
             <span class="dupe-card__price">${escapeHtml(dupePrice)}</span>
           </div>
           <div class="dupe-card__match">
-            <div class="dupe-card__match-bar"><div class="dupe-card__match-fill" style="width:0%"></div></div>
-            <span>${dupe.match_score || 0}% match</span>
+
+            <span>Suggested alternative</span>
           </div>
         </div>`;
 
+      const listingUrl = safeListingUrl(dupe.link);
+      if (listingUrl) {
+        const link = document.createElement('a');
+        link.href = listingUrl;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.className = 'product-listing-link';
+        link.textContent = 'View product listing →';
+        card.querySelector('.dupe-card__info').appendChild(link);
+      }
       resultsGrid.appendChild(card);
 
       requestAnimationFrame(() => requestAnimationFrame(() => {
@@ -2497,6 +2555,8 @@ document.addEventListener('DOMContentLoaded', () => {
       title.textContent   = t('results.title');
       sub.textContent     = t('results.subtitle');
       restoreDefaultCards();
+      title.textContent = 'Search could not finish';
+      sub.textContent = 'Please try again. No example products are shown as search results.';
     } finally {
       isSearching = false;
       hideSearchStatus();
@@ -2834,7 +2894,12 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   cookieAccept.addEventListener('click', () => dismissCookie('accepted'));
-  cookieManage.addEventListener('click', () => dismissCookie('managed'));
+  const cookieDialog = document.getElementById('cookiePreferences');
+  cookieManage.addEventListener('click', () => cookieDialog.showModal());
+  document.getElementById('cookieEssential').addEventListener('click', () => {
+    dismissCookie('essential'); cookieDialog.close();
+  });
+  document.getElementById('cookieClose').addEventListener('click', () => cookieDialog.close());
 
   /* ============================================================
      Match bars — animate width on scroll-in.
